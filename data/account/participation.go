@@ -31,18 +31,22 @@ import (
 	"github.com/algorand/go-algorand/util/db"
 )
 
-// A Participation encapsulates a set of secrets which allows a root to
-// participate in consensus. All such accounts are associated with a parent root
-// account via the Address (although this parent account may not be
-// resident on this machine).
-//
-// Participations are allowed to vote on a user's behalf for some range of
-// rounds. After this range, all remaining secrets are destroyed.
-//
-// For correctness, all Roots should have no more than one Participation
-// globally active at any time. If this condition is violated, the Root may
-// equivocate. (Algorand tolerates a limited fraction of misbehaving accounts.)
+// A Participation encapsulates a set of secrets which allows a root to participate in consensus.
+// All such accounts are associated with a parent root account via the Address
+// (although this parent account may not be resident on this machine).
+// Participations are allowed to vote on a user's behalf for some range of rounds.
+// After this range, all remaining secrets are destroyed.
+// For correctness, all Roots should have no more than one Participation globally active at any time.
+// If this condition is violated, the Root may equivocate. (Algorand tolerates a limited fraction of misbehaving accounts.)
 //msgp:ignore Participation
+/*
+=> Participation은 root가 합의에 참여할 수 있게 하는 비밀 집합을 캡슐화한다.
+모든 계정은 주소를 통해 root계정과 연결되어 있다.(부모 계정(root)은 머신상에 존재하지 않는다? 논리적으로만 존재한다는건가?
+avm에 올라가지 않는다는건가?)
+Participation은 유저가 특정 라운드만큼 투표할 수 있는 권한이다. 모든 라운드가 끝나면 남아있는 비밀(sectret)은 모두 파괴된다.
+정확성을 위해 모든 한번에 하나의 활성화된 참여만 가질 수 있다.
+이것이 위배되면 root는 모호해진다(알고랜드는 약각의 오작동은 허용) <= equivocate뜻이 모호해진다여서 이렇게 쎃는데 뭐가 모호해진다는건지 모르겠네..
+*/
 type Participation struct {
 	Parent basics.Address
 
@@ -61,6 +65,7 @@ type Participation struct {
 }
 
 // ParticipationKeyIdentity is for msgpack encoding the participation data.
+// => 참여 데이터를 인코딩하는 msgpack.
 type ParticipationKeyIdentity struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
