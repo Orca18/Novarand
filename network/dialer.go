@@ -29,15 +29,14 @@ type netDialer interface {
 }
 
 // Dialer establish tcp-level connection with the destination
-// 다이얼러는 대상과 tcp 수준 연결을 설정합니다.
 type Dialer struct {
 	phonebook   Phonebook
 	innerDialer netDialer
 	resolver    *net.Resolver
 }
 
-// makeRateLimitingDialer creates a rate limiting dialer that would limit the connections according to the entries in the phonebook.
-// makeRateLimitingDialer는 전화번호부의 항목에 따라 연결을 제한하는 속도 제한 다이얼러를 생성합니다.
+// makeRateLimitingDialer creates a rate limiting dialer that would limit the connections
+// according to the entries in the phonebook.
 func makeRateLimitingDialer(phonebook Phonebook, resolver dnssec.ResolverIf) Dialer {
 	var innerDialer netDialer = &net.Dialer{
 		Timeout:   30 * time.Second,
@@ -45,8 +44,8 @@ func makeRateLimitingDialer(phonebook Phonebook, resolver dnssec.ResolverIf) Dia
 		DualStack: true,
 	}
 
-	// if a DNSSEC-aware resolver provided, use a wrapping dnssec.Dialer to parse addr, resolve it securely and call a regular net.Dialer
-	// DNSSEC 인식 해석기가 제공된 경우 래핑 dnssec.Dialer를 사용하여 addr을 구문 분석하고 안전하게 해석하고 일반 net.Dialer를 호출합니다.
+	// if a DNSSEC-aware resolver provided, use a wrapping dnssec.Dialer to parse addr, resolve it securely
+	// and call a regular net.Dialer
 	if resolver != nil {
 		innerDialer = &dnssec.Dialer{
 			InnerDialer: innerDialer.(*net.Dialer),
@@ -61,17 +60,13 @@ func makeRateLimitingDialer(phonebook Phonebook, resolver dnssec.ResolverIf) Dia
 }
 
 // Dial connects to the address on the named network.
-// 다이얼은 명명된 네트워크의 주소에 연결합니다.
 // It waits if needed not to exceed connectionsRateLimitingCount.
-// 필요하면 connectionsRateLimitingCount를 초과하지 않도록 기다립니다.
 func (d *Dialer) Dial(network, address string) (net.Conn, error) {
 	return d.DialContext(context.Background(), network, address)
 }
 
 // DialContext connects to the address on the named network using the provided context.
-// DialContext는 제공된 컨텍스트를 사용하여 명명된 네트워크의 주소에 연결합니다.
 // It waits if needed not to exceed connectionsRateLimitingCount.
-// 필요하면 connectionsRateLimitingCount를 초과하지 않도록 기다립니다.
 func (d *Dialer) DialContext(ctx context.Context, network, address string) (net.Conn, error) {
 	var waitTime time.Duration
 	var provisionalTime time.Time
