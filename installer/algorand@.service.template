@@ -1,0 +1,42 @@
+## This file should be installed as:
+##
+##   /lib/systemd/system/algorand@.service
+##
+## and then running "systemctl daemon-reload".
+##
+## To enable and start algod for a particular directory, run:
+##
+##   systemctl enable algorand@$(systemd-escape /home/algorand/node/data)
+##   systemctl start  algorand@$(systemd-escape /home/algorand/node/data)
+##
+## This assumes a directory layout where the algod binary lives at
+## /home/algorand/node/algod and the data lives under /home/algorand/node/data.
+##
+## To allow the update script (which runs as the algo user) to manipulate
+## the algorand systemd service, the following lines need to be added to
+## /etc/sudoers (using visudo):
+##
+##   algo ALL=(ALL) NOPASSWD: /usr/bin/systemctl start *
+##   algo ALL=(ALL) NOPASSWD: /usr/bin/systemctl stop *
+##   algo ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart *
+##   algo ALL=(ALL) NOPASSWD: /usr/bin/systemctl status *
+##
+## On an Ubuntu machine, replace /usr/bin/systemctl with /bin/systemctl.
+##
+
+[Unit]
+Description=Algorand daemon under %I
+After=network.target
+AssertPathExists=%I
+
+[Service]
+ExecStartPre=bash -c "[[ ! -f %I/system.json ]] && echo '{\"shared_server\":true,\"systemd_managed\":true}' > %I/system.json || :"
+ExecStart=@@BINDIR@@/algod -d %I
+User=@@USER@@
+Group=@@GROUP@@
+Restart=always
+RestartSec=5s
+ProtectSystem=false
+
+[Install]
+WantedBy=multi-user.target

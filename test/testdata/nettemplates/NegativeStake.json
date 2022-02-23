@@ -1,0 +1,35 @@
+{
+    "Genesis": {
+        "NetworkName": "tbd",
+        "LastPartKeyRound": 3000,
+        "Wallets": [
+            {
+                "Name": "W1",
+                "Stake": 110,
+                "Online": true
+            },
+            {
+                "Name": "W2",
+                "Stake": -10,
+                "Online": true
+            }
+        ]
+    },
+    "Nodes": [
+        {
+            "Name": "N1",
+            "IsRelay": true,
+            "Wallets": [
+              { "Name": "W1",
+                "ParticipationOnly": false }
+            ]
+        },
+        {
+            "Name": "N2",
+            "Wallets": [
+              { "Name": "W2",
+                "ParticipationOnly": false }
+            ]
+        }
+    ]
+}

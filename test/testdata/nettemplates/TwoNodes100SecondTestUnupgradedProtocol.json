@@ -1,0 +1,36 @@
+{
+  "Genesis": {
+    "NetworkName": "tbd",
+    "ConsensusProtocol": "test-unupgraded-protocol",
+    "LastPartKeyRound": 3000,
+    "Wallets": [
+      {
+        "Name": "Wallet1",
+        "Stake": 10,
+        "Online": false
+      },
+      {
+        "Name": "Wallet2",
+        "Stake": 90,
+        "Online": true
+      }
+    ]
+  },
+  "Nodes": [
+    {
+      "Name": "Primary",
+      "IsRelay": true,
+      "Wallets": [
+        { "Name": "Wallet1",
+          "ParticipationOnly": false }
+      ]
+    },
+    {
+      "Name": "Node",
+      "Wallets": [
+        { "Name": "Wallet2",
+          "ParticipationOnly": false }
+      ]
+    }
+  ]
+}

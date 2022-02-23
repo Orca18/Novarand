@@ -1,0 +1,27 @@
+pipeline {
+    parameters {
+        string defaultValue: '', description: 'Channel', name: 'channel', trim: true
+        string defaultValue: '', description: 'Version', name: 'version', trim: true
+    }
+
+    environment {
+        AWS_ACCESS_KEY_ID = credentials("prod-s3-aws-access-key-id")
+        AWS_SECRET_ACCESS_KEY = credentials("prod-s3-aws-secret-access-key")
+    }
+
+    agent {
+        dockerfile {
+            filename 'scripts/release/common/docker/setup.Dockerfile'
+            args '-u root'
+        }
+    }
+
+    stages {
+        stage("sync staging and production buckets") {
+            steps {
+                sh script: "scripts/release/prod/stage/sync/run.sh ${params.channel} ${params.version}"
+            }
+        }
+    }
+}
+
