@@ -78,6 +78,7 @@ type ParticipationKeyIdentity struct {
 }
 
 // ToBeHashed implements the Hashable interface.
+// => Hashable인터페이스를 구현했다.
 func (id *ParticipationKeyIdentity) ToBeHashed() (protocol.HashID, []byte) {
 	return protocol.ParticipationKeys, protocol.Encode(id)
 }
