@@ -84,6 +84,7 @@ func (id *ParticipationKeyIdentity) ToBeHashed() (protocol.HashID, []byte) {
 }
 
 // ID creates a ParticipationID hash from the identity file.
+// => ID는 identity file로부터 ParticipationID hash를 생성한다.
 func (id ParticipationKeyIdentity) ID() ParticipationID {
 	return ParticipationID(crypto.HashObj(&id))
 }
