@@ -17,4 +17,5 @@
 package protocol
 
 // The NetworkID type is used for strings that identify distinct named networks
+// NetworkID 유형은 고유한 명명된 네트워크를 식별하는 문자열에 사용됩니다.
 type NetworkID string

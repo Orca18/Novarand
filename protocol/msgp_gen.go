@@ -64,7 +64,7 @@ import (
 //    |-----> MsgIsZero
 //
 
-// MarshalMsg implements msgp.Marshaler
+// MarshalMsg implements msgp.Marshaler ~
 func (z CompactCertType) MarshalMsg(b []byte) (o []byte) {
 	o = msgp.Require(b, z.Msgsize())
 	o = msgp.AppendUint64(o, uint64(z))
@@ -79,7 +79,7 @@ func (_ CompactCertType) CanMarshalMsg(z interface{}) bool {
 	return ok
 }
 
-// UnmarshalMsg implements msgp.Unmarshaler
+// UnmarshalMsg implements msgp.Unmarshaler ~
 func (z *CompactCertType) UnmarshalMsg(bts []byte) (o []byte, err error) {
 	{
 		var zb0001 uint64
@@ -100,12 +100,14 @@ func (_ *CompactCertType) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z CompactCertType) Msgsize() (s int) {
 	s = msgp.Uint64Size
 	return
 }
 
 // MsgIsZero returns whether this is a zero value
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z CompactCertType) MsgIsZero() bool {
 	return z == 0
 }
@@ -146,12 +148,14 @@ func (_ *ConsensusVersion) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z ConsensusVersion) Msgsize() (s int) {
 	s = msgp.StringPrefixSize + len(string(z))
 	return
 }
 
 // MsgIsZero returns whether this is a zero value
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z ConsensusVersion) MsgIsZero() bool {
 	return z == ""
 }
@@ -192,12 +196,14 @@ func (_ *Error) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z Error) Msgsize() (s int) {
 	s = msgp.StringPrefixSize + len(string(z))
 	return
 }
 
 // MsgIsZero returns whether this is a zero value
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z Error) MsgIsZero() bool {
 	return z == ""
 }
@@ -238,12 +244,14 @@ func (_ *HashID) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z HashID) Msgsize() (s int) {
 	s = msgp.StringPrefixSize + len(string(z))
 	return
 }
 
 // MsgIsZero returns whether this is a zero value
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z HashID) MsgIsZero() bool {
 	return z == ""
 }
@@ -284,12 +292,14 @@ func (_ *NetworkID) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z NetworkID) Msgsize() (s int) {
 	s = msgp.StringPrefixSize + len(string(z))
 	return
 }
 
 // MsgIsZero returns whether this is a zero value
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z NetworkID) MsgIsZero() bool {
 	return z == ""
 }
@@ -330,12 +340,14 @@ func (_ *Tag) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z Tag) Msgsize() (s int) {
 	s = msgp.StringPrefixSize + len(string(z))
 	return
 }
 
 // MsgIsZero returns whether this is a zero value
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z Tag) MsgIsZero() bool {
 	return z == ""
 }
@@ -376,12 +388,14 @@ func (_ *TxType) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z TxType) Msgsize() (s int) {
 	s = msgp.StringPrefixSize + len(string(z))
 	return
 }
 
 // MsgIsZero returns whether this is a zero value
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z TxType) MsgIsZero() bool {
 	return z == ""
 }

@@ -76,12 +76,14 @@ func (_ *testSlice) CanUnmarshalMsg(z interface{}) bool {
 }
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+// Msgsize는 직렬화된 메시지가 차지하는 바이트 수의 상한 추정치를 반환합니다.
 func (z testSlice) Msgsize() (s int) {
 	s = msgp.ArrayHeaderSize + (len(z) * (msgp.Uint64Size))
 	return
 }
 
-// MsgIsZero returns whether this is a zero value
+// MsgIsZero returns whether this is a zero value\
+// MsgIsZero는 이것이 0 값인지 여부를 반환합니다.
 func (z testSlice) MsgIsZero() bool {
 	return len(z) == 0
 }

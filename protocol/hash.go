@@ -30,6 +30,12 @@ const (
 	// The prefix for ARC-XXXX should start with:
 	// "arcXXXX" (where "XXXX" is the 0-padded number of the ARC)
 	// For example ARC-0003 can use any prefix starting with "arc0003"
+	// ===================================================================
+	// ARCReserved는 `arc`로 시작하는 접두사를 예약하는 데 사용됩니다.
+	// ARC 관련 해시 https://github.com/algorandfoundation/ARCs
+	// ARC-XXXX의 접두사는 다음으로 시작해야 합니다.
+	// "arcXXXX"(여기서 "XXXX"는 ARC의 0으로 채워진 숫자)
+	// 예를 들어 ARC-0003은 "arc0003"으로 시작하는 모든 접두사를 사용할 수 있습니다.
 	ARCReserved HashID = "arc"
 
 	AuctionBid        HashID = "aB"
