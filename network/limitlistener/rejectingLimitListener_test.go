@@ -26,7 +26,7 @@ func TestRejectingLimitListenerBasic(t *testing.T) {
 
 	const limit = 5
 	attempts := (maxOpenFiles() - limit) / 2
-	if attempts > 256 { // maximum length of accept queue is 128 by default
+	if attempts > 256 { // maximum length of accept queue is 128 by default // maximum length of accept queue is 128 by default
 		attempts = 256
 	}
 
@@ -80,6 +80,8 @@ func TestRejectingLimitListenerBasic(t *testing.T) {
 		}
 
 		// Give the rejecting limit listener time to update its semaphor.
+		// 거부 제한 수신기에 semaphor를 업데이트할 시간을 줍니다.
+		//semaphor? => 깃발 수신호 (Semaphore 오타인듯)
 		time.Sleep(time.Millisecond)
 	}
 }

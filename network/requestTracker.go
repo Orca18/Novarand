@@ -32,11 +32,14 @@ import (
 
 const (
 	// maxHeaderReadTimeout is the time limit where items would remain in the acceptedConnections cache before being pruned.
+	// maxHeaderReadTimeout은 항목이 정리되기 전에 acceptedConnections 캐시에 남아 있는 시간 제한입니다.
 	// certain malicious connections would never get to the http handler, and therefore must be pruned every so often.
+	// 특정 악의적인 연결은 절대로 http 처리기에 도달하지 않으므로 자주 제거해야 합니다.
 	maxHeaderReadTimeout = 30 * time.Second
 )
 
 // TrackerRequest hold the tracking data associated with a single request.
+// TrackerRequest는 단일 요청과 관련된 추적 데이터를 보유합니다.
 type TrackerRequest struct {
 	created            time.Time
 	remoteHost         string
@@ -51,6 +54,7 @@ type TrackerRequest struct {
 }
 
 // makeTrackerRequest creates a new TrackerRequest.
+// makeTrackerRequest는 새로운 TrackerRequest를 생성합니다.
 func makeTrackerRequest(remoteAddr, remoteHost, remotePort string, createTime time.Time, conn net.Conn) *TrackerRequest {
 	if remoteHost == "" {
 		remoteHost, remotePort, _ = net.SplitHostPort(remoteAddr)

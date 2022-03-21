@@ -58,6 +58,7 @@ func (gmt *graphtraceMessageTracer) HashTrace(prefix string, data []byte) {
 }
 
 // NewGraphtraceMessageTracer returns a new MessageTracer that sends data to a graphtrace collector
+// NewGraphtraceMessageTracer는 데이터를 그래프트레이스 수집기로 보내는 새로운 MessageTracer를 반환합니다.
 func NewGraphtraceMessageTracer(log logging.Logger) MessageTracer {
 	return &graphtraceMessageTracer{log: log}
 }
@@ -65,6 +66,7 @@ func NewGraphtraceMessageTracer(log logging.Logger) MessageTracer {
 func init() {
 	if implFactory != nil {
 		panic("at most one MessageTracer impl should be compiled in, dup found at graphtrace.go init()")
+		//"최대 하나의 MessageTracer impl을 컴파일해야 합니다. dup은 graphtrace.go init()에 있습니다.
 	}
 	implFactory = NewGraphtraceMessageTracer
 }
