@@ -22,8 +22,8 @@ import (
 	"github.com/Orca18/novarand/logging"
 )
 
-// Multiplexer is a message handler that sorts incoming messages by Tag and passes
-// them along to the relevant message handler for that type of message.
+// Multiplexer is a message handler that sorts incoming messages by Tag and passes them along to the relevant message handler for that type of message.
+// Multiplexer는 들어오는 메시지를 태그별로 분류하고 해당 메시지 유형에 대한 관련 메시지 처리기로 전달하는 메시지 처리기입니다.
 type Multiplexer struct {
 	msgHandlers atomic.Value // stores map[Tag]MessageHandler, an immutable map.
 
@@ -31,6 +31,7 @@ type Multiplexer struct {
 }
 
 // MakeMultiplexer creates an empty Multiplexer
+// MakeMultiplexer는 빈 멀티플렉서를 생성합니다.
 func MakeMultiplexer(log logging.Logger) *Multiplexer {
 	m := &Multiplexer{
 		log: log,
@@ -40,6 +41,7 @@ func MakeMultiplexer(log logging.Logger) *Multiplexer {
 }
 
 // getHandlersMap retrieves the handlers map.
+// getHandlersMap은 핸들러 맵을 검색합니다.
 func (m *Multiplexer) getHandlersMap() map[Tag]MessageHandler {
 	handlersVal := m.msgHandlers.Load()
 	if handlers, valid := handlersVal.(map[Tag]MessageHandler); valid {
@@ -49,6 +51,7 @@ func (m *Multiplexer) getHandlersMap() map[Tag]MessageHandler {
 }
 
 // Retrives the handler for the given message Tag from the handlers array while taking a read lock.
+// 읽기 잠금을 취하는 동안 핸들러 배열에서 주어진 메시지 태그에 대한 핸들러를 검색합니다.
 func (m *Multiplexer) getHandler(tag Tag) (MessageHandler, bool) {
 	if handlers := m.getHandlersMap(); handlers != nil {
 		handler, ok := handlers[tag]
@@ -58,6 +61,7 @@ func (m *Multiplexer) getHandler(tag Tag) (MessageHandler, bool) {
 }
 
 // Handle is the "input" side of the multiplexer. It dispatches the message to the previously defined handler.
+// 핸들은 멀티플렉서의 "입력" 측입니다. 이전에 정의된 핸들러에 메시지를 전달합니다.
 func (m *Multiplexer) Handle(msg IncomingMessage) OutgoingMessage {
 	handler, ok := m.getHandler(msg.Tag)
 
@@ -69,6 +73,7 @@ func (m *Multiplexer) Handle(msg IncomingMessage) OutgoingMessage {
 }
 
 // RegisterHandlers registers the set of given message handlers.
+// RegisterHandlers는 주어진 메시지 핸들러 세트를 등록합니다.
 func (m *Multiplexer) RegisterHandlers(dispatch []TaggedMessageHandler) {
 	mp := make(map[Tag]MessageHandler)
 	if existingMap := m.getHandlersMap(); existingMap != nil {
@@ -86,6 +91,7 @@ func (m *Multiplexer) RegisterHandlers(dispatch []TaggedMessageHandler) {
 }
 
 // ClearHandlers deregisters all the existing message handlers other than the one provided in the excludeTags list
+// ClearHandlers는 excludeTags 목록에 제공된 것 이외의 모든 기존 메시지 핸들러를 등록 취소합니다.
 func (m *Multiplexer) ClearHandlers(excludeTags []Tag) {
 	if len(excludeTags) == 0 {
 		m.msgHandlers.Store(make(map[Tag]MessageHandler))
@@ -93,6 +99,7 @@ func (m *Multiplexer) ClearHandlers(excludeTags []Tag) {
 	}
 
 	// convert into map, so that we can exclude duplicates.
+	// 중복을 제외할 수 있도록 맵으로 변환합니다.
 	excludeTagsMap := make(map[Tag]bool)
 	for _, tag := range excludeTags {
 		excludeTagsMap[tag] = true

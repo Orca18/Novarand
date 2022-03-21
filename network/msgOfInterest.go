@@ -32,6 +32,7 @@ const topicsEncodingSeparator = ","
 
 func unmarshallMessageOfInterest(data []byte) (map[protocol.Tag]bool, error) {
 	// decode the message, and ensure it's a valid message.
+	// 메시지를 디코딩하고 유효한 메시지인지 확인합니다.
 	topics, err := UnmarshallTopics(data)
 	if err != nil {
 		return nil, errUnableUnmarshallMessage
@@ -44,6 +45,7 @@ func unmarshallMessageOfInterest(data []byte) (map[protocol.Tag]bool, error) {
 		return nil, errInvalidMessageOfInterestLength
 	}
 	// convert the tags into a tags map.
+	// 태그를 태그 맵으로 변환합니다.
 	msgTagsMap := make(map[protocol.Tag]bool, len(tags))
 	for _, tag := range strings.Split(string(tags), topicsEncodingSeparator) {
 		msgTagsMap[protocol.Tag(tag)] = true
@@ -52,8 +54,10 @@ func unmarshallMessageOfInterest(data []byte) (map[protocol.Tag]bool, error) {
 }
 
 // MarshallMessageOfInterest generate a message of interest message body for a given set of message tags.
+// MarshallMessageOfInterest는 주어진 메시지 태그 세트에 대한 관심 메시지 본문을 생성합니다.
 func MarshallMessageOfInterest(messageTags []protocol.Tag) []byte {
 	// create a long string with all these messages.
+	// 이 모든 메시지가 포함된 긴 문자열을 만듭니다.
 	tags := ""
 	for _, tag := range messageTags {
 		tags += topicsEncodingSeparator + string(tag)
@@ -65,8 +69,8 @@ func MarshallMessageOfInterest(messageTags []protocol.Tag) []byte {
 	return topics.MarshallTopics()
 }
 
-// MarshallMessageOfInterestMap generates a message of interest message body
-// for the message tags that map to "true" in the map argument.
+// MarshallMessageOfInterestMap generates a message of interest message body for the message tags that map to "true" in the map argument.
+// MarshallMessageOfInterestMap은 map 인수에서 "true"로 매핑되는 메시지 태그에 대한 관심 메시지 메시지 본문을 생성합니다.
 func MarshallMessageOfInterestMap(tagmap map[protocol.Tag]bool) []byte {
 	tags := ""
 	for tag, flag := range tagmap {
