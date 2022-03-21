@@ -220,6 +220,7 @@ func waitReady(t testing.TB, wn *WebsocketNetwork, timeout <-chan time.Time) boo
 }
 
 // Set up two nodes, test that a.Broadcast is received by B
+// 두 개의 노드를 설정하고 a.Broadcast가 B에서 수신되는지 테스트합니다.
 func TestWebsocketNetworkBasic(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -256,6 +257,7 @@ func TestWebsocketNetworkBasic(t *testing.T) {
 }
 
 // Repeat basic, but test a unicast
+// 기본을 반복하지만 유니캐스트를 테스트합니다.
 func TestWebsocketNetworkUnicast(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -297,6 +299,7 @@ func TestWebsocketNetworkUnicast(t *testing.T) {
 }
 
 // Like a basic test, but really we just want to have SetPeerData()/GetPeerData()
+// 기본 테스트와 비슷하지만 실제로는 SetPeerData()/GetPeerData()가 필요합니다.
 func TestWebsocketPeerData(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -335,6 +338,7 @@ func TestWebsocketPeerData(t *testing.T) {
 }
 
 // Test sending array of messages
+// 메시지 배열을 보내는 테스트
 func TestWebsocketNetworkArray(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -372,6 +376,7 @@ func TestWebsocketNetworkArray(t *testing.T) {
 }
 
 // Test cancelling message sends
+// 테스트 취소 메시지 전송
 func TestWebsocketNetworkCancel(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -455,6 +460,7 @@ func TestWebsocketNetworkCancel(t *testing.T) {
 }
 
 // Set up two nodes, test that a.Broadcast is received by B, when B has no address.
+// 두 개의 노드를 설정하고 B에 주소가 없을 때 B가 a.Broadcast를 수신하는지 테스트합니다.
 func TestWebsocketNetworkNoAddress(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -547,6 +553,9 @@ const lineNetworkNumMessages = 5
 // Set up a network where each node connects to the previous; test that .Broadcast from one end gets to the other.
 // Bonus! Measure how long that takes.
 // TODO: also make a Benchmark version of this that reports per-node broadcast hop speed.
+// 각 노드가 이전 노드에 연결되는 네트워크를 설정합니다. .Broadcast가 한쪽 끝에서 다른 쪽 끝으로 전달되는지 테스트합니다.
+// 보너스! 얼마나 오래 걸리는지 측정하십시오.
+// TODO: 노드당 브로드캐스트 홉 속도를 보고하는 이것의 벤치마크 버전도 만듭니다.
 func TestLineNetwork(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -623,6 +632,7 @@ func (nc *nopConn) SetPongHandler(h func(appData string) error) {
 var nopConnSingleton = nopConn{}
 
 // What happens when all the read message handler threads get busy?
+// 모든 읽기 메시지 핸들러 스레드가 사용 중이면 어떻게 됩니까?
 func TestSlowHandlers(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -648,6 +658,7 @@ func TestSlowHandlers(t *testing.T) {
 	}
 	ipi := 0
 	// start slow handler calls that will block all handler threads
+	// 모든 핸들러 스레드를 차단하는 느린 핸들러 호출 시작
 	for i := 0; i < incomingThreads; i++ {
 		data := []byte{byte(i)}
 		node.readBuffer <- IncomingMessage{Sender: &injectionPeers[ipi], Tag: slowTag, Data: data, Net: node}
@@ -656,6 +667,7 @@ func TestSlowHandlers(t *testing.T) {
 	defer slowCounter.Broadcast()
 
 	// start fast handler calls that won't get to run
+	// 실행되지 않는 빠른 처리기 호출을 시작합니다.
 	for i := 0; i < incomingThreads; i++ {
 		data := []byte{byte(i)}
 		node.readBuffer <- IncomingMessage{Sender: &injectionPeers[ipi], Tag: fastTag, Data: data, Net: node}
@@ -684,6 +696,7 @@ func TestSlowHandlers(t *testing.T) {
 	require.Equal(t, 0, fastCounter.Count())
 
 	// release one slow request, all the other requests should process on that one handler thread
+	// 하나의 느린 요청을 해제하고 다른 모든 요청은 해당 하나의 핸들러 스레드에서 처리해야 합니다.
 	slowCounter.Signal()
 
 	select {
@@ -692,13 +705,16 @@ func TestSlowHandlers(t *testing.T) {
 		t.Errorf("timeout waiting for %d blocked events to be handled, have %d", incomingThreads, fastCounter.Count())
 	}
 	// checks that above .Signal() did in fact release just one waiting slow handler
+	// 위의 .Signal()이 실제로 대기 중인 느린 처리기를 하나만 해제했는지 확인합니다.
 	require.Equal(t, 1, slowCounter.Count())
 
 	// we don't care about counting how things finish
+	// 우리는 일이 어떻게 끝나는지 계산하는 데 신경 쓰지 않습니다.
 	debugMetrics(t)
 }
 
 // one peer sends waaaayy too much slow-to-handle traffic. everything else should run fine.
+// 한 피어가 처리 속도가 느린 트래픽을 너무 많이 보냅니다. 다른 모든 것은 잘 실행되어야 합니다.
 func TestFloodingPeer(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -724,6 +740,7 @@ func TestFloodingPeer(t *testing.T) {
 	ipi := 0
 	const numBadPeers = 1
 	// start slow handler calls that will block some threads
+	// 일부 스레드를 차단하는 느린 처리기 호출을 시작합니다.
 	ctx, cancel := context.WithCancel(context.Background())
 	for i := 0; i < numBadPeers; i++ {
 		myI := i
@@ -757,6 +774,7 @@ func TestFloodingPeer(t *testing.T) {
 	}()
 
 	// start fast handler calls that will run on other reader threads
+	// 다른 판독기 스레드에서 실행될 빠른 처리기 호출을 시작합니다.
 	numFast := 0
 	fastCounter.target = len(injectionPeers) - ipi
 	fastCounter.done = make(chan struct{})
@@ -775,6 +793,7 @@ func TestFloodingPeer(t *testing.T) {
 	}
 
 	// we don't care about counting how things finish
+	// 우리는 일이 어떻게 끝나는지 계산하는 데 신경 쓰지 않습니다.
 }
 
 func peerIsClosed(peer *wsPeer) bool {
@@ -792,8 +811,9 @@ func avgSendBufferHighPrioLength(wn *WebsocketNetwork) float64 {
 }
 
 // TestSlowOutboundPeer tests what happens when one outbound peer is slow and the rest are fine. Current logic is to disconnect the one slow peer when its outbound channel is full.
-//
+// TestSlowOutboundPeer는 하나의 아웃바운드 피어가 느리고 나머지는 정상일 때 어떤 일이 발생하는지 테스트합니다. 현재 논리는 아웃바운드 채널이 가득 차면 느린 피어 하나의 연결을 끊는 것입니다.
 // This is a deeply invasive test that reaches into the guts of WebsocketNetwork and wsPeer. If the implementation chainges consider throwing away or totally reimplementing this test.
+// 이것은 WebsocketNetwork 및 wsPeer의 내장에 도달하는 매우 침습적인 테스트입니다. 구현 체인이 이 테스트를 폐기하거나 완전히 다시 구현하는 것을 고려하는 경우.
 func TestSlowOutboundPeer(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -844,9 +864,11 @@ func TestSlowOutboundPeer(t *testing.T) {
 		return
 	}
 	// it shouldn't have closed for just sitting on the limit of full
+	// 전체 제한에 앉아 있기 때문에 닫히지 않아야 합니다.
 	require.False(t, peerIsClosed(&destPeers[0]))
 
 	// function context just to contain defer cf()
+	// defer cf()를 포함하기 위한 함수 컨텍스트
 	func() {
 		timeout, cf := context.WithTimeout(context.Background(), time.Second)
 		defer cf()
@@ -855,6 +877,7 @@ func TestSlowOutboundPeer(t *testing.T) {
 	}()
 
 	// and now with the rest of the peers well and this one slow, we closed the slow one
+	// 이제 나머지 피어는 잘되고 이것은 느린 것으로, 느린 것을 닫았습니다.
 	require.True(t, peerIsClosed(&destPeers[0]))
 }
 
@@ -924,8 +947,13 @@ func TestDupFilter(t *testing.T) {
 	// algod_network_duplicate_message_received_total{} 2
 	// algod_outgoing_network_message_filtered_out_total{} 2
 	// Maybe we should just .Set(0) those counters and use them in this test?
+	// TODO: 이 테스트에는 수신된 해시로 인해 인바운드 중복 제거 및 아웃바운드 미전송을 실행하는 두 개의 절반이 있습니다. 그러나 각 메시지를 정확히 한 번 수신하는 _이유_를 측정하지 않기 때문에 적절하게 _테스트_하지 않습니다. 아래의 후반부는 실제로 이 전반부와 동일한 인바운드 중복 제거 때문일 수 있습니다. 메트릭에서 둘 중 하나의 작업을 볼 수 있습니다.
+	// algod_network_duplicate_message_received_total{} 2
+	// algod_outgoing_network_message_filtered_out_total{} 2
+	// 이 카운터를 .Set(0)하고 이 테스트에서 사용해야 할까요?
 
 	// This exercise inbound dup detection.
+	// 인바운드 중복 감지를 실행합니다.
 	netA.Broadcast(context.Background(), protocol.AgreementVoteTag, msg, true, nil)
 	netA.Broadcast(context.Background(), protocol.AgreementVoteTag, msg, true, nil)
 	netA.Broadcast(context.Background(), protocol.AgreementVoteTag, msg, true, nil)
@@ -934,6 +962,7 @@ func TestDupFilter(t *testing.T) {
 	select {
 	case <-counter.done:
 		// probably a failure, but let it fall through to the equal check
+		// 아마도 실패할 수 있지만 동등 검사로 넘어갑니다.
 	case <-time.After(time.Second):
 	}
 	counter.lock.Lock()
@@ -945,6 +974,7 @@ func TestDupFilter(t *testing.T) {
 	t.Log("A send, C non-dup-send")
 	netA.Broadcast(context.Background(), debugTag2, msg, true, nil)
 	// B should broadcast its non-desire to receive the message again
+	// B는 메시지를 다시 수신하기를 원하지 않음을 브로드캐스트해야 합니다.
 	time.Sleep(500 * time.Millisecond)
 
 	// C should now not send these
@@ -954,6 +984,7 @@ func TestDupFilter(t *testing.T) {
 	select {
 	case <-counter2.done:
 		// probably a failure, but let it fall through to the equal check
+		// 아마도 실패할 수 있지만 동등 검사로 넘어갑니다.
 	case <-time.After(time.Second):
 	}
 	assert.Equal(t, 1, counter2.count)
@@ -990,15 +1021,18 @@ func TestGetPeers(t *testing.T) {
 	//addrB, _ := netB.Address()
 
 	// A has only an inbound connection from B
+	// A는 B로부터의 인바운드 연결만 가지고 있습니다.
 	aPeers := netA.GetPeers(PeersConnectedOut)
 	assert.Equal(t, 0, len(aPeers))
 
 	// B's connection to A is outgoing
+	// B와 A의 연결이 나가는 중입니다.
 	bPeers := netB.GetPeers(PeersConnectedOut)
 	assert.Equal(t, 1, len(bPeers))
 	assert.Equal(t, addrA, bPeers[0].(HTTPPeer).GetAddress())
 
 	// B also knows about other peers not connected to
+	// B는 또한 연결되지 않은 다른 피어에 대해서도 알고 있습니다.
 	bPeers = netB.GetPeers(PeersPhonebookRelays)
 	assert.Equal(t, 4, len(bPeers))
 	peerAddrs := make([]string, len(bPeers))
@@ -1022,6 +1056,7 @@ func (bh *benchmarkHandler) Handle(message IncomingMessage) OutgoingMessage {
 }
 
 // Set up two nodes, test that a.Broadcast is received by B
+// 두 개의 노드를 설정하고 a.Broadcast가 B에서 수신되는지 테스트합니다.
 func BenchmarkWebsocketNetworkBasic(t *testing.B) {
 	deadlock.Opts.Disable = true
 	const msgSize = 200
@@ -1100,6 +1135,7 @@ func BenchmarkWebsocketNetworkBasic(t *testing.B) {
 }
 
 // Check that priority is propagated from B to A
+// 우선순위가 B에서 A로 전파되었는지 확인
 func TestWebsocketNetworkPrio(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1125,6 +1161,7 @@ func TestWebsocketNetworkPrio(t *testing.T) {
 	defer func() { t.Log("stopping B"); netB.Stop(); t.Log("B done") }()
 
 	// Wait for response message to propagate from B to A
+	// 응답 메시지가 B에서 A로 전파될 때까지 기다립니다.
 	select {
 	case <-netA.prioResponseChan:
 	case <-time.After(time.Second):
@@ -1133,6 +1170,7 @@ func TestWebsocketNetworkPrio(t *testing.T) {
 	waitReady(t, netA, time.After(time.Second))
 
 	// Peek at A's peers
+	// A의 피어를 엿본다.
 	netA.peersLock.RLock()
 	defer netA.peersLock.RUnlock()
 	require.Equal(t, len(netA.peers), 1)
@@ -1142,6 +1180,7 @@ func TestWebsocketNetworkPrio(t *testing.T) {
 }
 
 // Check that priority is propagated from B to A
+// 우선순위가 B에서 A로 전파되었는지 확인
 func TestWebsocketNetworkPrioLimit(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1187,6 +1226,7 @@ func TestWebsocketNetworkPrioLimit(t *testing.T) {
 	defer func() { t.Log("stopping C"); netC.Stop(); t.Log("C done") }()
 
 	// Wait for response messages to propagate from B+C to A
+	// 응답 메시지가 B+C에서 A로 전파될 때까지 기다립니다.
 	select {
 	case peer := <-netA.prioResponseChan:
 		netA.peersLock.RLock()
@@ -1230,6 +1270,7 @@ func TestWebsocketNetworkPrioLimit(t *testing.T) {
 }
 
 // Create many idle connections, to see if we have excessive CPU utilization.
+// 과도한 CPU 사용률이 있는지 확인하기 위해 많은 유휴 연결을 만듭니다.
 func TestWebsocketNetworkManyIdle(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1298,6 +1339,13 @@ func TestWebsocketNetworkManyIdle(t *testing.T) {
 // TODO? disconnect a node in the middle of a line and test that messages _don't_ get through?
 // TODO: test self-connect rejection
 // TODO: test funcion when some message handler is slow?
+// ===============================================================
+// TODO: http 헤더 설정 및 확인의 양면을 테스트하시겠습니까?
+// TODO: 테스트 요청-연결 해제-재연결?
+// TODO: 다양한 기형 클라이언트의 테스트 서버 처리?
+// TODO? 줄 중간에 있는 노드의 연결을 끊고 메시지가 _don't_ 통과하는지 테스트하십시오.
+// TODO: 자체 연결 거부 테스트
+// TODO: 일부 메시지 핸들러가 느릴 때 테스트 기능?
 
 func TestWebsocketNetwork_getCommonHeaders(t *testing.T) {
 	partitiontest.PartitionTest(t)
@@ -1457,14 +1505,17 @@ func TestSlowPeerDisconnection(t *testing.T) {
 	require.Equalf(t, len(peers), 1, "Expected number of peers should be 1")
 	peer := peers[0]
 	// modify the peer on netA and
+	// netA의 피어를 수정하고
 	beforeLoopTime := time.Now()
 	atomic.StoreInt64(&peer.intermittentOutgoingMessageEnqueueTime, beforeLoopTime.Add(-maxMessageQueueDuration).Add(time.Second).UnixNano())
 	// wait up to 10 seconds for the monitor to figure out it needs to disconnect.
+	// 모니터가 연결을 끊을 필요가 있음을 알아낼 때까지 최대 10초 동안 기다립니다.
 	expire := beforeLoopTime.Add(2 * slowWritingPeerMonitorInterval)
 	for {
 		peers, _ = netA.peerSnapshot(peers)
 		if len(peers) == 0 || peers[0] != peer {
 			// make sure it took more than 1 second, and less than 5 seconds.
+			// 1초 이상 5초 미만이 소요되었는지 확인합니다.
 			waitTime := time.Now().Sub(beforeLoopTime)
 			require.LessOrEqual(t, int64(time.Second), int64(waitTime))
 			require.GreaterOrEqual(t, int64(5*time.Second), int64(waitTime))
@@ -1525,6 +1576,7 @@ func TestForceMessageRelaying(t *testing.T) {
 	waitReady(t, netC, readyTimeout.C)
 
 	// send 5 messages from both netB and netC to netA
+	// netB와 netC에서 모두 5개의 메시지를 netA로 보냅니다.
 	for i := 0; i < 5; i++ {
 		err := netB.Relay(context.Background(), protocol.TxnTag, []byte{1, 2, 3}, true, nil)
 		require.NoError(t, err)
@@ -1547,8 +1599,10 @@ func TestForceMessageRelaying(t *testing.T) {
 	netA.RegisterHandlers([]TaggedMessageHandler{{Tag: protocol.TxnTag, MessageHandler: counter}})
 
 	// hack the relayMessages on the netB so that it would start sending messages.
+	// netB의 relayMessage를 해킹하여 메시지 전송을 시작합니다.
 	netB.relayMessages = true
 	// send additional 10 messages from netB
+	// netB에서 추가로 10개의 메시지를 보냅니다.
 	for i := 0; i < 10; i++ {
 		err := netB.Relay(context.Background(), protocol.TxnTag, []byte{1, 2, 3}, true, nil)
 		require.NoError(t, err)
@@ -1575,6 +1629,7 @@ func TestCheckProtocolVersionMatch(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
 	// note - this test changes the SupportedProtocolVersions global variable ( SupportedProtocolVersions ) and therefore cannot be parallelized.
+	// 참고 - 이 테스트는 SupportedProtocolVersions 전역 변수( SupportedProtocolVersions )를 변경하므로 병렬화할 수 없습니다.
 	originalSupportedProtocolVersions := SupportedProtocolVersions
 	defer func() {
 		SupportedProtocolVersions = originalSupportedProtocolVersions
@@ -1652,6 +1707,7 @@ func handleTopicRequest(msg IncomingMessage) (out OutgoingMessage) {
 }
 
 // Set up two nodes, test topics send/receive is working
+// 두 개의 노드를 설정하고 테스트 토픽 보내기/받기가 작동 중입니다.
 func TestWebsocketNetworkTopicRoundtrip(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1708,6 +1764,7 @@ func TestWebsocketNetworkTopicRoundtrip(t *testing.T) {
 }
 
 // Set up two nodes, have one of them request a certain message tag mask, and verify the other follow that.
+// 두 개의 노드를 설정하고 그 중 하나가 특정 메시지 태그 마스크를 요청하도록 하고 다른 노드가 이를 따르는지 확인합니다.
 func TestWebsocketNetworkMessageOfInterest(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1745,6 +1802,7 @@ func TestWebsocketNetworkMessageOfInterest(t *testing.T) {
 	}
 
 	// register all the handlers.
+	// 모든 핸들러를 등록합니다.
 	taggedHandlers := []TaggedMessageHandler{}
 	for tag := range defaultSendMessageTags {
 		taggedHandlers = append(taggedHandlers, TaggedMessageHandler{
@@ -1764,13 +1822,17 @@ func TestWebsocketNetworkMessageOfInterest(t *testing.T) {
 	waitReady(t, netB, readyTimeout.C)
 
 	// have netB asking netA to send it only AgreementVoteTag and ProposalPayloadTag
+	// netB가 netA에게 동의 VoteTag 및 제안 페이로드 태그만 보내도록 요청합니다.
 	netB.Broadcast(context.Background(), protocol.MsgOfInterestTag, MarshallMessageOfInterest([]protocol.Tag{protocol.AgreementVoteTag, protocol.ProposalPayloadTag}), true, nil)
 	// send another message which we can track, so that we'll know that the first message was delivered.
+	// 추적할 수 있는 다른 메시지를 보내 첫 번째 메시지가 배달되었음을 알 수 있습니다.
 	netB.Broadcast(context.Background(), protocol.AgreementVoteTag, []byte{0, 1, 2, 3, 4}, true, nil)
 	messageFilterArriveWg.Wait()
 
 	messageArriveWg.Add(5 * 2) // we're expecting exactly 10 messages.
 	// send 5 messages of few types.
+	// 정확히 10개의 메시지가 필요합니다.
+	// 몇 가지 유형의 5개 메시지를 보냅니다.
 	for i := 0; i < 5; i++ {
 		netA.Broadcast(context.Background(), protocol.AgreementVoteTag, []byte{0, 1, 2, 3, 4}, true, nil)
 		netA.Broadcast(context.Background(), protocol.TxnTag, []byte{0, 1, 2, 3, 4}, true, nil)
@@ -1793,6 +1855,12 @@ func TestWebsocketNetworkMessageOfInterest(t *testing.T) {
 // Network A will be sending messages to network B.
 // Network B will respond with another message for the first 4 messages. When it receive the 5th message, it would close the connection.
 // We want to get an event with disconnectRequestReceived
+//===========
+// 두 개의 노드를 설정하고 그 중 하나를 다른 노드와 연결 해제하고 연결 해제가 발생하지 않은 쪽의 연결 해제 오류를 모니터링합니다.
+// 계획:
+// 네트워크 A는 네트워크 B에 메시지를 보냅니다.
+// 네트워크 B는 처음 4개 메시지에 대해 다른 메시지로 응답합니다. 다섯 번째 메시지를 받으면 연결을 닫습니다.
+// disconnectRequestReceived로 이벤트를 가져오고 싶습니다.
 func TestWebsocketDisconnection(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1816,6 +1884,7 @@ func TestWebsocketDisconnection(t *testing.T) {
 
 	msgHandlerA := func(msg IncomingMessage) (out OutgoingMessage) {
 		// if we received a message, send a message back.
+		// 메시지를 받으면 다시 메시지를 보냅니다.
 		if msg.Data[0]%10 == 2 {
 			netA.Broadcast(context.Background(), protocol.ProposalPayloadTag, []byte{msg.Data[0] + 8}, true, nil)
 		}
@@ -1829,6 +1898,7 @@ func TestWebsocketDisconnection(t *testing.T) {
 			netB.DisconnectPeers()
 		} else {
 			// if we received a message, send a message back.
+			// 메시지를 받으면 다시 메시지를 보냅니다.
 			netB.Broadcast(context.Background(), protocol.ProposalPayloadTag, []byte{msg.Data[0] + 1}, true, nil)
 			netB.Broadcast(context.Background(), protocol.ProposalPayloadTag, []byte{msg.Data[0] + 2}, true, nil)
 		}
@@ -1836,6 +1906,7 @@ func TestWebsocketDisconnection(t *testing.T) {
 	}
 
 	// register all the handlers.
+	// 모든 핸들러를 등록합니다.
 	taggedHandlersA := []TaggedMessageHandler{
 		{
 			Tag:            protocol.ProposalPayloadTag,
@@ -1882,6 +1953,7 @@ func TestWebsocketDisconnection(t *testing.T) {
 }
 
 // TestASCIIFiltering tests the behaviour of filterASCII by feeding it with few known inputs and verifying the expected outputs.
+// TestASCIIFiltering은 알려진 입력이 거의 없고 예상 출력을 확인하여 filterASCII의 동작을 테스트합니다.
 func TestASCIIFiltering(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1924,6 +1996,7 @@ func (cl callbackLogger) Warnf(s string, args ...interface{}) {
 }
 
 // TestMaliciousCheckServerResponseVariables test the checkServerResponseVariables to ensure it doesn't print the a malicious input without being filtered to the log file.
+// TestMaliciousCheckServerResponseVariables는 checkServerResponseVariables를 테스트하여 로그 파일로 필터링되지 않고 악의적인 입력을 인쇄하지 않는지 확인합니다.
 func TestMaliciousCheckServerResponseVariables(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -1999,12 +2072,14 @@ func BenchmarkVariableTransactionMessageBlockSizes(t *testing.B) {
 
 	msgHandlerA := func(msg IncomingMessage) (out OutgoingMessage) {
 		// spend some time, linear to the size of the message -
+		// 메시지 크기에 선형으로 시간을 보냅니다.
 		txnCount := len(msg.Data) / txnSize
 		time.Sleep(time.Nanosecond * time.Duration(10000*txnCount))
 		msgProcessed <- struct{}{}
 		return
 	}
 	// register all the handlers.
+	// 모든 핸들러를 등록합니다.
 	taggedHandlersA := []TaggedMessageHandler{
 		{
 			Tag:            protocol.TxnTag,

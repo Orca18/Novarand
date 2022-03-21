@@ -44,6 +44,7 @@ func TestCheckSlowWritingPeer(t *testing.T) {
 }
 
 // TestGetRequestNonce tests if unique values are generated each time
+// TestGetRequestNonce는 매번 고유한 값이 생성되는지 테스트합니다.
 func TestGetRequestNonce(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -62,6 +63,7 @@ func TestGetRequestNonce(t *testing.T) {
 	maxWait := time.After(2 * time.Second)
 
 	// check if all the values are unique
+	// 모든 값이 고유한지 확인
 	seenValue := make([]bool, numValues+1)
 	for x := 0; x < numValues; x++ {
 		select {
@@ -73,6 +75,7 @@ func TestGetRequestNonce(t *testing.T) {
 		}
 	}
 	// Check if all the values were generated
+	// 모든 값이 고유한지 확인
 	for x := 1; x <= numValues; x++ {
 		require.Equal(t, true, seenValue[x])
 	}
@@ -86,9 +89,10 @@ func TestDefaultMessageTagsLength(t *testing.T) {
 	}
 }
 
-// TestAtomicVariablesAligment ensures that the 64-bit atomic variables
-// offsets are 64-bit aligned. This is required due to go atomic library
-// limitation.
+// TestAtomicVariablesAligment ensures that the 64-bit atomic variables offsets are 64-bit aligned.
+// TestAtomicVariablesAlignment는 64비트 원자 변수 오프셋이 64비트로 정렬되도록 합니다.
+// This is required due to go atomic library limitation.
+// 이것은 go atomic 라이브러리 제한으로 인해 필요합니다.
 func TestAtomicVariablesAligment(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
