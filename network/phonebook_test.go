@@ -119,8 +119,8 @@ func TestArrayPhonebookUniform3(t *testing.T) {
 	testPhonebookUniform(t, set, ph, 3)
 }
 
-// TestPhonebookExtension tests for extending different phonebooks with
-// addresses.
+// TestPhonebookExtension tests for extending different phonebooks with addresses.
+// TestPhonebookExtension은 주소가 있는 다른 전화번호부를 확장하기 위한 테스트입니다.
 func TestPhonebookExtension(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
@@ -240,9 +240,10 @@ func TestMultiPhonebookDuplicateFiltering(t *testing.T) {
 func TestWaitAndAddConnectionTimeLongtWindow(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
-	// make the connectionsRateLimitingWindow long enough to avoid triggering it when the
-	// test is running in a slow environment
+	// make the connectionsRateLimitingWindow long enough to avoid triggering it when the test is running in a slow environment
+	// 테스트가 느린 환경에서 실행될 때 트리거되는 것을 피하기 위해 connectionsRateLimitingWindow를 충분히 길게 만듭니다.
 	// The test will artificially simulate time passing
+	// 테스트는 시간 경과를 인위적으로 시뮬레이션합니다.
 	timeUnit := 2000 * time.Second
 	connectionsRateLimitingWindow := 2 * timeUnit
 	entries := MakePhonebook(3, connectionsRateLimitingWindow).(*phonebookImpl)
@@ -250,12 +251,13 @@ func TestWaitAndAddConnectionTimeLongtWindow(t *testing.T) {
 	addr2 := "addrXYZ"
 
 	// Address not in. Should return false
+	// 주소가 없습니다. false를 반환해야 합니다.
 	addrInPhonebook, _, provisionalTime := entries.GetConnectionWaitTime(addr1)
 	require.Equal(t, false, addrInPhonebook)
 	require.Equal(t, false, entries.UpdateConnectionTime(addr1, provisionalTime))
 
-	// Test the addresses are populated in the phonebook and a
-	// time can be added to one of them
+	// Test the addresses are populated in the phonebook and a time can be added to one of them
+	// 전화번호부에 주소가 채워져 있는지 테스트하고 그 중 하나에 시간을 추가할 수 있습니다.
 	entries.ReplacePeerList([]string{addr1, addr2}, "default", PhoneBookEntryRelayRole)
 	addrInPhonebook, waitTime, provisionalTime := entries.GetConnectionWaitTime(addr1)
 	require.Equal(t, true, addrInPhonebook)
@@ -265,11 +267,13 @@ func TestWaitAndAddConnectionTimeLongtWindow(t *testing.T) {
 	require.Equal(t, 1, len(phBookData))
 
 	// simulate passing a unit of time
+	// 시간 단위를 전달하는 시뮬레이션
 	for rct := range entries.data[addr1].recentConnectionTimes {
 		entries.data[addr1].recentConnectionTimes[rct] = entries.data[addr1].recentConnectionTimes[rct].Add(-1 * timeUnit)
 	}
 
 	// add another value to addr
+	// addr에 다른 값 추가
 	addrInPhonebook, waitTime, provisionalTime = entries.GetConnectionWaitTime(addr1)
 	require.Equal(t, time.Duration(0), waitTime)
 	require.Equal(t, true, entries.UpdateConnectionTime(addr1, provisionalTime))
@@ -277,13 +281,14 @@ func TestWaitAndAddConnectionTimeLongtWindow(t *testing.T) {
 	require.Equal(t, 2, len(phBookData))
 
 	// simulate passing a unit of time
+	// 시간 단위를 전달하는 시뮬레이션
 	for rct := range entries.data[addr1].recentConnectionTimes {
 		entries.data[addr1].recentConnectionTimes[rct] =
 			entries.data[addr1].recentConnectionTimes[rct].Add(-1 * timeUnit)
 	}
 
-	// the first time should be removed and a new one added
-	// there should not be any wait
+	// the first time should be removed and a new one added there should not be any wait
+	// 첫 번째 시간은 제거되고 새 항목이 추가되어야 대기가 없어야 합니다.
 	addrInPhonebook, waitTime, provisionalTime = entries.GetConnectionWaitTime(addr1)
 	require.Equal(t, time.Duration(0), waitTime)
 	require.Equal(t, true, entries.UpdateConnectionTime(addr1, provisionalTime))
@@ -291,20 +296,23 @@ func TestWaitAndAddConnectionTimeLongtWindow(t *testing.T) {
 	require.Equal(t, 2, len(phBookData2))
 
 	// make sure the right time was removed
+	// 올바른 시간이 제거되었는지 확인
 	require.Equal(t, phBookData[1], phBookData2[0])
 	require.Equal(t, true, phBookData2[0].Before(phBookData2[1]))
 
 	// try requesting from another address, make sure
 	// a separate array is used for these new requests
+	// 다른 주소에서 요청을 시도합니다.
+	// 이러한 새 요청에는 별도의 배열이 사용됩니다.
 
-	// add 3 values to another address. should not wait
-	// value 1
+	// add 3 values to another address. should not wait value 1
+	// 다른 주소에 3개의 값을 추가합니다. 값 1을 기다리지 않아야 함
 	_, waitTime, provisionalTime = entries.GetConnectionWaitTime(addr2)
 	require.Equal(t, time.Duration(0), waitTime)
 	require.Equal(t, true, entries.UpdateConnectionTime(addr2, provisionalTime))
 
-	// introduce a gap between the two requests so that only the first will be removed later when waited
-	// simulate passing a unit of time
+	// introduce a gap between the two requests so that only the first will be removed later when waited simulate passing a unit of time
+	// 두 요청 사이에 간격을 만들어 대기 시 첫 번째 요청만 나중에 제거되도록 시간 단위 통과 시뮬레이트
 	for rct := range entries.data[addr2].recentConnectionTimes {
 		entries.data[addr2].recentConnectionTimes[rct] =
 			entries.data[addr2].recentConnectionTimes[rct].Add(-1 * timeUnit)
@@ -321,32 +329,39 @@ func TestWaitAndAddConnectionTimeLongtWindow(t *testing.T) {
 
 	phBookData = entries.data[addr2].recentConnectionTimes
 	// all three times should be queued
+	// 세 번 모두 대기열에 넣어야 합니다.
 	require.Equal(t, 3, len(phBookData))
 
 	// add another element to trigger wait
+	// 대기를 트리거하기 위해 다른 요소를 추가합니다.
 	_, waitTime, provisionalTime = entries.GetConnectionWaitTime(addr2)
 	require.Greater(t, int64(waitTime), int64(0))
 	// no element should be removed
+	// 제거할 요소가 없어야 함
 	phBookData2 = entries.data[addr2].recentConnectionTimes
 	require.Equal(t, phBookData[0], phBookData2[0])
 	require.Equal(t, phBookData[1], phBookData2[1])
 	require.Equal(t, phBookData[2], phBookData2[2])
 
 	// simulate passing of the waitTime duration
+	// waitTime 지속 시간의 전달을 시뮬레이션합니다.
 	for rct := range entries.data[addr2].recentConnectionTimes {
 		entries.data[addr2].recentConnectionTimes[rct] =
 			entries.data[addr2].recentConnectionTimes[rct].Add(-1 * waitTime)
 	}
 
 	// The wait should be sufficient
+	// 기다림은 충분해야 합니다.
 	_, waitTime, provisionalTime = entries.GetConnectionWaitTime(addr2)
 	require.Equal(t, time.Duration(0), waitTime)
 	require.Equal(t, true, entries.UpdateConnectionTime(addr2, provisionalTime))
 	// only one element should be removed, and one added
+	// 하나의 요소만 제거하고 하나의 요소를 추가해야 합니다.
 	phBookData2 = entries.data[addr2].recentConnectionTimes
 	require.Equal(t, 3, len(phBookData2))
 
 	// make sure the right time was removed
+	// 올바른 시간이 제거되었는지 확인
 	require.Equal(t, phBookData[1], phBookData2[0])
 	require.Equal(t, phBookData[2], phBookData2[1])
 }
@@ -358,6 +373,7 @@ func TestWaitAndAddConnectionTimeShortWindow(t *testing.T) {
 	addr1 := "addrABC"
 
 	// Init the data structures
+	// 데이터 구조 초기화
 	entries.ReplacePeerList([]string{addr1}, "default", PhoneBookEntryRelayRole)
 
 	// add 3 values. should not wait
@@ -376,14 +392,17 @@ func TestWaitAndAddConnectionTimeShortWindow(t *testing.T) {
 	require.Equal(t, true, entries.UpdateConnectionTime(addr1, provisionalTime))
 
 	// give enough time to expire all the elements
+	// 모든 요소가 만료되기에 충분한 시간을 줍니다.
 	time.Sleep(10 * time.Millisecond)
 
 	// there should not be any wait
+	// 대기가 없어야 함
 	_, waitTime, provisionalTime = entries.GetConnectionWaitTime(addr1)
 	require.Equal(t, time.Duration(0), waitTime)
 	require.Equal(t, true, entries.UpdateConnectionTime(addr1, provisionalTime))
 
 	// only one time should be left (the newly added)
+	// 한 번만 남겨야 함(새로 추가됨)
 	phBookData := entries.data[addr1].recentConnectionTimes
 	require.Equal(t, 1, len(phBookData))
 }
@@ -403,8 +422,8 @@ func BenchmarkThreadsafePhonebook(b *testing.B) {
 	wg.Wait()
 }
 
-// TestPhonebookRoles tests that the filtering by roles for different
-// phonebooks entries works as expected.
+// TestPhonebookRoles tests that the filtering by roles for different phonebooks entries works as expected.
+// TestPhonebookRoles는 다른 전화번호부 항목에 대한 역할별 필터링이 예상대로 작동하는지 테스트합니다.
 func TestPhonebookRoles(t *testing.T) {
 	partitiontest.PartitionTest(t)
 

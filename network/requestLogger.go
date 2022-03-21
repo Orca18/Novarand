@@ -29,8 +29,11 @@ import (
 )
 
 // RequestLogger is a middleware helps logging all the incoming http requests.
-// The intended use is to place it at the bottom of the http processing. It will capture the status codes
-// set by the upstream handlers and write the request info/response to the logger.
+// RequestLogger는 들어오는 모든 http 요청을 기록하는 데 도움이 되는 미들웨어입니다.
+// The intended use is to place it at the bottom of the http processing.
+// 의도된 용도는 http 처리의 맨 아래에 배치하는 것입니다.
+// It will capture the status codes set by the upstream handlers and write the request info/response to the logger.
+// 업스트림 핸들러가 설정한 상태 코드를 캡처하고 요청 정보/응답을 로거에 씁니다.
 type RequestLogger struct {
 	downsteamHandler    http.Handler
 	trackingWritersPool sync.Pool
@@ -52,6 +55,7 @@ func makeRequestLogger(downsteamHandler http.Handler, log logging.Logger) *Reque
 }
 
 // this is the http entry point for the request logger.
+// 이것은 요청 로거의 http 진입점입니다.
 func (rl *RequestLogger) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	trackingWriter := rl.trackingWritersPool.Get().(*trackingResponseWriter)
 	trackingWriter.Reset(writer)
@@ -59,6 +63,7 @@ func (rl *RequestLogger) ServeHTTP(writer http.ResponseWriter, request *http.Req
 		// log the request.
 		rl.logRequest(trackingWriter, request)
 		// reset with nil to allow the GC to recycle the underlaying writer.
+		// GC가 기본 작성기를 재활용할 수 있도록 nil로 재설정합니다.
 		trackingWriter.Reset(nil)
 		rl.trackingWritersPool.Put(trackingWriter)
 	}()
@@ -66,6 +71,7 @@ func (rl *RequestLogger) ServeHTTP(writer http.ResponseWriter, request *http.Req
 }
 
 // log the request that was tracked, including the resulting error code.
+// 결과 오류 코드를 포함하여 추적된 요청을 기록합니다.
 func (rl *RequestLogger) logRequest(trackingWriter *trackingResponseWriter, request *http.Request) {
 	uri := request.RequestURI
 	if len(uri) > 64 {
@@ -83,6 +89,7 @@ func (rl *RequestLogger) logRequest(trackingWriter *trackingResponseWriter, requ
 }
 
 // SetStatusCode sets the status code of a given response writer without writing it to the underlaying writer object.
+// SetStatusCode는 기본 작성기 개체에 쓰지 않고 주어진 응답 작성기의 상태 코드를 설정합니다.
 func (rl *RequestLogger) SetStatusCode(writer http.ResponseWriter, statusCode int) {
 	if trackingWriter := writer.(*trackingResponseWriter); trackingWriter != nil {
 		trackingWriter.statusCode = statusCode
