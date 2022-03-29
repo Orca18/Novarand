@@ -40,15 +40,15 @@ import (
 	"github.com/algorand/websocket"
 	"github.com/gorilla/mux"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/network/limitlistener"
-	"github.com/algorand/go-algorand/protocol"
-	tools_network "github.com/algorand/go-algorand/tools/network"
-	"github.com/algorand/go-algorand/tools/network/dnssec"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/network/limitlistener"
+	"github.com/Orca18/novarand/protocol"
+	tools_network "github.com/Orca18/novarand/tools/network"
+	"github.com/Orca18/novarand/tools/network/dnssec"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 const incomingThreads = 20

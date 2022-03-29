@@ -21,9 +21,9 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/protocol"
 )
 
 const maxPinnedEntries = 500000

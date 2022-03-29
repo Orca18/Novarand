@@ -15,7 +15,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 // RejectingLimitListener returns a Listener that accepts at most n simultaneous connections from the provided Listener. `log` can be nil.

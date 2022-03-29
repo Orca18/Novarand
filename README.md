@@ -34,7 +34,7 @@ requirements.
 
 Initial environment setup:
 ```bash
-git clone https://github.com/algorand/go-algorand
+git clone https://github.com/Orca18/novarand
 cd go-algorand
 ./scripts/configure_dev.sh
 ./scripts/buildtools/install_buildtools.sh

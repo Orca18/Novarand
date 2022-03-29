@@ -17,10 +17,10 @@
 package compactcert
 
 import (
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merklearray"
-	"github.com/algorand/go-algorand/crypto/merklesignature"
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merklearray"
+	"github.com/Orca18/novarand/crypto/merklesignature"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 // Params defines common parameters for the verifier and builder.

@@ -1,4 +1,4 @@
-module github.com/algorand/go-algorand/cmd/partitiontest_linter
+module github.com/Orca18/novarand/cmd/partitiontest_linter
 
 go 1.16
 

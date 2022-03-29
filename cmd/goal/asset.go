@@ -22,8 +22,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/libgoal"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/libgoal"
 )
 
 var (

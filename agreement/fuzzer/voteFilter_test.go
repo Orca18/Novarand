@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
 )
 
 type VoteFilterMask struct {

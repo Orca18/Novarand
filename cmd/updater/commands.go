@@ -22,7 +22,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 var log = logging.Base()

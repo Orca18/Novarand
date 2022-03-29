@@ -19,7 +19,7 @@ package transactions
 import (
 	"bytes"
 
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 // EvalMaxArgs is the maximum number of arguments to an LSig

@@ -31,11 +31,11 @@ import (
 	"github.com/algorand/go-deadlock"
 	"github.com/algorand/websocket"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 const maxMessageLength = 4 * 1024 * 1024 // Currently the biggest message is VB vote bundles. TODO: per message type size limit? // 현재 가장 큰 메시지는 VB 투표 번들입니다. TODO: 메시지 유형당 크기 제한?

@@ -20,9 +20,9 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merklesignature"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merklesignature"
+	"github.com/Orca18/novarand/protocol"
 )
 
 const (

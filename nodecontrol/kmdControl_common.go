@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with go-algorand.  If not, see <https://www.gnu.org/licenses/>.
 
+//go:build !windows
 // +build !windows
 
 package nodecontrol
@@ -21,7 +22,7 @@ package nodecontrol
 import (
 	"os"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 func (kc *KMDController) isDirectorySafe(dirStats os.FileInfo) bool {

@@ -22,8 +22,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/codecs"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/codecs"
 )
 
 // Local holds the per-node-instance configuration settings for the protocol.

@@ -21,8 +21,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/nodecontrol"
-	"github.com/algorand/go-algorand/test/framework/fixtures"
+	"github.com/Orca18/novarand/nodecontrol"
+	"github.com/Orca18/novarand/test/framework/fixtures"
 )
 
 func TestGoalNodeCleanup(t *testing.T) {

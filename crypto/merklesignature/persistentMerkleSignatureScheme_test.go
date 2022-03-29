@@ -24,8 +24,8 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/test/partitiontest"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/test/partitiontest"
+	"github.com/Orca18/novarand/util/db"
 )
 
 func TestSecretsDatabaseUpgrade(t *testing.T) {

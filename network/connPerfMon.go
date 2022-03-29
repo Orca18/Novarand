@@ -22,7 +22,7 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 type pmStage int

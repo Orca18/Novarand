@@ -10,7 +10,7 @@ From the go-algorand root directory, setup the environment and build the binarie
 
 #### Initialize the project
 ```bash
-git clone https://github.com/algorand/go-algorand
+git clone https://github.com/Orca18/novarand
 cd go-algorand
 ./scripts/configure_dev.sh
 ```
@@ -43,7 +43,7 @@ There are three (optional) environment variables that can be used to control the
 
 - TESTDATADIR
     - The location of the `genesis.json` file.
-    - Defaults to `$GOPATH/src/github.com/algorand/go-algorand/test/testdata`.
+    - Defaults to `$GOPATH/src/github.com/Orca18/novarand/test/testdata`.
 
 - TESTDIR
     - This is the location to where test artifacts will be written.

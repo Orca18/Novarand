@@ -17,9 +17,9 @@
 package ledgercore
 
 import (
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
 )
 
 // InitState structure defines blockchain init params

@@ -22,9 +22,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func TestApplicationCallFieldsNotChanged(t *testing.T) {

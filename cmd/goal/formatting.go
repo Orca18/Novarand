@@ -20,7 +20,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 // unicodePrintable scan the input string str, and find if it contains any

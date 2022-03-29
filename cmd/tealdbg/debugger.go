@@ -24,8 +24,8 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions/logic"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions/logic"
 )
 
 // Notification is sent to the client over their websocket connection

@@ -1,3 +1,4 @@
+//go:build !skip_msgp_testing
 // +build !skip_msgp_testing
 
 package transactions
@@ -7,8 +8,8 @@ package transactions
 import (
 	"testing"
 
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/algorand/msgp/msgp"
 )
 

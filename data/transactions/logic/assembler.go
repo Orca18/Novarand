@@ -31,7 +31,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 // optimizeConstantsEnabledVersion is the first version of TEAL where the

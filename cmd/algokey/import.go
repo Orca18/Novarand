@@ -21,8 +21,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 var mnemonic string

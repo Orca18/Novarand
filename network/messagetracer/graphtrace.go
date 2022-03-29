@@ -24,8 +24,8 @@ import (
 
 	"github.com/algorand/graphtrace/graphtrace"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
 )
 
 type graphtraceMessageTracer struct {

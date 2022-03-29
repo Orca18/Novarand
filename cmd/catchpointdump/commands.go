@@ -24,8 +24,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
 )
 
 var log = logging.Base()

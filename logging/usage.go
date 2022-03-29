@@ -21,7 +21,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/util"
 )
 
 // UsageLogThread utility logging method

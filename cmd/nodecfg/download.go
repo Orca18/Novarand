@@ -22,8 +22,8 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/algorand/go-algorand/util/s3"
-	"github.com/algorand/go-algorand/util/tar"
+	"github.com/Orca18/novarand/util/s3"
+	"github.com/Orca18/novarand/util/tar"
 )
 
 func downloadAndExtractConfigPackage(channel string, targetDir string, configBucket string) (err error) {

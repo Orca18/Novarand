@@ -19,10 +19,10 @@ package agreement
 import (
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 )
 
 var deadlineTimeout = config.Protocol.BigLambda + config.Protocol.SmallLambda

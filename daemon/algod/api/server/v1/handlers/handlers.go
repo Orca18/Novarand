@@ -30,19 +30,19 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/algorand/go-algorand/agreement"
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/daemon/algod/api/server/lib"
-	v1 "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
-	"github.com/algorand/go-algorand/data"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/node"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/rpcs"
+	"github.com/Orca18/novarand/agreement"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/daemon/algod/api/server/lib"
+	v1 "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+	"github.com/Orca18/novarand/data"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/node"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/rpcs"
 )
 
 func getNodeStatus(node *node.AlgorandFullNode) (res v1.NodeStatus, err error) {

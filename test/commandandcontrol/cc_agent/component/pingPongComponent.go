@@ -23,8 +23,8 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/shared/pingpong"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/shared/pingpong"
 )
 
 // PingPongComponentInstance extends component instance

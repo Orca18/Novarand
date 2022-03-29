@@ -21,10 +21,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // Txid is a hash used to uniquely identify individual transactions

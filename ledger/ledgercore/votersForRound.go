@@ -22,12 +22,12 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/compactcert"
-	"github.com/algorand/go-algorand/crypto/merklearray"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/compactcert"
+	"github.com/Orca18/novarand/crypto/merklearray"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
 )
 
 // VotersForRound tracks the top online voting accounts as of a particular

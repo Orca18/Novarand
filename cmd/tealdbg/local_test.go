@@ -26,14 +26,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/algorand/go-algorand/config"
-	v2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/ledger/apply"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/config"
+	v2 "github.com/Orca18/novarand/daemon/algod/api/server/v2"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/ledger/apply"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/stretchr/testify/require"
 )
 

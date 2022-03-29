@@ -16,5 +16,5 @@ python3 scripts/get_current_installers.py "s3://algorand-staging/releases/$CHANN
 
 # Copy previous installers into ~.
 scp -i ReleaseBuildInstanceKey.pem -o StrictHostKeyChecking=no ./*.deb ubuntu@"$INSTANCE":
-ssh -i ReleaseBuildInstanceKey.pem -A ubuntu@"$INSTANCE" bash go/src/github.com/algorand/go-algorand/scripts/release/test/stage/test/task.sh
+ssh -i ReleaseBuildInstanceKey.pem -A ubuntu@"$INSTANCE" bash go/src/github.com/Orca18/novarand/scripts/release/test/stage/test/task.sh
 

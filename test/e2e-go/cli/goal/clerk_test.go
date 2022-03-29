@@ -23,7 +23,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/test/framework/fixtures"
+	"github.com/Orca18/novarand/test/framework/fixtures"
 )
 
 func TestClerkSendNoteEncoding(t *testing.T) {

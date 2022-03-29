@@ -1,2 +1,2 @@
 --- PASS: TestAccountsCanSendMoney (112.79s)
-ok  	github.com/algorand/go-algorand/test/e2e-go/features/transactions	113.107s
+ok  	github.com/Orca18/novarand/test/e2e-go/features/transactions	113.107s

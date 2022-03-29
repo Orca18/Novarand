@@ -22,7 +22,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/util"
 )
 
 const minimumAPITokenLength = 64

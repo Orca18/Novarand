@@ -23,10 +23,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 )
 
 var base32Encoder = base32.StdEncoding.WithPadding(base32.NoPadding)

@@ -121,7 +121,7 @@ EOF
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Algorand
 Upstream-Contact: Algorand developers <dev@algorand.com>
-Source: https://github.com/algorand/go-algorand
+Source: https://github.com/Orca18/novarand
 
 Files: *
 Copyright: Algorand developers <dev@algorand.com>

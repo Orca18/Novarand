@@ -24,17 +24,17 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/algorand/go-algorand/agreement"
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/execpool"
+	"github.com/Orca18/novarand/agreement"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/execpool"
 )
 
 const catchupPeersForSync = 10

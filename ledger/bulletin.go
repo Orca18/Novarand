@@ -23,9 +23,9 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/ledger/ledgercore"
 )
 
 // notifier is a struct that encapsulates a single-shot channel; it will only be signaled once.

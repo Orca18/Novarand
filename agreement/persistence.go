@@ -23,12 +23,12 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/logspec"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
-	"github.com/algorand/go-algorand/util/timers"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/logspec"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
+	"github.com/Orca18/novarand/util/timers"
 )
 
 // diskState represents the state required by the agreement protocol to be persistent.

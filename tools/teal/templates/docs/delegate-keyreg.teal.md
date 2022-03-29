@@ -30,7 +30,7 @@ Signatures for use in `arg_0` can be generated using the `algokey` and `dsign` t
 
 ### Initial checks
 
-First, check that this is a key registration transaction. The possible valid values of this enum may be found [here](https://github.com/algorand/go-algorand/blob/9978b3aed0643751246af82f5538ba1e7de47310/data/transactions/logic/assembler.go#L569).
+First, check that this is a key registration transaction. The possible valid values of this enum may be found [here](https://github.com/Orca18/novarand/blob/9978b3aed0643751246af82f5538ba1e7de47310/data/transactions/logic/assembler.go#L569).
 
 ```
 txn TypeEnum

@@ -29,7 +29,7 @@ aptly snapshot create "${CHANNEL}-${VERSION}" from repo algorand
 # Since snapshots have already been published, it's only necessary to switch the old one for the new one.
 aptly -config="$HOME"/.aptly.conf -gpg-key=dev@algorand.com publish switch "$CHANNEL" "s3:algorand-releases:" "$SNAPSHOT"
 
-#"${HOME}"/go/src/github.com/algorand/go-algorand/scripts/release/prod/rpm/run_centos.sh
+#"${HOME}"/go/src/github.com/Orca18/novarand/scripts/release/prod/rpm/run_centos.sh
 
 echo
 date "+build_release end SNAPSHOT stage %Y%m%d_%H%M%S"

@@ -21,8 +21,8 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // MockNetwork is a dummy network that doesn't do anything

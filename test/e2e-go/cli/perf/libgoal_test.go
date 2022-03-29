@@ -22,8 +22,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/test/framework/fixtures"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/test/framework/fixtures"
 )
 
 func BenchmarkLibGoalPerf(b *testing.B) {

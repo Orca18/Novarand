@@ -28,12 +28,12 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
+	"github.com/Orca18/novarand/util/db"
 )
 
 var partableColumnNames = [...]string{"parent", "vrf", "voting", "stateProof", "firstValid", "lastValid", "keyDilution"}

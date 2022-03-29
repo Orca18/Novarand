@@ -2,7 +2,7 @@
 set -ev
 
 GOPATH=$(go env GOPATH)
-REPO_DIR=${GOPATH}/src/github.com/algorand/go-algorand
+REPO_DIR=${GOPATH}/src/github.com/Orca18/novarand
 cd ${REPO_DIR}
 
 # Flag that we want release handling of genesis files

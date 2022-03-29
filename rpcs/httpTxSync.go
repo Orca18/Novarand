@@ -27,12 +27,12 @@ import (
 	"path"
 	"strings"
 
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/bloom"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/bloom"
 )
 
 // HTTPTxSync implements the TxSyncClient interface over HTTP

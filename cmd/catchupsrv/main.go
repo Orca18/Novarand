@@ -30,10 +30,10 @@ import (
 	"github.com/algorand/websocket"
 	"github.com/gorilla/mux"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/rpcs"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/rpcs"
 )
 
 var addrFlag = flag.String("addr", "127.0.0.1:4160", "Address to listen on")

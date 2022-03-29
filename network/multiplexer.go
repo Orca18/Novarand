@@ -19,7 +19,7 @@ package network
 import (
 	"sync/atomic"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 // Multiplexer is a message handler that sorts incoming messages by Tag and passes them along to the relevant message handler for that type of message.

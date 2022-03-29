@@ -19,8 +19,8 @@ package merklearray
 import (
 	"hash"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // A Layer of the Merkle tree consists of a dense array of hashes at that

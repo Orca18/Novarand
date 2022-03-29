@@ -23,7 +23,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/chrismcguire/gobberish"
 	"github.com/stretchr/testify/require"
 )

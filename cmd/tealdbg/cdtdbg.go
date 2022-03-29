@@ -26,7 +26,7 @@ import (
 	"github.com/algorand/go-deadlock"
 	"github.com/gorilla/mux"
 
-	"github.com/algorand/go-algorand/cmd/tealdbg/cdt"
+	"github.com/Orca18/novarand/cmd/tealdbg/cdt"
 )
 
 // CdtFrontend is Chrome DevTools frontend

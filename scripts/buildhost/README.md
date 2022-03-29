@@ -6,7 +6,7 @@ buildhost
 run the following on a fresh image:
 
 ```bash
-git clone https://github.com/algorand/go-algorand
+git clone https://github.com/Orca18/novarand
 cd go-algorand/scripts/buildhost
 sudo ./configure.sh
 ```

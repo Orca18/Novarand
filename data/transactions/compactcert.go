@@ -17,10 +17,10 @@
 package transactions
 
 import (
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/compactcert"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/compactcert"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // CompactCertTxnFields captures the fields used for compact cert transactions.

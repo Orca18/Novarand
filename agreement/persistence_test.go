@@ -24,11 +24,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/test/partitiontest"
-	"github.com/algorand/go-algorand/util/db"
-	"github.com/algorand/go-algorand/util/timers"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/test/partitiontest"
+	"github.com/Orca18/novarand/util/db"
+	"github.com/Orca18/novarand/util/timers"
 )
 
 func TestAgreementSerialization(t *testing.T) {

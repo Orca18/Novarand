@@ -22,9 +22,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/util/db"
 )
 
 func benchmarkKeyRegistration(numKeys int, b *testing.B) {

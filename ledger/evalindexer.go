@@ -20,13 +20,13 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger/internal"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger/internal"
+	"github.com/Orca18/novarand/ledger/ledgercore"
 )
 
 // A ledger interface that Indexer implements. This is a simplified version of the

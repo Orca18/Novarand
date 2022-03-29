@@ -23,8 +23,8 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 func makeRecordingKeyManager(accounts []account.Participation) *recordingKeyManager {
