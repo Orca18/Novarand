@@ -41,7 +41,7 @@ const (
 	ProposalPayloadTag Tag = "PP"
 	TopicMsgRespTag    Tag = "TS"
 	TxnTag             Tag = "TX"
-	UniCatchupReqTag   Tag = "UC" //Replaced by UniEnsBlockReqTag. Only for backward compatibility.
+	UniCatchupReqTag   Tag = "UC" //Replaced by UniEnsBlockReqTag. Only for backward compatibility. //이전 버전과의 호환성을 위해서만, UniEnsBlockReqTag 에 의해 교체됩니다.
 	UniEnsBlockReqTag  Tag = "UE"
 	//UniEnsBlockResTag  Tag = "US" was used for wsfetcherservice
 	//UniCatchupResTag   Tag = "UT" was used for wsfetcherservice

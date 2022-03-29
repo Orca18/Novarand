@@ -397,7 +397,7 @@ func (rt *RequestTracker) sendBlockedConnectionResponse(conn net.Conn, requestTi
 	// http handler can handle, or getting requests that fails before the header retrieval is complete.
 	// in this case, we want to send our response right away and disconnect. If the client is currently still sending it's request, it might not know how to handle
 	// this correctly. This use case is similar to the issue handled by the go-server in the same manner. ( see "431 Request Header Fields Too Large" in the server.go )
-	// 이것은 정상이 아닙니다. 일반적으로 HTTP 핸들러가 응답을 줄 때까지 기다리기를 원합니다. 그러나 우리는보다 빨리 요청을 받고있는 것 같습니다
+	// 이것은 정상이 아닙니다. 일반적으로 HTTP 핸들러가 응답을 줄 때까지 기다리기를 원합니다. 그러나 우리는 보다 빨리 요청을 받고있는 것 같습니다
 	// http 핸들러는 헤더 검색이 완료되기 전에 실패한 요청을 처리하거나 받을 수 있습니다.
 	// 이 경우 우리는 즉시 응답을 보내고 연결을 끊고 싶습니다. 클라이언트가 현재 요청을 계속 보내고 있는 경우 처리 방법을 모를 수 있습니다.
 	// 이것은 올바르게. 이 사용 사례는 동일한 방식으로 go-server에서 처리되는 문제와 유사합니다. (server.go의 "431 요청 헤더 필드가 너무 큼" 참조)
