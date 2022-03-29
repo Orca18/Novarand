@@ -26,7 +26,7 @@ import (
 )
 
 // NOTE: discussion about go-algorand-sdk
-// https://github.com/algorand/go-algorand/pull/3375#issuecomment-1007536841
+// https://github.com/Orca18/novarand/pull/3375#issuecomment-1007536841
 
 var base32Encoder = base32.StdEncoding.WithPadding(base32.NoPadding)
 

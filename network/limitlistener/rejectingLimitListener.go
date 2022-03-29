@@ -15,11 +15,12 @@ import (
 	"net"
 	"sync"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
-// RejectingLimitListener returns a Listener that accepts at most n simultaneous
-// connections from the provided Listener. `log` can be nil.
+// RejectingLimitListener returns a Listener that accepts at most n simultaneous connections from the provided Listener. `log` can be nil.
+// RejectingLimitListener는 최대 n개의 동시 수신을 허용하는 리스너를 반환합니다.
+// 제공된 리스너로부터의 연결. 'log'는 0일 수 있습니다.
 func RejectingLimitListener(l net.Listener, n uint64, log logging.Logger) net.Listener {
 	return &rejectingLimitListener{
 		Listener: l,

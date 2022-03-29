@@ -17,7 +17,7 @@
 package main
 
 import (
-	linter "github.com/algorand/go-algorand/cmd/partitiontest_linter"
+	linter "github.com/Orca18/novarand/cmd/partitiontest_linter"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/singlechecker"
 )

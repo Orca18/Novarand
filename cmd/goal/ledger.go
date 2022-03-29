@@ -23,7 +23,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/protocol/transcode"
+	"github.com/Orca18/novarand/protocol/transcode"
 )
 
 var (

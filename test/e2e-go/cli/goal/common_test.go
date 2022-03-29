@@ -22,7 +22,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/algorand/go-algorand/test/framework/fixtures"
+	"github.com/Orca18/novarand/test/framework/fixtures"
 )
 
 var fixture fixtures.GoalFixture

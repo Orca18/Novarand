@@ -19,8 +19,8 @@ package transactions
 import (
 	"bytes"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // EvalDelta stores StateDeltas for an application's global key/value store, as

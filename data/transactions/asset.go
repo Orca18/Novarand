@@ -17,7 +17,7 @@
 package transactions
 
 import (
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 // AssetConfigTxnFields captures the fields used for asset

@@ -23,13 +23,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func makeMsgPool(N int, peers []Peer) (out []IncomingMessage) {
 	// preallocate enough.
+	// 충분히 사전 할당합니다.
 	out = make([]IncomingMessage, 0, N*2)
 	msgIndex := uint64(0)
 	timer := int64(0)
@@ -55,13 +56,13 @@ func makeMsgPool(N int, peers []Peer) (out []IncomingMessage) {
 			}
 		}
 		switch {
-		case (msgIndex % 10) == 0: // 10% of the messages comes from a single source
+		case (msgIndex % 10) == 0: // 10% of the messages comes from a single source // 메시지의 10%는 단일 소스에서 옵니다.
 			addMsg(1)
-		case (msgIndex%10) == 1 || (msgIndex%10) == 2: // 20% of the messages comes from two sources
+		case (msgIndex%10) == 1 || (msgIndex%10) == 2: // 20% of the messages comes from two sources // 메시지의 20%는 두 가지 소스에서 옵니다.
 			addMsg(2)
-		case (msgIndex%10) == 3 || (msgIndex%10) == 4: // 20% of the messages comes from three sources
+		case (msgIndex%10) == 3 || (msgIndex%10) == 4: // 20% of the messages comes from three sources // 20% of the messages comes from three sources
 			addMsg(3)
-		default: // 50% of the messages comes from all sources
+		default: // 50% of the messages comes from all sources // 메시지의 50%는 모든 소스에서 옵니다.
 			addMsg(len(peers))
 		}
 

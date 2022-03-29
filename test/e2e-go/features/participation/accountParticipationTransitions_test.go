@@ -31,11 +31,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/daemon/algod/api/server/v2/generated"
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/test/framework/fixtures"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/daemon/algod/api/server/v2/generated"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/test/framework/fixtures"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 // installParticipationKey generates a new key for a given account and installs it with the client.

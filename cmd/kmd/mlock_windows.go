@@ -17,7 +17,7 @@
 package main
 
 import (
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 // Windows does not have an mlockall functionality but might be emulated by

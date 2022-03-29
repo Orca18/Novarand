@@ -949,7 +949,7 @@
           "x-go-name": "AssetParams"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "ApplicationCallTransactionType": {
       "description": "ApplicationCallTransactionType contains the additional fields for an ApplicationCall transaction",
@@ -1026,7 +1026,7 @@
           "x-go-name": "OnCompletion"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "Asset": {
       "description": "Asset specifies both the unique identifier and the parameters for an asset",
@@ -1045,7 +1045,7 @@
           "$ref": "#/definitions/AssetParams"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "AssetConfigTransactionType": {
       "description": "AssetConfigTransactionType contains the additional fields for an asset config transaction",
@@ -1061,7 +1061,7 @@
           "$ref": "#/definitions/AssetParams"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "AssetFreezeTransactionType": {
       "description": "AssetFreezeTransactionType contains the additional fields for an asset freeze transaction",
@@ -1089,7 +1089,7 @@
           "x-go-name": "AssetID"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "AssetList": {
       "description": "AssetList contains a list of assets",
@@ -1107,7 +1107,7 @@
           "x-go-name": "Assets"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "AssetParams": {
       "type": "object",
@@ -1182,7 +1182,7 @@
           "x-go-name": "URL"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "AssetTransferTransactionType": {
       "description": "AssetTransferTransactionType contains the additional fields for an asset transfer transaction",
@@ -1227,7 +1227,7 @@
           "x-go-name": "Sender"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "Block": {
       "description": "Block contains a block information",
@@ -1374,7 +1374,7 @@
           "x-go-name": "UpgradePropose"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "BuildVersion": {
       "type": "object",
@@ -1416,7 +1416,7 @@
           "x-go-name": "Minor"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/common"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/common"
     },
     "CompactCertTransactionType": {
       "description": "CompactCertTransactionType contains the additional fields for a compact cert transaction",
@@ -1439,7 +1439,7 @@
           "x-go-name": "CertRound"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "KeyregTransactionType": {
       "description": "KeyregTransactionType contains the additional fields for a keyreg Transaction",
@@ -1476,7 +1476,7 @@
           "x-go-name": "VoteLast"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "NodeStatus": {
       "description": "NodeStatus contains the information about a node status",
@@ -1543,7 +1543,7 @@
           "x-go-name": "TimeSinceLastRound"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "Participation": {
       "description": "Participation Description",
@@ -1587,7 +1587,7 @@
           "x-go-name": "VRFPK"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "PaymentTransactionType": {
       "description": "PaymentTransactionType contains the additional fields for a payment Transaction",
@@ -1632,7 +1632,7 @@
           "x-go-name": "ToRewards"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "PendingTransactions": {
       "description": "PendingTransactions represents a potentially truncated list of transactions currently in the\nnode's transaction pool.",
@@ -1652,7 +1652,7 @@
           "$ref": "#/definitions/TransactionList"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "StateSchema": {
       "description": "swagger: model StateSchema",
@@ -1676,7 +1676,7 @@
           "x-go-name": "NumUint"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "Supply": {
       "description": "Supply represents the current supply of MicroAlgos in the system",
@@ -1706,7 +1706,7 @@
           "x-go-name": "TotalMoney"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "Transaction": {
       "description": "Transaction contains all fields common to all transactions and serves as an envelope to all transactions\ntype",
@@ -1828,7 +1828,7 @@
           "x-go-name": "Type"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "TransactionFee": {
       "description": "TransactionFee contains the suggested fee",
@@ -1844,7 +1844,7 @@
           "x-go-name": "Fee"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "TransactionList": {
       "description": "TransactionList contains a list of transactions",
@@ -1862,7 +1862,7 @@
           "x-go-name": "Transactions"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "TransactionParams": {
       "description": "TransactionParams contains the parameters that help a client construct\na new transaction.",
@@ -1910,7 +1910,7 @@
           "x-go-name": "MinTxnFee"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "TransactionResults": {
       "description": "TransactionResults contains information about the side effects of a transaction",
@@ -1929,7 +1929,7 @@
           "x-go-name": "CreatedAssetIndex"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "Version": {
       "description": "Note that we annotate this as a model so that legacy clients\ncan directly import a swagger generated Version model.",
@@ -1962,7 +1962,7 @@
           "x-go-name": "Versions"
         }
       },
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/common"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/common"
     },
     "transactionID": {
       "description": "TransactionID Description",
@@ -1978,7 +1978,7 @@
         }
       },
       "x-go-name": "TransactionID",
-      "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     }
   },
   "responses": {

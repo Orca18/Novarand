@@ -20,7 +20,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 type DuplicateMessageFilter struct {

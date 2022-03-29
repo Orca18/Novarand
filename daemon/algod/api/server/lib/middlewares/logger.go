@@ -22,7 +22,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	log "github.com/algorand/go-algorand/logging"
+	log "github.com/Orca18/novarand/logging"
 )
 
 // LoggerMiddleware provides some extra state to the logger middleware

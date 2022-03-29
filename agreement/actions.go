@@ -20,9 +20,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/algorand/go-algorand/logging/logspec"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/logging/logspec"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/protocol"
 )
 
 //go:generate stringer -type=actionType

@@ -17,8 +17,8 @@
 package ledger
 
 import (
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
 )
 
 // lruAccounts provides a storage class for the most recently used accounts data.

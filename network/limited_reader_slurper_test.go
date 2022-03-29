@@ -24,8 +24,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func TestLimitedReaderSlurper(t *testing.T) {
@@ -68,6 +68,7 @@ func (f *fuzzReader) Read(b []byte) (n int, err error) {
 	}
 	if f.pos+s >= len(f.buf) {
 		// we want a chunk that ends at ( or after ) the end of the data.
+		// 데이터 끝(또는 이후)에서 끝나는 청크를 원합니다.
 		n = len(f.buf) - f.pos
 		err = io.EOF
 	} else {
@@ -143,6 +144,7 @@ func TestLimitedReaderSlurperBufferAllocations(t *testing.T) {
 		for maxAllocation := uint64(512); maxAllocation < 100000; maxAllocation += 512 {
 			lrs := MakeLimitedReaderSlurper(baseAllocation, maxAllocation)
 			// check to see if the allocated buffers count is exactly what needed to match the allocation needs.
+			// 할당된 버퍼 수가 할당 요구 사항과 정확히 일치하는 데 필요한 것인지 확인합니다.
 			allocationNeeds := 1
 			remainingBytes := int64(maxAllocation - baseAllocation)
 			for remainingBytes > 0 {

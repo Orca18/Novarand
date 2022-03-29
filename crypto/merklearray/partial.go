@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"hash"
 
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 // siblings represents the siblings needed to compute the root hash

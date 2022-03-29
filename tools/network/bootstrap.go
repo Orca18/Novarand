@@ -20,7 +20,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 // ReadFromSRV is a helper to collect SRV addresses for a given name.

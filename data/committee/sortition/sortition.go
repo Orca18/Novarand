@@ -28,7 +28,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 const precision = uint(8 * (crypto.DigestSize + 1))

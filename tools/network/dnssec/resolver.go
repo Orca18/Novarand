@@ -45,7 +45,7 @@ import (
 
 	"github.com/miekg/dns"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 // ResolverIf represents net.Resolver-compatible interface

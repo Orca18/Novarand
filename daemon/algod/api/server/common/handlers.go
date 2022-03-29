@@ -22,9 +22,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/daemon/algod/api/server/lib"
-	"github.com/algorand/go-algorand/daemon/algod/api/spec/common"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/daemon/algod/api/server/lib"
+	"github.com/Orca18/novarand/daemon/algod/api/spec/common"
 )
 
 // GenesisJSON is an httpHandler for route GET /genesis

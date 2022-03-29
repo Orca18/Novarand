@@ -23,9 +23,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/gen"
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/gen"
+	"github.com/Orca18/novarand/util"
 )
 
 var outDir = flag.String("d", "", "The directory containing the generated ledger and wallet files.")

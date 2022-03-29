@@ -27,10 +27,10 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 
-	"github.com/algorand/go-algorand/cmd/kmd/codes"
-	"github.com/algorand/go-algorand/daemon/kmd"
-	"github.com/algorand/go-algorand/daemon/kmd/server"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/cmd/kmd/codes"
+	"github.com/Orca18/novarand/daemon/kmd"
+	"github.com/Orca18/novarand/daemon/kmd/server"
+	"github.com/Orca18/novarand/logging"
 )
 
 const (

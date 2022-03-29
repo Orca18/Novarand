@@ -5,8 +5,8 @@ package basics
 import (
 	"sort"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
 	"github.com/algorand/msgp/msgp"
 )
 

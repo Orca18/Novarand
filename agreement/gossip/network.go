@@ -22,12 +22,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/algorand/go-algorand/agreement"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/network/messagetracer"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/agreement"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/network/messagetracer"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 var (

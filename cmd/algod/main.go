@@ -30,17 +30,17 @@ import (
 	"github.com/algorand/go-deadlock"
 	"github.com/gofrs/flock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/daemon/algod"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/protocol"
-	toolsnet "github.com/algorand/go-algorand/tools/network"
-	"github.com/algorand/go-algorand/util/metrics"
-	"github.com/algorand/go-algorand/util/tokens"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/daemon/algod"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/protocol"
+	toolsnet "github.com/Orca18/novarand/tools/network"
+	"github.com/Orca18/novarand/util/metrics"
+	"github.com/Orca18/novarand/util/tokens"
 )
 
 var dataDirectory = flag.String("d", "", "Root Algorand daemon data path")

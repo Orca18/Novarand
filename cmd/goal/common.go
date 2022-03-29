@@ -19,7 +19,7 @@ package main
 import (
 	"github.com/spf13/cobra"
 
-	cmdutil "github.com/algorand/go-algorand/cmd/util"
+	cmdutil "github.com/Orca18/novarand/cmd/util"
 )
 
 const (

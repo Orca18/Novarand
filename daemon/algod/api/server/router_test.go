@@ -23,9 +23,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/algorand/go-algorand/daemon/algod/api/server/lib"
-	"github.com/algorand/go-algorand/daemon/algod/api/server/v1/routes"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/daemon/algod/api/server/lib"
+	"github.com/Orca18/novarand/daemon/algod/api/server/v1/routes"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 type TestSuite struct {

@@ -24,6 +24,11 @@ type Tag string
 // These tags must not contain a comma character because lists of tags
 // are encoded using a comma separator (see network/msgOfInterest.go).
 // The tags must be 2 bytes long.
+// ==========================================
+// 태그, 중복을 피하기 위해 태그 값의 사전식 정렬 순서.
+// 태그 목록은 쉼표 구분 기호를 사용하여 인코딩되기 때문에
+// 이러한 태그에는 쉼표 문자가 포함되지 않아야 합니다(network/msgOfInterest.go 참조).
+// 태그의 길이는 2바이트여야 합니다.
 const (
 	UnknownMsgTag      Tag = "??"
 	AgreementVoteTag   Tag = "AV"
@@ -36,7 +41,7 @@ const (
 	ProposalPayloadTag Tag = "PP"
 	TopicMsgRespTag    Tag = "TS"
 	TxnTag             Tag = "TX"
-	UniCatchupReqTag   Tag = "UC" //Replaced by UniEnsBlockReqTag. Only for backward compatibility.
+	UniCatchupReqTag   Tag = "UC" //Replaced by UniEnsBlockReqTag. Only for backward compatibility. //이전 버전과의 호환성을 위해서만, UniEnsBlockReqTag 에 의해 교체됩니다.
 	UniEnsBlockReqTag  Tag = "UE"
 	//UniEnsBlockResTag  Tag = "US" was used for wsfetcherservice
 	//UniCatchupResTag   Tag = "UT" was used for wsfetcherservice

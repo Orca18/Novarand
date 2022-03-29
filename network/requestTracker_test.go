@@ -23,9 +23,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func (ard *hostIncomingRequests) remove(trackedRequest *TrackerRequest) {
@@ -44,6 +44,7 @@ func TestHostIncomingRequestsOrdering(t *testing.T) {
 		t.Skip()
 	}
 	// add 100 items to the hostIncomingRequests object, and make sure they are sorted.
+	// hostIncomingRequests 객체에 100개의 항목을 추가하고 정렬되었는지 확인합니다.
 	hir := hostIncomingRequests{}
 	now := time.Now()
 	perm := rand.Perm(100)
@@ -54,17 +55,21 @@ func TestHostIncomingRequestsOrdering(t *testing.T) {
 	require.Equal(t, 100, len(hir.requests))
 
 	// make sure the array ends up being ordered.
+	// 배열이 순서대로 끝나는지 확인합니다.
 	for i := 1; i < 100; i++ {
 		require.True(t, hir.requests[i].created.After(hir.requests[i-1].created))
 	}
 
 	// test the remove function.
+	// 제거 기능을 테스트합니다.
 	for len(hir.requests) > 0 {
 		// select a random item.
+		// 임의의 항목을 선택합니다.
 		i := rand.Int() % len(hir.requests)
 		o := hir.requests[i]
 		hir.remove(o)
 		// make sure the item isn't there anymore.
+		// 항목이 더 이상 존재하지 않는지 확인합니다.
 		for _, p := range hir.requests {
 			require.False(t, p == o)
 			require.Equal(t, hir.countConnections(now.Add(-time.Second)), uint(len(hir.requests)))
@@ -82,6 +87,7 @@ func TestRateLimiting(t *testing.T) {
 	log.SetLevel(logging.Level(defaultConfig.BaseLoggerDebugLevel))
 	testConfig := defaultConfig
 	// This test is conducted locally, so we want to treat all hosts the same for counting incoming requests.
+	// 이 테스트는 로컬에서 수행되므로 들어오는 요청을 계산할 때 모든 호스트를 동일하게 처리하려고 합니다.
 	testConfig.DisableLocalhostConnectionRateLimit = false
 	wn := &WebsocketNetwork{
 		log:       log,
@@ -92,6 +98,7 @@ func TestRateLimiting(t *testing.T) {
 	}
 
 	// increase the IncomingConnectionsLimit/MaxConnectionsPerIP limits, since we don't want to test these.
+	// IncomingConnectionsLimit/MaxConnectionsPerIP 제한을 증가시킵니다. 우리는 이것을 테스트하고 싶지 않기 때문입니다.
 	wn.config.IncomingConnectionsLimit = int(testConfig.ConnectionsRateLimitingCount) * 5
 	wn.config.MaxConnectionsPerIP += int(testConfig.ConnectionsRateLimitingCount) * 5
 
@@ -153,10 +160,13 @@ func TestRateLimiting(t *testing.T) {
 				connectedClients++
 				phonebookLen := len(phonebooks[i].GetAddresses(1, PhoneBookEntryRelayRole))
 				// if this channel is ready, than we should have an address, since it didn't get blocked.
+				// 이 채널이 준비되면 차단되지 않았으므로 주소가 있어야 합니다.
 				require.Equal(t, 1, phonebookLen)
 			default:
 				// not ready yet.
+				// 아직 준비되지 않았습니다.
 				// wait abit longer.
+				// 조금 더 기다립니다.
 			}
 		}
 		if connectedClients >= int(testConfig.ConnectionsRateLimitingCount) {
@@ -166,6 +176,7 @@ func TestRateLimiting(t *testing.T) {
 	}
 	if !timedOut {
 		// test to see that at least some of the clients have seen 429
+		// 적어도 일부 클라이언트가 429를 보았는지 테스트합니다.
 		require.Equal(t, int(testConfig.ConnectionsRateLimitingCount), connectedClients)
 	}
 }

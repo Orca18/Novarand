@@ -25,8 +25,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/util/codecs"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/util/codecs"
 )
 
 var (

@@ -16,7 +16,7 @@
 
 package merklesignature
 
-import "github.com/algorand/go-algorand/crypto"
+import "github.com/Orca18/novarand/crypto"
 
 // HashType/ hashSize relate to the type of hash this package uses.
 const (

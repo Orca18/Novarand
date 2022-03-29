@@ -25,8 +25,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/algorand/go-algorand/daemon/algod/api/server/lib/middlewares"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/daemon/algod/api/server/lib/middlewares"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func TestConnectionLimiterBasic(t *testing.T) {

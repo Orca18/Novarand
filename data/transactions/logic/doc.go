@@ -17,7 +17,7 @@
 package logic
 
 import (
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // short description of every op

@@ -20,12 +20,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/algorand/go-algorand/daemon/kmd/config"
-	"github.com/algorand/go-algorand/daemon/kmd/server"
-	"github.com/algorand/go-algorand/daemon/kmd/session"
-	"github.com/algorand/go-algorand/daemon/kmd/wallet/driver"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/util/tokens"
+	"github.com/Orca18/novarand/daemon/kmd/config"
+	"github.com/Orca18/novarand/daemon/kmd/server"
+	"github.com/Orca18/novarand/daemon/kmd/session"
+	"github.com/Orca18/novarand/daemon/kmd/wallet/driver"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/util/tokens"
 )
 
 // StartConfig contains configuration information used for starting up kmd

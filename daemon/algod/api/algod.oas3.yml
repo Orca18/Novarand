@@ -663,7 +663,7 @@
                 "min-fee"
               ],
               "type": "object",
-              "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+              "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
             }
           }
         },
@@ -3567,7 +3567,7 @@
                     "min-fee"
                   ],
                   "type": "object",
-                  "x-go-package": "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+                  "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
                 }
               }
             },

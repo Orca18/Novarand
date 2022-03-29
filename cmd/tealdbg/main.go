@@ -24,7 +24,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 
-	cmdutil "github.com/algorand/go-algorand/cmd/util"
+	cmdutil "github.com/Orca18/novarand/cmd/util"
 )
 
 func main() {

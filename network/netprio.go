@@ -20,12 +20,12 @@ import (
 	"container/heap"
 	"sync/atomic"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
 )
 
-// NetPrioScheme is an implementation of network connection priorities
-// based on a challenge-response protocol.
+// NetPrioScheme is an implementation of network connection priorities based on a challenge-response protocol.
+// NetPrioScheme은 시도-응답 프로토콜을 기반으로 하는 네트워크 연결 우선 순위의 구현입니다.
 type NetPrioScheme interface {
 	NewPrioChallenge() string
 	MakePrioResponse(challenge string) []byte
@@ -68,9 +68,12 @@ var prioHandlers = []TaggedMessageHandler{
 	{protocol.NetPrioResponseTag, HandlerFunc(prioResponseHandler)},
 }
 
-// The prioTracker sorts active peers by priority, and ensures
-// there's only one peer with weight per address.  The data
-// structure is not thread-safe; it is protected by wn.peersLock.
+// The prioTracker sorts active peers by priority, and ensures there's only one peer with weight per address.
+// The data structure is not thread-safe;
+// it is protected by wn.peersLock.
+// prioTracker는 우선 순위에 따라 활성 피어를 정렬하고 주소당 가중치가 있는 피어가 하나만 있는지 확인합니다.
+// 데이터 구조는 스레드로부터 안전하지 않습니다.
+// wn.peersLock에 의해 보호됩니다.
 type prioTracker struct {
 	// If a peer has a non-zero prioWeight, it will be present in
 	// this map under its peerAddress.
@@ -90,20 +93,26 @@ func (pt *prioTracker) setPriority(peer *wsPeer, addr basics.Address, weight uin
 	wn := pt.wn
 
 	// Make sure this peer is currently in the peers slice
+	// 이 피어가 현재 피어 슬라이스에 있는지 확인합니다.
 	if peer.peerIndex >= len(wn.peers) || wn.peers[peer.peerIndex] != peer {
 		// The peer might be in the process of being added to wn.peers;
 		// in this case, wn.addPeer() will call setPriority again and
 		// we will finish setup in that call.
+		// 피어가 wn.peers에 추가되는 중일 수 있습니다.
+		// 이 경우 wn.addPeer()는 setPriority를 다시 호출하고
+		// 우리는 그 호출에서 설정을 마칠 것입니다.
 		peer.prioAddress = addr
 		peer.prioWeight = weight
 		return
 	}
 
 	// Evict old peer from same address, if present
+	// 같은 주소에서 오래된 피어(있는 경우)를 제거합니다.
 	old, present := pt.peerByAddress[addr]
 	if present {
 		if old == peer {
 			// No eviction necessary if it was already this peer
+			// 이미 이 피어인 경우 축출이 필요하지 않습니다.
 			if peer.prioAddress == addr && peer.prioWeight == weight {
 				// Same address and weight, nothing to update
 				return
@@ -116,8 +125,8 @@ func (pt *prioTracker) setPriority(peer *wsPeer, addr basics.Address, weight uin
 		}
 	}
 
-	// Check if this peer was in peerByAddress[] under its old address,
-	// and delete that mapping if so.
+	// Check if this peer was in peerByAddress[] under its old address, and delete that mapping if so.
+	// 이 피어가 이전 주소 아래의 peerByAddress[]에 있는지 확인하고, 그렇다면 해당 매핑을 삭제합니다.
 	if addr != peer.prioAddress && peer == pt.peerByAddress[peer.prioAddress] {
 		delete(pt.peerByAddress, peer.prioAddress)
 	}

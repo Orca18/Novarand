@@ -22,10 +22,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 type eventsDetailsLogger struct {
@@ -42,6 +42,7 @@ func (dl eventsDetailsLogger) EventWithDetails(category telemetryspec.Category, 
 }
 
 // for two node network, check that B can ping A and get a reply
+// 두 개의 노드 네트워크의 경우 B가 A를 ping하고 응답을 받을 수 있는지 확인합니다.
 func TestRequestLogger(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
