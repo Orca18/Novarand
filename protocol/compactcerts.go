@@ -37,8 +37,8 @@ const (
 
 // SortCompactCertType implements sorting by CompactCertType keys for canonical encoding of maps in msgpack format.
 // SortCompactCertType은 msgpack 형식의 맵을 표준 인코딩하기 위해 CompactCertType 키를 기준으로 정렬을 구현합니다.
-//msgp:ignore SortCompactCertType
-//msgp:sort CompactCertType SortCompactCertType
+// msgp:ignore SortCompactCertType
+// msgp:sort CompactCertType SortCompactCertType
 type SortCompactCertType []CompactCertType
 
 func (a SortCompactCertType) Len() int           { return len(a) }

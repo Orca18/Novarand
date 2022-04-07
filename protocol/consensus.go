@@ -212,7 +212,7 @@ const ConsensusCurrentVersion = ConsensusV31
 type Error ConsensusVersion
 
 // Error satisfies builtin interface `error`
-// 오류는 내장 인터페이스 `error`를 충족합니다.
+// Error 는 내장 인터페이스 `error`를 충족합니다.
 func (err Error) Error() string {
 	proto := ConsensusVersion(err)
 	return fmt.Sprintf("protocol not supported: %s", proto)
