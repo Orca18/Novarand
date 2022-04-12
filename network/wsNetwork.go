@@ -312,6 +312,7 @@ const (
 	Respond
 )
 
+// ====== 멀티플렉서 ======
 // MessageHandler takes a IncomingMessage (e.g., vote, transaction), processes it, and returns what (if anything) to send to the network in response.
 // MessageHandler는 IncomingMessage(예: 투표, 트랜잭션)를 받아 처리하고 응답으로 네트워크에 보낼 내용(있는 경우)을 반환합니다.
 // The ForwardingPolicy field of the returned OutgoingMessage indicates whether to reply directly to the sender (unicast), propagate to everyone except the sender (broadcast), or do nothing (ignore).
@@ -337,6 +338,8 @@ type TaggedMessageHandler struct {
 	MessageHandler
 }
 
+// ======   ======
+
 // Propagate is a convenience function to save typing in the common case of a message handler telling us to propagate an incoming message "return network.Propagate(msg)" instead of "return network.OutgoingMsg{network.Broadcast, msg.Tag, msg.Data}"
 // Propagate는 "return network.OutgoingMsg{network.Broadcast, msg.Tag" 대신 "return network.Propagate(msg)"가 들어오는 메시지를 전파하도록 지시하는 메시지 처리기의 일반적인 경우 입력을 저장하는 편리한 기능입니다. msg.Data}"
 func Propagate(msg IncomingMessage) OutgoingMessage {
@@ -349,8 +352,7 @@ func Propagate(msg IncomingMessage) OutgoingMessage {
 // gorilla/mux가 처리할 {genesisID} 매개변수를 포함합니다.
 const GossipNetworkPath = "/v1/{genesisID}/gossip"
 
-// WebsocketNetwork implements
-// WebsocketNetwork는 GossipNode를 구현합니다.
+// WebsocketNetwork implements GossipNode
 type WebsocketNetwork struct {
 	listener net.Listener
 	server   http.Server
@@ -471,7 +473,7 @@ type WebsocketNetwork struct {
 	messagesOfInterestMu deadlock.Mutex
 
 	// peersConnectivityCheckTicker is the timer for testing that all the connected peers are still transmitting or receiving information.
-	// peersConnectivityCheckTicker는 연결된 모든 피어가 여전히 정보를 전송하거나 수신하고 있는지 테스트하기 위한 타이머입니다.
+	// peersConnectivityCheckTicker 는 연결된 모든 피어가 여전히 정보를 전송하거나 수신하고 있는지 테스트하기 위한 타이머입니다.
 	// The channel produced by this ticker is consumed by any of the messageHandlerThread(s).
 	// 이 티커에 의해 생성된 채널은 모든 messageHandlerThread(s)에 의해 사용됩니다.
 	// The ticker itself is created during Start(), and being shut down when Stop() is called.
@@ -668,7 +670,7 @@ func (wn *WebsocketNetwork) RegisterHTTPHandler(path string, handler http.Handle
 }
 
 // RequestConnectOutgoing tries to actually do the connect to new peers.
-// RequestConnectOutgoing은 실제로 새 피어에 연결을 시도합니다.
+// RequestConnectOutgoing 은 실제로 새 피어에 연결을 시도합니다.
 // `replace` drop all connections first and find new peers.
 // `replace`는 먼저 모든 연결을 삭제하고 새 피어를 찾습니다.
 func (wn *WebsocketNetwork) RequestConnectOutgoing(replace bool, quit <-chan struct{}) {
@@ -1173,7 +1175,7 @@ func (wn *WebsocketNetwork) GetHTTPRequestConnection(request *http.Request) (con
 }
 
 // ServerHTTP handles the gossip network functions over websockets
-// ServerHTTP는 웹 소켓을 통해 가십 네트워크 기능을 처리합니다.
+// ServerHTTP는 웹 소켓을 통해 가십 네트워크 기능을 처리합니다. keep serving request
 func (wn *WebsocketNetwork) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	trackedRequest := wn.requestsTracker.GetTrackedRequest(request)
 
@@ -1318,7 +1320,7 @@ func (wn *WebsocketNetwork) messageHandlerThread(peersConnectivityCheckCh <-chan
 }
 
 // checkPeersConnectivity tests the last timestamp where each of these peers was communicated with, and disconnect the peer if it has been too long since last time.
-// checkPeersConnectivity는 이러한 각 피어와 통신한 마지막 타임스탬프를 테스트하고 마지막 시간 이후 너무 오래 지속되면 피어를 연결 해제합니다.
+// peersConnectivity는 각 피어가 통신된 마지막 타임스탬프를 테스트하고 마지막 시간 이후 너무 오래되면 피어의 연결을 끊습니다.
 func (wn *WebsocketNetwork) checkPeersConnectivity() {
 	wn.peersLock.Lock()
 	defer wn.peersLock.Unlock()
@@ -1961,6 +1963,8 @@ func (wn *WebsocketNetwork) getDNSAddrs(dnsBootstrap string) (relaysAddresses []
 	return
 }
 
+// ===
+
 // ProtocolVersionHeader HTTP header for protocol version.
 // ProtocolVersionHeader 프로토콜 버전에 대한 HTTP 헤더입니다.
 const ProtocolVersionHeader = "X-Algorand-Version"
@@ -2039,7 +2043,7 @@ var HostColonPortPattern = regexp.MustCompile("^[-a-zA-Z0-9.]+:\\d+$")
 // ParseHostOrURL handles "host:port" or a full URL.
 // ParseHostOrURL은 "host:port" 또는 전체 URL을 처리합니다.
 // Standard library net/url.Parse chokes on "host:port".
-// 표준 라이브러리 net/url.Parse는 "host:port"에서 질식합니다.
+// 표준 라이브러리 net/url.Parse는 "host:port"에서 chokes 합니다.
 func ParseHostOrURL(addr string) (*url.URL, error) {
 	// If the entire addr is "host:port" grab that right away.
 	// 전체 addr이 "host:port"라면 바로 잡아라.
@@ -2132,7 +2136,7 @@ func (wn *WebsocketNetwork) numOutgoingPending() int {
 }
 
 // GetRoundTripper returns an http.Transport that limits the number of connection to comply with connectionsRateLimitingCount.
-// GetRoundTripper는 connectionsRateLimitingCount를 준수하도록 연결 수를 제한하는 http.Transport를 반환합니다.
+// GetRoundTripper는 connectionsRateLimitingCount 를 준수하도록 연결 수를 제한하는 http.Transport를 반환합니다.
 func (wn *WebsocketNetwork) GetRoundTripper() http.RoundTripper {
 	return &wn.transport
 }
@@ -2424,7 +2428,7 @@ func (wn *WebsocketNetwork) addPeer(peer *wsPeer) {
 	wn.countPeersSetGauges()
 	if len(wn.peers) >= wn.config.GossipFanout {
 		// we have a quorum of connected peers, if we weren't ready before, we are now
-		// 연결된 피어의 쿼럼이 있습니다. 이전에 준비되지 않았다면 이제
+		// 연결된 피어의 쿼럼이 있습니다. 이전에 준비되지 않았다면 이제 ㅡㅡ
 		if atomic.CompareAndSwapInt32(&wn.ready, 0, 1) {
 			wn.log.Debug("ready")
 			close(wn.readyChan)

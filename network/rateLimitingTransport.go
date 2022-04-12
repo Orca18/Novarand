@@ -35,7 +35,7 @@ type rateLimitingTransport struct {
 var ErrConnectionQueueingTimeout = errors.New("rateLimitingTransport: queueing timeout")
 
 // makeRateLimitingTransport creates a rate limiting http transport that would limit the requests rate according to the entries in the phonebook.
-// makeRateLimitingTransport는 전화번호부의 항목에 따라 요청 속도를 제한하는 속도 제한 http 전송을 생성합니다.
+// makeRateLimitingTransport는 폰북의 항목에 따라 요청 속도를 제한하는 속도 제한 http 전송을 생성합니다.
 func makeRateLimitingTransport(phonebook Phonebook, queueingTimeout time.Duration, dialer *Dialer, maxIdleConnsPerHost int) rateLimitingTransport {
 	defaultTransport := http.DefaultTransport.(*http.Transport)
 	return rateLimitingTransport{

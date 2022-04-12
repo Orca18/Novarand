@@ -252,9 +252,10 @@ type RequestTracker struct {
 
 	listener net.Listener // this is the downsteam listener // 이것은 다운스트림 리스너입니다.
 
-	hostRequests        hostsIncomingMap             // maps a request host to a request data (i.e. "1.2.3.4" -> *hostIncomingRequests ) // 요청 호스트를 요청 데이터에 매핑합니다(즉, "1.2.3.4" -> *hostIncomingRequests ).
+	hostRequests        hostsIncomingMap             // maps a request host to a request data (i.e. "1.2.3.4" -> *hostIncomingRequests )
 	acceptedConnections map[net.Addr]*TrackerRequest // maps a local address interface  to a tracked request data (i.e. "1.2.3.4:1560" -> *TrackerRequest ); used to associate connection between the Accept and the ServeHTTP
 	hostRequestsMu      deadlock.Mutex               // used to syncronize access to the hostRequests and acceptedConnections variables
+	// 요청 호스트를 요청 데이터에 매핑합니다(즉, "1.2.3.4" -> *hostIncomingRequests ).
 	// 로컬 주소 인터페이스를 추적된 요청 데이터에 매핑합니다(예: "1.2.3.4:1560" -> *TrackerRequest ). Accept와 ServeHTTP 간의 연결을 연결하는 데 사용됩니다.
 	// hostRequests 및 acceptedConnections 변수에 대한 액세스를 동기화하는 데 사용됩니다.
 
