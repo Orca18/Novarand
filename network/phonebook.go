@@ -105,7 +105,7 @@ type addressData struct {
 	role PhoneBookEntryRoles
 }
 
-// makePhonebookEntryData creates a new addressData entry for provided network name and role.
+// makePhonebookEntryData creates a new addressData entry for provided network name and role. /n
 // makePhonebookEntryData는 제공된 네트워크 이름과 역할에 대한 새 addressData 항목을 만듭니다.
 func makePhonebookEntryData(networkName string, role PhoneBookEntryRoles) addressData {
 	pbData := addressData{

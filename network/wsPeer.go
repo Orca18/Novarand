@@ -712,7 +712,7 @@ func (wp *wsPeer) writeLoop() {
 		default:
 		}
 		// if nothing high prio, send anything
-		// 우선순위가 없으면 아무 것도 보내십시오.
+		// 높은 우선순위가 없으면, 아무거나 보내십시오.
 		select {
 		case <-wp.closing:
 			return

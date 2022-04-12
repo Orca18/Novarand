@@ -85,6 +85,7 @@ func makeHTTPSync(peerSource network.GossipNode, log logging.Logger, serverRespo
 }
 
 // Sync gets pending transactions from a random peer.
+// 동기화는 임의의 피어에서 보류 중인 트랜잭션을 가져옵니다.
 // Part of TxSyncClient interface.
 func (hts *HTTPTxSync) Sync(ctx context.Context, bloom *bloom.Filter) (txgroups [][]transactions.SignedTxn, err error) {
 	bloomBytes, err := bloom.MarshalBinary()

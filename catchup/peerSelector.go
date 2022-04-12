@@ -423,8 +423,8 @@ func peerAddress(peer network.Peer) string {
 	return ""
 }
 
-// refreshAvailablePeers reload the available peers from the network package, add new peers along with their
-// corresponding initial rank, and deletes peers that have been dropped by the network package.
+// refreshAvailablePeers reload the available peers from the network package, add new peers along with their corresponding initial rank, and deletes peers that have been dropped by the network package.
+// refreshAvailablePeers는 네트워크 패키지에서 사용 가능한 피어를 다시 로드하고 해당 초기 순위와 함께 새 피어를 추가하고 네트워크 패키지에 의해 삭제된 피어를 삭제합니다.
 func (ps *peerSelector) refreshAvailablePeers() {
 	existingPeers := make(map[network.PeerOption]map[string]bool)
 	for _, pool := range ps.pools {
