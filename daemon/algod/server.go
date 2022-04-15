@@ -50,6 +50,7 @@ import (
 var server http.Server
 
 // Server represents an instance of the REST API HTTP server
+// 서버는 REST API HTTP 서버의 인스턴스를 나타냅니다.
 type Server struct {
 	RootPath             string
 	Genesis              bookkeeping.Genesis
@@ -64,6 +65,7 @@ type Server struct {
 }
 
 // Initialize creates a Node instance with applicable network services
+// Initialize는 적용 가능한 네트워크 서비스로 노드 인스턴스를 생성합니다.
 func (s *Server) Initialize(cfg config.Local, phonebookAddresses []string, genesisText string) error {
 	// set up node
 	s.log = logging.Base()
@@ -171,6 +173,7 @@ func (s *Server) Initialize(cfg config.Local, phonebookAddresses []string, genes
 }
 
 // helper handles startup of tcp listener
+// 헬퍼는 tcp 리스너의 시작을 처리합니다.
 func makeListener(addr string) (net.Listener, error) {
 	var listener net.Listener
 	var err error
@@ -187,6 +190,7 @@ func makeListener(addr string) (net.Listener, error) {
 }
 
 // Start starts a Node instance and its network services
+// Start는 Node 인스턴스와 네트워크 서비스를 시작합니다.
 func (s *Server) Start() {
 	s.log.Info("Trying to start an Algorand node")
 	fmt.Print("Initializing the Algorand node... ")
@@ -287,12 +291,14 @@ func (s *Server) Start() {
 }
 
 // Stop initiates a graceful shutdown of the node by shutting down the network server.
+// 중지는 네트워크 서버를 종료하여 노드의 정상적인 종료를 시작합니다.
 func (s *Server) Stop() {
-	// close the s.stopping, which would signal the rest api router that any pending commands
-	// should be aborted.
+	// close the s.stopping, which would signal the rest api router that any pending commands should be aborted.
+	// s.stopping을 닫으면 나머지 API 라우터에 보류 중인 명령이 중단되어야 함을 알립니다.
 	close(s.stopping)
 
 	// Attempt to log a shutdown event before we exit...
+	// 종료하기 전에 종료 이벤트를 기록하려고 시도합니다...
 	s.log.Event(telemetryspec.ApplicationState, telemetryspec.ShutdownEvent)
 
 	s.node.Stop()
