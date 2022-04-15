@@ -59,6 +59,7 @@ import (
 )
 
 // StatusReport represents the current basic status of the node
+// StatusReport는 노드의 현재 기본 상태를 나타냅니다.
 type StatusReport struct {
 	LastRound                          basics.Round
 	LastVersion                        protocol.ConsensusVersion
@@ -80,6 +81,7 @@ type StatusReport struct {
 }
 
 // TimeSinceLastRound returns the time since the last block was approved (locally), or 0 if no blocks seen
+// TimeSinceLastRound는 마지막 블록이 (로컬로) 승인된 이후의 시간을 반환하거나 블록이 보이지 않으면 0을 반환합니다.
 func (status StatusReport) TimeSinceLastRound() time.Duration {
 	if status.LastRoundTimestamp.IsZero() {
 		return time.Duration(0)
@@ -89,6 +91,7 @@ func (status StatusReport) TimeSinceLastRound() time.Duration {
 }
 
 // AlgorandFullNode specifies and implements a full Algorand node.
+// AlgorandFullNode는 전체 Algorand 노드를 지정하고 구현합니다.
 type AlgorandFullNode struct {
 	mu        deadlock.Mutex
 	ctx       context.Context
@@ -120,6 +123,8 @@ type AlgorandFullNode struct {
 
 	// syncStatusMu used for locking lastRoundTimestamp and hasSyncedSinceStartup
 	// syncStatusMu added so OnNewBlock wouldn't be blocked by oldKeyDeletionThread during catchup
+	// lastRoundTimestamp 및 hasSyncedSinceStartup 잠금에 사용되는 syncStatusMu
+	// onNewBlock이 캐치업 동안 oldKeyDeletionThread에 의해 차단되지 않도록 syncStatusMu가 추가되었습니다.
 	syncStatusMu          deadlock.Mutex
 	lastRoundTimestamp    time.Time
 	hasSyncedSinceStartup bool
@@ -137,26 +142,28 @@ type AlgorandFullNode struct {
 	compactCert *compactcert.Worker
 }
 
-// TxnWithStatus represents information about a single transaction,
-// in particular, whether it has appeared in some block yet or not,
-// and whether it was kicked out of the txpool due to some error.
+// TxnWithStatus represents information about a single transaction, in particular, whether it has appeared in some block yet or not, and whether it was kicked out of the txpool due to some error.
+// TxnWithStatus는 단일 트랜잭션에 대한 정보, 특히 아직 특정 블록에 나타나지 않았는지, 어떤 오류로 인해 txpool에서 쫓겨났는지 여부를 나타냅니다.
 type TxnWithStatus struct {
 	Txn transactions.SignedTxn
 
 	// Zero indicates no confirmation
+	// 0은 확인이 없음을 나타냅니다.
 	ConfirmedRound basics.Round
 
-	// PoolError indicates that the transaction was kicked out of this
-	// node's transaction pool (and specifies why that happened).  An
-	// empty string indicates the transaction wasn't kicked out of this
-	// node's txpool due to an error.
+	// PoolError indicates that the transaction was kicked out of this node's transaction pool (and specifies why that happened).
+	// An empty string indicates the transaction wasn't kicked out of this node's txpool due to an error.
+	// PoolError는 트랜잭션이 이 노드의 트랜잭션 풀에서 쫓겨났음을 나타냅니다(그리고 왜 그런 일이 발생했는지 지정).
+	// 빈 문자열은 트랜잭션이 오류로 인해 이 노드의 txpool에서 추방되지 않았음을 나타냅니다.
 	PoolError string
 
 	// ApplyData is the transaction.ApplyData, if committed.
+	// ApplyData는 커밋된 경우 transaction.ApplyData입니다.
 	ApplyData transactions.ApplyData
 }
 
 // MakeFull sets up an Algorand full node
+// MakeFull은 Algorand 전체 노드를 설정합니다.
 // (i.e., it returns a node that participates in consensus)
 func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAddresses []string, genesis bookkeeping.Genesis) (*AlgorandFullNode, error) {
 	node := new(AlgorandFullNode)

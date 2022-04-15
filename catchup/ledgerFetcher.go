@@ -40,10 +40,13 @@ var errNoLedgerForRound = errors.New("No ledger available for given round")
 
 const (
 	// maxCatchpointFileChunkSize is a rough estimate for the worst-case scenario we're going to have of all the accounts data per a single catchpoint file chunk.
+	// maxCatchpointFileChunkSize는 단일 catchpoint 파일 청크당 모든 계정 데이터를 갖게 될 최악의 시나리오에 대한 대략적인 추정치입니다.
 	maxCatchpointFileChunkSize = ledger.BalancesPerCatchpointFileChunk * basics.MaxEncodedAccountDataSize
 	// defaultMinCatchpointFileDownloadBytesPerSecond defines the worst-case scenario download speed we expect to get while downloading a catchpoint file
+	// defaultMinCatchpointFileDownloadBytesPerSecond는 캐치포인트 파일을 다운로드하는 동안 얻을 것으로 예상되는 최악의 시나리오 다운로드 속도를 정의합니다.
 	defaultMinCatchpointFileDownloadBytesPerSecond = 20 * 1024
 	// catchpointFileStreamReadSize defines the number of bytes we would attempt to read at each itration from the incoming http data stream
+	// catchpointFileStreamReadSize는 들어오는 http 데이터 스트림에서 각 반복에서 읽으려고 시도하는 바이트 수를 정의합니다.
 	catchpointFileStreamReadSize = 4096
 )
 
@@ -106,6 +109,7 @@ func (lf *ledgerFetcher) getPeerLedger(ctx context.Context, peer network.HTTPPee
 	defer response.Body.Close()
 
 	// check to see that we had no errors.
+	// 오류가 없는지 확인합니다.
 	switch response.StatusCode {
 	case http.StatusOK:
 	case http.StatusNotFound: // server could not find a block with that round numbers.
@@ -114,8 +118,10 @@ func (lf *ledgerFetcher) getPeerLedger(ctx context.Context, peer network.HTTPPee
 		return fmt.Errorf("getPeerLedger error response status code %d", response.StatusCode)
 	}
 
-	// at this point, we've already receieved the response headers. ensure that the
-	// response content type is what we'd like it to be.
+	// at this point, we've already receieved the response headers.
+	// ensure that the response content type is what we'd like it to be.
+	// 이 시점에서 우리는 이미 응답 헤더를 수신했습니다.
+	// 응답 콘텐츠 유형이 우리가 원하는 것과 같은지 확인합니다.
 	contentTypes := response.Header["Content-Type"]
 	if len(contentTypes) != 1 {
 		err = fmt.Errorf("getPeerLedger : http ledger fetcher invalid content type count %d", len(contentTypes))
@@ -128,6 +134,7 @@ func (lf *ledgerFetcher) getPeerLedger(ctx context.Context, peer network.HTTPPee
 	}
 
 	// maxCatchpointFileChunkDownloadDuration is the maximum amount of time we would wait to download a single chunk off a catchpoint file
+	// maxCatchpointFileChunkDownloadDuration은 캐치포인트 파일에서 단일 청크를 다운로드하기 위해 대기하는 최대 시간입니다.
 	maxCatchpointFileChunkDownloadDuration := 2 * time.Minute
 	if lf.config.MinCatchpointFileDownloadBytesPerSecond > 0 {
 		maxCatchpointFileChunkDownloadDuration += maxCatchpointFileChunkSize * time.Second / time.Duration(lf.config.MinCatchpointFileDownloadBytesPerSecond)

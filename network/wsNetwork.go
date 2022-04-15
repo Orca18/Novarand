@@ -339,7 +339,6 @@ type TaggedMessageHandler struct {
 }
 
 // ======   ======
-
 // Propagate is a convenience function to save typing in the common case of a message handler telling us to propagate an incoming message "return network.Propagate(msg)" instead of "return network.OutgoingMsg{network.Broadcast, msg.Tag, msg.Data}"
 // Propagate는 "return network.OutgoingMsg{network.Broadcast, msg.Tag" 대신 "return network.Propagate(msg)"가 들어오는 메시지를 전파하도록 지시하는 메시지 처리기의 일반적인 경우 입력을 저장하는 편리한 기능입니다. msg.Data}"
 func Propagate(msg IncomingMessage) OutgoingMessage {
@@ -1338,10 +1337,8 @@ func (wn *WebsocketNetwork) checkPeersConnectivity() {
 
 // checkSlowWritingPeers tests each of the peer's current message timestamp.
 // checkSlowWritingPeers는 피어의 현재 메시지 타임스탬프 각각을 테스트합니다.
-// if that timestamp is too old, it means that the transmission of that message
-// 타임스탬프가 너무 오래된 경우 해당 메시지의 전송이
-// takes longer than desired. In that case, it will disconnect the peer, allowing it to reconnect to a faster network endpoint.
-// 원하는 것보다 오래 걸립니다. 이 경우 피어의 연결을 끊고 더 빠른 네트워크 끝점에 다시 연결할 수 있습니다.
+// if that timestamp is too old, it means that the transmission of that message takes longer than desired. In that case, it will disconnect the peer, allowing it to reconnect to a faster network endpoint.
+// 타임스탬프가 너무 오래되면 해당 메시지의 전송이 원하는 시간보다 더 오래 걸린다는 것을 의미합니다. 이 경우 피어의 연결이 끊겨 더 빠른 네트워크 끝점에 다시 연결할 수 있습니다.
 func (wn *WebsocketNetwork) checkSlowWritingPeers() {
 	wn.peersLock.Lock()
 	defer wn.peersLock.Unlock()
