@@ -41,6 +41,7 @@ const catchupPeersForSync = 10
 const blockQueryPeerLimit = 10
 
 // this should be at least the number of relays
+// 이것은 최소한 릴레이 수여야 합니다??
 const catchupRetryLimit = 500
 
 // PendingUnmatchedCertificate is a single certificate that is being waited upon to have its corresponding block fetched.
@@ -99,7 +100,7 @@ type Service struct {
 }
 
 // A BlockAuthenticator authenticates blocks given a certificate.
-// Block Authenticator 인증은 주어진 인증서를 차단합니다.
+// 블록 인증자는 인증서에 지정된 블록을 인증합니다.
 //
 // Note that Authenticate does not check if the block contents match their header as it only checks the block header.
 // If the contents have not been checked yet, callers should also call block.

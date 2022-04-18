@@ -104,6 +104,7 @@ type fallbackEndpoints struct {
 }
 
 // MakeBlockService creates a BlockService around the provider Ledger and registers it for HTTP callback on the block serving path
+// MakeBlockService는 공급자 Leader 주위에 BlockService를 생성하고 블록 서비스 경로에 HTTP 콜백을 위해 등록합니다.
 func MakeBlockService(log logging.Logger, config config.Local, ledger *data.Ledger, net network.GossipNode, genesisID string) *BlockService {
 	service := &BlockService{
 		ledger:                  ledger,

@@ -61,18 +61,19 @@ import (
 // StatusReport represents the current basic status of the node
 // StatusReport는 노드의 현재 기본 상태를 나타냅니다.
 type StatusReport struct {
-	LastRound                          basics.Round
-	LastVersion                        protocol.ConsensusVersion
-	NextVersion                        protocol.ConsensusVersion
-	NextVersionRound                   basics.Round
-	NextVersionSupported               bool
-	LastRoundTimestamp                 time.Time
-	SynchronizingTime                  time.Duration
-	CatchupTime                        time.Duration
-	HasSyncedSinceStartup              bool
-	StoppedAtUnsupportedRound          bool
-	LastCatchpoint                     string // the last catchpoint hit by the node. This would get updated regardless of whether the node is catching up using catchpoints or not.
-	Catchpoint                         string // the catchpoint where we're currently catching up to. If the node isn't in fast catchup mode, it will be empty.
+	LastRound                 basics.Round
+	LastVersion               protocol.ConsensusVersion
+	NextVersion               protocol.ConsensusVersion
+	NextVersionRound          basics.Round
+	NextVersionSupported      bool
+	LastRoundTimestamp        time.Time
+	SynchronizingTime         time.Duration
+	CatchupTime               time.Duration
+	HasSyncedSinceStartup     bool
+	StoppedAtUnsupportedRound bool
+	LastCatchpoint            string // the last catchpoint hit by the node. This would get updated regardless of whether the node is catching up using catchpoints or not.
+	Catchpoint                string // the catchpoint where we're currently catching up to. If the node isn't in fast catchup mode, it will be empty.\
+	// 우리가 현재 따라잡고 있는 목표 지점입니다. 노드가 빠른 따라잡기 모드에 있지 않으면 비어 있습니다.
 	CatchpointCatchupTotalAccounts     uint64
 	CatchpointCatchupProcessedAccounts uint64
 	CatchpointCatchupVerifiedAccounts  uint64
@@ -118,6 +119,7 @@ type AlgorandFullNode struct {
 	genesisID   string
 	genesisHash crypto.Digest
 	devMode     bool // is this node operates in a developer mode ? ( benign agreement, broadcasting transaction generates a new block )
+	// 이 노드가 개발자 모드에서 작동합니까? (양호 계약, 브로드캐스트 트랜잭션이 새 블록을 생성합니다.)
 
 	log logging.Logger
 
@@ -179,6 +181,7 @@ func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAdd
 	node.config = cfg
 
 	// tie network, block fetcher, and agreement services together
+	// 네트워크, 블록 페처 및 계약 서비스를 함께 연결
 	p2pNode, err := network.NewWebsocketNetwork(node.log, node.config, phonebookAddresses, genesis.ID(), genesis.Network)
 	if err != nil {
 		log.Errorf("could not create websocket node: %v", err)
@@ -352,21 +355,25 @@ func bootstrapData(genesis bookkeeping.Genesis, log logging.Logger) (bookkeeping
 }
 
 // Config returns a copy of the node's Local configuration
+// Config는 노드의 로컬 구성 사본을 반환합니다.
 func (node *AlgorandFullNode) Config() config.Local {
 	return node.config
 }
 
 // Start the node: connect to peers and run the agreement service while obtaining a lock. Doesn't wait for initial sync.
+// 노드 시작: 피어에 연결하고 잠금을 얻으면서 계약 서비스를 실행합니다. 초기 동기화를 기다리지 않습니다.
 func (node *AlgorandFullNode) Start() {
 	node.mu.Lock()
 	defer node.mu.Unlock()
 	fmt.Println(&node)
 	// Set up a context we can use to cancel goroutines on Stop()
+	// Stop()에서 고루틴을 취소하는 데 사용할 수 있는 컨텍스트를 설정합니다.
 	node.ctx, node.cancelCtx = context.WithCancel(context.Background())
 
 	// The start network is being called only after the various services start up.
-	// We want to do so in order to let the services register their callbacks with the
-	// network package before any connections are being made.
+	// We want to do so in order to let the services register their callbacks with the network package before any connections are being made.
+	// 시작 네트워크는 다양한 서비스가 시작된 후에만 호출됩니다.
+	// 연결이 설정되기 전에 서비스가 네트워크 패키지에 콜백을 등록하도록 하기 위해 이 작업을 수행하려고 합니다.
 	startNetwork := func() {
 		if !node.config.DisableNetworking {
 			// start accepting connections
@@ -406,29 +413,36 @@ func (node *AlgorandFullNode) Start() {
 }
 
 // startMonitoringRoutines starts the internal monitoring routines used by the node.
+// startMonitoring루틴은 노드에서 사용하는 내부 모니터링 루틴을 시작합니다.
 func (node *AlgorandFullNode) startMonitoringRoutines() {
 	node.monitoringRoutinesWaitGroup.Add(3)
 
 	// PKI TODO: Remove this with #2596
 	// Periodically check for new participation keys
+	// 주기적으로 새 참여 키 확인
 	go node.checkForParticipationKeys()
 
 	go node.txPoolGaugeThread()
 	// Delete old participation keys
+	// 이전 참여 키 삭제
 	go node.oldKeyDeletionThread()
 
 	// TODO re-enable with configuration flag post V1
 	//go logging.UsageLogThread(node.ctx, node.log, 100*time.Millisecond, nil)
 }
 
-// waitMonitoringRoutines waits for all the monitoring routines to exit. Note that
-// the node.mu must not be taken, and that the node's context should have been canceled.
+// waitMonitoringRoutines waits for all the monitoring routines to exit.
+// Note that the node.mu must not be taken, and that the node's context should have been canceled.
+// waitMonitoringRoutines는 모든 모니터링 루틴이 종료될 때까지 기다립니다.
+// node.mu을 사용하면 안 되며, 노드의 컨텍스트는 취소되어야 합니다.
 func (node *AlgorandFullNode) waitMonitoringRoutines() {
 	node.monitoringRoutinesWaitGroup.Wait()
 }
 
 // ListeningAddress retrieves the node's current listening address, if any.
 // Returns true if currently listening, false otherwise.
+// ListeningAddress는 노드의 현재 수신 대기 주소를 검색합니다(있는 경우).
+// 현재 수신 중인 경우 true를 반환하고, 그렇지 않으면 false를 반환합니다.
 func (node *AlgorandFullNode) ListeningAddress() (string, bool) {
 	node.mu.Lock()
 	defer node.mu.Unlock()
@@ -436,13 +450,14 @@ func (node *AlgorandFullNode) ListeningAddress() (string, bool) {
 }
 
 // Stop stops running the node. Once a node is closed, it can never start again.
+// Stop, 노드를 한번 닫으면 다신 시작할 수 없다.
 func (node *AlgorandFullNode) Stop() {
 	node.mu.Lock()
 	defer func() {
 		node.mu.Unlock()
 		node.waitMonitoringRoutines()
-		// we want to shut down the compactCert last, since the oldKeyDeletionThread might depend on it when making the
-		// call to LatestSigsFromThisNode.
+		// we want to shut down the compactCert last, since the oldKeyDeletionThread might depend on it when making the call to LatestSigsFromThisNode.
+		// 이전 키 삭제 이후 CompactCert를 마지막으로 종료합니다.LatestSigsFrom으로 호출할 때 스레드가 종속될 수 있습니다.이 노드.
 		node.compactCert.Shutdown()
 		node.compactCert = nil
 	}()
@@ -472,6 +487,7 @@ func (node *AlgorandFullNode) Stop() {
 }
 
 // note: unlike the other two functions, this accepts a whole filename
+// 참고: 다른 두 함수와는 달리, 이것은 전체 파일 이름을 받아들입니다.
 func (node *AlgorandFullNode) getExistingPartHandle(filename string) (db.Accessor, error) {
 	filename = filepath.Join(node.rootDir, node.genesisID, filename)
 
@@ -483,11 +499,13 @@ func (node *AlgorandFullNode) getExistingPartHandle(filename string) (db.Accesso
 }
 
 // Ledger exposes the node's ledger handle to the algod API code
+// Ledger는 노드의 원장 핸들을 algod API 코드에 노출시킵니다.
 func (node *AlgorandFullNode) Ledger() *data.Ledger {
 	return node.ledger
 }
 
 // writeDevmodeBlock generates a new block for a devmode, and write it to the ledger.
+// writeDevmodeBlock은 devmode에 대한 새 블록을 생성하고 원장에 씁니다.
 func (node *AlgorandFullNode) writeDevmodeBlock() (err error) {
 	var vb *ledgercore.ValidatedBlock
 	vb, err = node.transactionPool.AssembleDevModeBlock()
@@ -501,14 +519,15 @@ func (node *AlgorandFullNode) writeDevmodeBlock() (err error) {
 }
 
 // BroadcastSignedTxGroup broadcasts a transaction group that has already been signed.
+// BroadcastSignedTxGroup은 이미 서명된 트랜잭션 그룹을 브로드캐스트합니다.
 func (node *AlgorandFullNode) BroadcastSignedTxGroup(txgroup []transactions.SignedTxn) (err error) {
-	// in developer mode, we need to take a lock, so that each new transaction group would truly
-	// render into a unique block.
+	// in developer mode, we need to take a lock, so that each new transaction group would truly render into a unique block.
+	// 개발자 모드에서는 각각의 새로운 트랜잭션 그룹이 고유한 블록으로 렌더링될 수 있도록 잠금을 설정해야 합니다.
 	if node.devMode {
 		node.mu.Lock()
 		defer func() {
-			// if we added the transaction successfully to the transaction pool, then
-			// attempt to generate a block and write it to the ledger.
+			// if we added the transaction successfully to the transaction pool, then attempt to generate a block and write it to the ledger.
+			// 트랜잭션을 트랜잭션 풀에 성공적으로 추가한 경우 블록 생성을 시도하고 원장에 기록합니다.
 			if err == nil {
 				err = node.writeDevmodeBlock()
 			}
@@ -557,8 +576,9 @@ func (node *AlgorandFullNode) BroadcastSignedTxGroup(txgroup []transactions.Sign
 }
 
 // ListTxns returns SignedTxns associated with a specific account in a range of Rounds (inclusive).
-// TxnWithStatus returns the round in which a particular transaction appeared,
-// since that information is not part of the SignedTxn itself.
+// TxnWithStatus returns the round in which a particular transaction appeared, since that information is not part of the SignedTxn itself.
+// ListTxns는 Rounds(포함) 범위의 특정 계정과 연결된 SignedTxns를 반환합니다.
+// TxnWithStatus는 해당 정보가 SignedTxn 자체의 일부가 아니기 때문에 특정 트랜잭션이 나타난 라운드를 반환합니다.
 func (node *AlgorandFullNode) ListTxns(addr basics.Address, minRound basics.Round, maxRound basics.Round) ([]TxnWithStatus, error) {
 	result := make([]TxnWithStatus, 0)
 	for r := minRound; r <= maxRound; r++ {
@@ -577,11 +597,13 @@ func (node *AlgorandFullNode) ListTxns(addr basics.Address, minRound basics.Roun
 	return result, nil
 }
 
-// GetTransaction looks for the required txID within with a specific account within a range of rounds (inclusive) and
-// returns the SignedTxn and true iff it finds the transaction.
+// GetTransaction looks for the required txID within with a specific account within a range of rounds (inclusive) and returns the SignedTxn and true iff it finds the transaction.
+// GetTransaction은 라운드 범위(포함) 내에서 특정 계정으로 필요한 txID를 찾고 트랜잭션을 찾으면 SignedTxn 및 true를 반환합니다.
 func (node *AlgorandFullNode) GetTransaction(addr basics.Address, txID transactions.Txid, minRound basics.Round, maxRound basics.Round) (TxnWithStatus, bool) {
 	// start with the most recent round, and work backwards:
 	// this will abort early if it hits pruned rounds
+	// 가장 최근 라운드부터 시작하여 역순으로 작업:
+	// 프루닝된 라운드에 도달하면 일찍 중단됩니다.
 	if maxRound < minRound {
 		return TxnWithStatus{}, false
 	}
@@ -608,23 +630,27 @@ func (node *AlgorandFullNode) GetTransaction(addr basics.Address, txID transacti
 	return TxnWithStatus{}, false
 }
 
-// GetPendingTransaction looks for the required txID in the recent ledger
-// blocks, in the txpool, and in the txpool's status cache.  It returns
-// the SignedTxn (with status information), and a bool to indicate if the
-// transaction was found.
+// GetPendingTransaction looks for the required txID in the recent ledger blocks, in the txpool, and in the txpool's status cache.
+// It returns the SignedTxn (with status information), and a bool to indicate if the transaction was found.
+// GetPendingTransaction은 최근 원장 블록, txpool 및 txpool의 상태 캐시에서 필요한 txID를 찾습니다.
+// SignedTxn(상태 정보 포함)과 트랜잭션이 발견되었는지 나타내는 bool을 반환합니다.
 func (node *AlgorandFullNode) GetPendingTransaction(txID transactions.Txid) (res TxnWithStatus, found bool) {
 	// We need to check both the pool and the ledger's blocks.
-	// If the transaction is found in a committed block, that
-	// takes precedence.  But we check the pool first, because
-	// otherwise there could be a race between the pool and the
-	// ledger, where the block wasn't in the ledger at first,
-	// but by the time we check the pool, it's not there either
-	// because it committed.
-
+	// If the transaction is found in a committed block, that takes precedence.
+	// But we check the pool first, because otherwise there could be a race between the pool and the ledger, where the block wasn't in the ledger at first,
+	// but by the time we check the pool, it's not there either because it committed.
+	// 풀과 원장의 블록을 모두 확인해야 합니다.
+	// 트랜잭션이 커밋된 블록에서 발견되면 해당 블록이 우선 적용됩니다.
+	// 그러나 우리는 먼저 풀을 확인합니다. 그렇지 않으면 풀과 원장 사이에 경쟁이 있을 수 있기 때문입니다.
+	// 그러나 풀을 확인할 때 커밋했기 때문에 풀도 존재하지 않습니다.
+	//
 	// The default return value is found=false, which is
 	// appropriate if the transaction isn't found anywhere.
-
+	// 기본 반환 값은 found=false입니다.
+	// 트랜잭션이 어디에도 없는 경우에 적합합니다.
+	//
 	// Check if it's in the pool or evicted from the pool.
+	// 풀에 있는지 풀에서 제거되었는지 확인합니다.
 	tx, txErr, found := node.transactionPool.Lookup(txID)
 	if found {
 		res = TxnWithStatus{
@@ -665,6 +691,7 @@ func (node *AlgorandFullNode) GetPendingTransaction(txID transactions.Txid) (res
 }
 
 // Status returns a StatusReport structure reporting our status as Active and with our ledger's LastRound
+// Status는 상태를 활성으로 보고하고 원장의 LastRound와 함께 StatusReport 구조를 반환합니다.
 func (node *AlgorandFullNode) Status() (s StatusReport, err error) {
 	node.syncStatusMu.Lock()
 	s.LastRoundTimestamp = node.lastRoundTimestamp
@@ -723,6 +750,7 @@ func (node *AlgorandFullNode) GenesisID() string {
 }
 
 // GenesisHash returns the hash of the genesis configuration.
+// GenesisHash는 Genesis 구성의 해시를 반환합니다.
 func (node *AlgorandFullNode) GenesisHash() crypto.Digest {
 	node.mu.Lock()
 	defer node.mu.Unlock()
@@ -731,6 +759,7 @@ func (node *AlgorandFullNode) GenesisHash() crypto.Digest {
 }
 
 // PoolStats returns a PoolStatus structure reporting stats about the transaction pool
+// PoolStats는 트랜잭션 풀에 대한 통계를 보고하는 PoolStatus 구조를 반환합니다.
 func (node *AlgorandFullNode) PoolStats() PoolStats {
 	r := node.ledger.Latest()
 	last, err := node.ledger.Block(r)
@@ -748,17 +777,22 @@ func (node *AlgorandFullNode) PoolStats() PoolStats {
 
 // SuggestedFee returns the suggested fee per byte recommended to ensure a new transaction is processed in a timely fashion.
 // Caller should set fee to max(MinTxnFee, SuggestedFee() * len(encoded SignedTxn))
+// SuggestedFee는 새 트랜잭션이 적시에 처리되도록 권장되는 바이트당 제안된 요금을 반환합니다.
+// 호출자는 수수료를 max(MinTxnFee, SuggestedFee() * len(encoded SignedTxn))로 설정해야 합니다.
 func (node *AlgorandFullNode) SuggestedFee() basics.MicroAlgos {
 	return basics.MicroAlgos{Raw: node.transactionPool.FeePerByte()}
 }
 
 // GetPendingTxnsFromPool returns a snapshot of every pending transactions from the node's transaction pool in a slice.
 // Transactions are sorted in decreasing order. If no transactions, returns an empty slice.
+// GetPendingTxnsFromPool은 슬라이스의 노드 트랜잭션 풀에서 보류 중인 모든 트랜잭션의 스냅샷을 반환합니다.
+// 트랜잭션은 내림차순으로 정렬됩니다. 트랜잭션이 없으면 빈 슬라이스를 반환합니다.
 func (node *AlgorandFullNode) GetPendingTxnsFromPool() ([]transactions.SignedTxn, error) {
 	return bookkeeping.SignedTxnGroupsFlatten(node.transactionPool.PendingTxGroups()), nil
 }
 
 // ensureParticipationDB opens or creates a participation DB.
+//sureParticipationDB는 참여 DB를 열거나 생성합니다.
 func ensureParticipationDB(genesisDir string, log logging.Logger) (account.ParticipationRegistry, error) {
 	accessorFile := filepath.Join(genesisDir, config.ParticipationRegistryFilename)
 	accessor, err := db.OpenPair(accessorFile, false)
@@ -769,6 +803,7 @@ func ensureParticipationDB(genesisDir string, log logging.Logger) (account.Parti
 }
 
 // Reload participation keys from disk periodically
+// 주기적으로 디스크에서 참여 키를 다시 로드
 func (node *AlgorandFullNode) checkForParticipationKeys() {
 	defer node.monitoringRoutinesWaitGroup.Done()
 	ticker := time.NewTicker(node.config.ParticipationKeysRefreshInterval)
@@ -787,11 +822,13 @@ func (node *AlgorandFullNode) checkForParticipationKeys() {
 }
 
 // ListParticipationKeys returns all participation keys currently installed on the node
+// ListParticipationKeys는 현재 노드에 설치된 모든 참여 키를 반환합니다.
 func (node *AlgorandFullNode) ListParticipationKeys() (partKeys []account.ParticipationRecord, err error) {
 	return node.accountManager.Registry().GetAll(), nil
 }
 
 // GetParticipationKey retries the information of a participation id from the node
+// GetParticipationKey는 노드의 참여 ID 정보를 재시도합니다.
 func (node *AlgorandFullNode) GetParticipationKey(partKeyID account.ParticipationID) (account.ParticipationRecord, error) {
 	rval := node.accountManager.Registry().Get(partKeyID)
 
@@ -803,10 +840,13 @@ func (node *AlgorandFullNode) GetParticipationKey(partKeyID account.Participatio
 }
 
 // RemoveParticipationKey given a participation id, remove the records from the node
+// RemoveParticipationKey에 참여 ID가 주어지면 노드에서 레코드를 제거합니다.
 func (node *AlgorandFullNode) RemoveParticipationKey(partKeyID account.ParticipationID) error {
 
 	// Need to remove the file and then remove the entry in the registry
 	// Let's first get the recorded information from the registry so we can lookup the file
+	// 파일을 제거한 다음 레지스트리에서 항목을 제거해야 합니다.
+	// 파일을 조회할 수 있도록 먼저 레지스트리에서 기록된 정보를 가져옵니다.
 
 	partRecord := node.accountManager.Registry().Get(partKeyID)
 
@@ -841,6 +881,7 @@ func (node *AlgorandFullNode) RemoveParticipationKey(partKeyID account.Participa
 }
 
 // AppendParticipationKeys given a participation id, remove the records from the node
+// AppendParticipationKeys에 참여 ID가 주어지면 노드에서 레코드를 제거합니다.
 func (node *AlgorandFullNode) AppendParticipationKeys(partKeyID account.ParticipationID, keys account.StateProofKeys) error {
 	err := node.accountManager.Registry().AppendKeys(partKeyID, keys)
 	if err != nil {
@@ -883,6 +924,7 @@ func createTemporaryParticipationKey(outDir string, partKeyBinary []byte) (strin
 }
 
 // InstallParticipationKey Given a participation key binary stream install the participation key.
+// InstallParticipationKey 참여 키 바이너리 스트림이 주어지면 참여 키를 설치합니다.
 func (node *AlgorandFullNode) InstallParticipationKey(partKeyBinary []byte) (account.ParticipationID, error) {
 	genID := node.GenesisID()
 
@@ -1043,11 +1085,13 @@ func (node *AlgorandFullNode) txPoolGaugeThread() {
 }
 
 // IsArchival returns true the node is an archival node, false otherwise
+// IsArchival은 노드가 보관 노드인 경우 true를 반환하고 그렇지 않으면 false를 반환합니다.
 func (node *AlgorandFullNode) IsArchival() bool {
 	return node.config.Archival
 }
 
 // OnNewBlock implements the BlockListener interface so we're notified after each block is written to the ledger
+// OnNewBlock은 BlockListener 인터페이스를 구현하므로 각 블록이 원장에 기록된 후 알림을 받습니다.
 func (node *AlgorandFullNode) OnNewBlock(block bookkeeping.Block, delta ledgercore.StateDelta) {
 	if node.ledger.Latest() > block.Round() {
 		return
@@ -1065,8 +1109,9 @@ func (node *AlgorandFullNode) OnNewBlock(block bookkeeping.Block, delta ledgerco
 }
 
 // oldKeyDeletionThread keeps deleting old participation keys.
-// It runs in a separate thread so that, during catchup, we
-// don't have to delete key for each block we received.
+// It runs in a separate thread so that, during catchup, we don't have to delete key for each block we received.
+// oldKeyDeletionThread는 오래된 참여 키를 계속 삭제합니다.
+// 캐치업 동안 수신한 각 블록에 대해 키를 삭제할 필요가 없도록 별도의 스레드에서 실행됩니다.
 func (node *AlgorandFullNode) oldKeyDeletionThread() {
 	defer node.monitoringRoutinesWaitGroup.Done()
 	for {
@@ -1078,8 +1123,8 @@ func (node *AlgorandFullNode) oldKeyDeletionThread() {
 
 		r := node.ledger.Latest()
 
-		// We need the latest header to determine the next compact cert
-		// round, if any.
+		// We need the latest header to determine the next compact cert round, if any.
+		// 다음 컴팩트 인증서 라운드(있는 경우)를 결정하려면 최신 헤더가 필요합니다.
 		latestHdr, err := node.ledger.BlockHdr(r)
 		if err != nil {
 			switch err.(type) {
@@ -1128,11 +1173,13 @@ func (node *AlgorandFullNode) oldKeyDeletionThread() {
 }
 
 // Uint64 implements the randomness by calling the crypto library.
+// Uint64는 암호화 라이브러리를 호출하여 임의성을 구현합니다.
 func (node *AlgorandFullNode) Uint64() uint64 {
 	return crypto.RandUint64()
 }
 
 // Indexer returns a pointer to nodes indexer
+// 인덱서는 노드 인덱서에 대한 포인터를 반환합니다.
 func (node *AlgorandFullNode) Indexer() (*indexer.Indexer, error) {
 	if node.indexer != nil && node.config.IsIndexerActive {
 		return node.indexer, nil
@@ -1140,8 +1187,8 @@ func (node *AlgorandFullNode) Indexer() (*indexer.Indexer, error) {
 	return nil, fmt.Errorf("indexer is not active")
 }
 
-// GetTransactionByID gets transaction by ID
-// this function is intended to be called externally via the REST api interface.
+// GetTransactionByID gets transaction by ID this function is intended to be called externally via the REST api interface.
+// GetTransactionByID는 ID별로 트랜잭션을 가져옵니다. 이 함수는 REST API 인터페이스를 통해 외부에서 호출하도록 되어 있습니다.
 func (node *AlgorandFullNode) GetTransactionByID(txid transactions.Txid, rnd basics.Round) (TxnWithStatus, error) {
 	stx, _, err := node.ledger.LookupTxid(txid, rnd)
 	if err != nil {
@@ -1154,8 +1201,8 @@ func (node *AlgorandFullNode) GetTransactionByID(txid transactions.Txid, rnd bas
 	}, nil
 }
 
-// StartCatchup starts the catchpoint mode and attempt to get to the provided catchpoint
-// this function is intended to be called externally via the REST api interface.
+// StartCatchup starts the catchpoint mode and attempt to get to the provided catchpoint this function is intended to be called externally via the REST api interface.
+// StartCatchup은 캐치포인트 모드를 시작하고 제공된 캐치포인트에 도달하려고 시도합니다. 이 함수는 REST API 인터페이스를 통해 외부적으로 호출되도록 되어 있습니다.
 func (node *AlgorandFullNode) StartCatchup(catchpoint string) error {
 	node.mu.Lock()
 	defer node.mu.Unlock()
@@ -1181,8 +1228,8 @@ func (node *AlgorandFullNode) StartCatchup(catchpoint string) error {
 	return nil
 }
 
-// AbortCatchup aborts the given catchpoint
-// this function is intended to be called externally via the REST api interface.
+// AbortCatchup aborts the given catchpoint this function is intended to be called externally via the REST api interface.
+// AbortCatchup은 주어진 캐치포인트를 중단합니다. 이 함수는 REST API 인터페이스를 통해 외부적으로 호출되도록 되어 있습니다.
 func (node *AlgorandFullNode) AbortCatchup(catchpoint string) error {
 	node.mu.Lock()
 	defer node.mu.Unlock()
@@ -1197,10 +1244,10 @@ func (node *AlgorandFullNode) AbortCatchup(catchpoint string) error {
 	return nil
 }
 
-// SetCatchpointCatchupMode change the node's operational mode from catchpoint catchup mode and back, it returns a
-// channel which contains the updated node context. This function need to work asyncronisly so that the caller could
-// detect and handle the usecase where the node is being shut down while we're switching to/from catchup mode without
-// deadlocking on the shared node mutex.
+// SetCatchpointCatchupMode change the node's operational mode from catchpoint catchup mode and back, it returns a channel which contains the updated node context.
+// This function need to work asyncronisly so that the caller could detect and handle the usecase where the node is being shut down while we're switching to/from catchup mode without deadlocking on the shared node mutex.
+// SetCatchpointCatchupMode는 캐치포인트 캐치업 모드에서 노드의 작동 모드를 변경하고 다시 업데이트된 노드 컨텍스트를 포함하는 채널을 반환합니다.
+// 이 함수는 공유 노드 뮤텍스에서 교착 상태 없이 캐치업 모드로/그로부터 전환하는 동안 호출자가 노드가 종료되는 사용 사례를 감지하고 처리할 수 있도록 비동기식으로 작동해야 합니다.
 func (node *AlgorandFullNode) SetCatchpointCatchupMode(catchpointCatchupMode bool) (outCtxCh <-chan context.Context) {
 	// create a non-buffered channel to return the newly created context. The fact that it's non-buffered here
 	// is imporant, as it allows us to syncronize the "receiving" of the new context before canceling of the previous
@@ -1276,7 +1323,7 @@ func (node *AlgorandFullNode) SetCatchpointCatchupMode(catchpointCatchupMode boo
 
 }
 
-// validatedBlock satisfies agreement.ValidatedBlock
+// validatedBlock satisfies (충족) agreement.ValidatedBlock
 type validatedBlock struct {
 	vb *ledgercore.ValidatedBlock
 }
@@ -1320,6 +1367,8 @@ func (node *AlgorandFullNode) AssembleBlock(round basics.Round) (agreement.Valid
 
 // VotingKeys implements the key manager's VotingKeys method, and provides additional validation with the ledger.
 // that allows us to load multiple overlapping keys for the same account, and filter these per-round basis.
+// VotingKeys는 키 관리자의 VotingKeys 메서드를 구현하고 원장과 함께 추가 유효성 검사를 제공합니다.
+// 동일한 계정에 대해 중복되는 여러 키를 로드하고 라운드별로 필터링할 수 있습니다.
 func (node *AlgorandFullNode) VotingKeys(votingRound, keysRound basics.Round) []account.ParticipationRecordForRound {
 	parts := node.accountManager.Keys(votingRound)
 	participations := make([]account.ParticipationRecordForRound, 0, len(parts))
@@ -1375,6 +1424,7 @@ func (node *AlgorandFullNode) VotingKeys(votingRound, keysRound basics.Round) []
 }
 
 // Record forwards participation record calls to the participation registry.
+// Record는 참여 기록 호출을 참여 레지스트리로 전달합니다.
 func (node *AlgorandFullNode) Record(account basics.Address, round basics.Round, participationType account.ParticipationAction) {
 	node.accountManager.Record(account, round, participationType)
 }

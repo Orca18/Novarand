@@ -383,8 +383,8 @@ func (l *Ledger) Close() {
 	l.trackerDBs.Close()
 }
 
-// RegisterBlockListeners registers listeners that will be called when a
-// new block is added to the ledger.
+// RegisterBlockListeners registers listeners that will be called when a new block is added to the ledger.
+// RegisterBlockListeners 는 새 블록이 원장에 추가될 때 호출될 수신기를 등록합니다.
 func (l *Ledger) RegisterBlockListeners(listeners []BlockListener) {
 	l.notifier.register(listeners)
 }
@@ -644,6 +644,7 @@ func (l *Ledger) GenesisAccounts() map[basics.Address]basics.AccountData {
 }
 
 // GetCatchpointCatchupState returns the current state of the catchpoint catchup.
+// GetCatchpointCatchupState는 catchpoint catchup의 현재 상태를 반환합니다.
 func (l *Ledger) GetCatchpointCatchupState(ctx context.Context) (state CatchpointCatchupState, err error) {
 	return MakeCatchpointCatchupAccessor(l, l.log).GetState(ctx)
 }
