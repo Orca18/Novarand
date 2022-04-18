@@ -17,12 +17,15 @@
 package ledgercore
 
 import (
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
 )
 
 // InitState structure defines blockchain init params
+/*
+블록체인의 초기 파라미터들을 정의하는 구조체
+*/
 type InitState struct {
 	Block       bookkeeping.Block
 	Accounts    map[basics.Address]basics.AccountData

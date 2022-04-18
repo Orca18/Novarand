@@ -26,8 +26,8 @@ import (
 
 	"github.com/algorand/websocket"
 
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/test/commandandcontrol/lib"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/test/commandandcontrol/lib"
 )
 
 type arrayFlags []string

@@ -24,10 +24,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 
-	"github.com/algorand/go-algorand/config"
+	"github.com/Orca18/novarand/config"
 )
 
 // TelemetryConfigFilename default file name for telemetry config "logging.config"

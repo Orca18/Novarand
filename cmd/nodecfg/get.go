@@ -23,8 +23,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/netdeploy/remote"
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/netdeploy/remote"
+	"github.com/Orca18/novarand/util"
 )
 
 var getChannel string

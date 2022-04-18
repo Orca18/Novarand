@@ -27,7 +27,7 @@ namespace eval ::AlgorandGoal {
 
   # My Variables
    set version 1.0
-   set description "Algorand Goal Expect Package"
+   set description "Novarand Goal Expect Package"
 
   # Variable for the path of the script
    variable home [file join [pwd] [file dirname [info script]]]
@@ -985,7 +985,7 @@ proc ::AlgorandGoal::Report { TEST_PRIMARY_NODE_DIR } {
         spawn goal report -d $TEST_PRIMARY_NODE_DIR
         expect {
             timeout { ::AlgorandGoal::Abort "goal report timed out"  }
-            "source code available at https://github.com/algorand/go-algorand" {puts "goal -v ok"}
+            "source code available at https://github.com/Orca18/novarand" {puts "goal -v ok"}
             -re {Genesis ID from genesis.json: *} {puts "genesis ID from genesis.json ok"}
             -re {Last committed block: (\d+)} {puts "status check ok"}
         }

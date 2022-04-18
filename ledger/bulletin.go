@@ -23,12 +23,19 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/ledger/ledgercore"
 )
 
+// bulletin은 고시, 공보라는 뜻이다. 즉, 무언가를 알려주는 역할을 하는 것 같다.
+
 // notifier is a struct that encapsulates a single-shot channel; it will only be signaled once.
+/*
+notifier는 단일 샷 채널을 캡슐화하는 구조체입니다. 그것은 한 번만 신호됩니다
+chan은 고루틴(쓰레드)사용 시 데이터를 전달할 때 사용하는 채널을 의미한다 chan뒤의 자료형의 데이터를 이동시킬 수 있다.
+여기선 구조체를 이동할 수 있다!
+*/
 type notifier struct {
 	signal   chan struct{}
 	notified uint32
@@ -40,6 +47,9 @@ func makeNotifier() notifier {
 }
 
 // notify signals the channel if it hasn't already done so
+/*
+이전에 하지 않았다면 채널에 신호를 보낸다.
+*/
 func (notifier *notifier) notify() {
 	if atomic.CompareAndSwapUint32(&notifier.notified, 0, 1) {
 		close(notifier.signal)
@@ -48,6 +58,9 @@ func (notifier *notifier) notify() {
 
 // bulletin provides an easy way to wait on a round to be written to the ledger.
 // To use it, call <-Wait(round)
+/*
+bulletin은 원장에 기록되기 위한 라운드를 기다리는 쉬운 방법을 제공합니다. 그것을 사용하려면 <-Wait(round)를 호출해야 한다.
+*/
 type bulletin struct {
 	mu                          deadlock.Mutex
 	pendingNotificationRequests map[basics.Round]notifier
@@ -61,11 +74,17 @@ func makeBulletin() *bulletin {
 }
 
 // Wait returns a channel which gets closed when the ledger reaches a given round.
+/*
+Wait은 원장이 주어진 라운드에 도달하면 닫히는 채널을 반환합니다.(흠.. 무슨 역할을 하는거지 진짜...)
+*/
 func (b *bulletin) Wait(round basics.Round) chan struct{} {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
 	// Return an already-closed channel if we already have the block.
+	/*
+		이미 블록이 있는 경우 이미 닫힌 채널을 반환합니다.
+	*/
 	if round <= b.latestRound {
 		closed := make(chan struct{})
 		close(closed)

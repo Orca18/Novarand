@@ -20,7 +20,7 @@ import (
 	"container/heap"
 	"encoding/json"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 	"github.com/algorand/go-deadlock"
 )
 

@@ -17,14 +17,19 @@
 package apply
 
 import (
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
 )
 
 // Balances allow to move MicroAlgos from one address to another and to update balance records, or to access and modify individual balance records
 // After a call to Put (or Move), future calls to Get or Move will reflect the updated balance record(s)
+/*
+	Balances는 MicroAlgos를 다른 주소로 옮기고 잔액을 수정할 수 있게 해준다.
+	혹은 개별 잔액에 접근하거나 수정하게 해준다.
+	Put(또는 Move)을 호출한 후 Get 또는 Move에 대한 향후 호출은 업데이트된 잔액 레코드를 반영합니다.
+*/
 type Balances interface {
 	// Get looks up the account data for an address, ignoring application state
 	// If the account is known to be empty, then err should be nil and the returned balance record should have the given address and empty AccountData

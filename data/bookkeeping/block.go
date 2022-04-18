@@ -20,13 +20,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/committee"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/committee"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 )
 
 type (
@@ -35,6 +35,10 @@ type (
 
 	// A BlockHeader represents the metadata and commitments to the state of a Block.
 	// The Algorand Ledger may be defined minimally as a cryptographically authenticated series of BlockHeader objects.
+	/*
+		블록헤더는 블록의 상태에 대한 메타데이터 및 확신을 나타낸다.
+		알고랜드 원장은 암호적으로 인증된 블록헤더 객체들의 일련의 집합이라고 정의할 수 있다.
+	*/
 	BlockHeader struct {
 		_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -49,6 +53,9 @@ type (
 		// TxnRoot authenticates the set of transactions appearing in the block.
 		// The commitment is computed based on the PaysetCommit type specified
 		// in the block's consensus protocol.
+		/*
+			TxnRoot는 블록에 나타나는 트랜잭션 집합을 인증한다.
+		*/
 		TxnRoot crypto.Digest `codec:"txn"`
 
 		// TimeStamp in seconds since epoch
@@ -58,6 +65,9 @@ type (
 		GenesisID string `codec:"gen"`
 
 		// Genesis hash to which this block belongs.
+		/*
+			이 블록이 속한 제네시스 해시
+		*/
 		GenesisHash crypto.Digest `codec:"gh"`
 
 		// Rewards.
@@ -76,6 +86,10 @@ type (
 		// account to determine if it should get one more algo of rewards
 		// because compounding formed another whole config.Protocol.RewardUnit
 		// of algos.
+		/*
+			블록이 적용되면 AccountData.Status가 NotParticipating가 아닌 계정들에게 보상이 적립된다.
+			보상은 이 계정에서 다른 트랜잭션이 실행되기 전까지 내 자산으로 들어오지 않는다.
+		*/
 		RewardsState
 
 		// Consensus protocol versioning.
@@ -124,6 +138,9 @@ type (
 		// CompactCert tracks the state of compact certs, potentially
 		// for multiple types of certs.
 		//msgp:sort protocol.CompactCertType protocol.SortCompactCertType
+		/*
+			CompactCert는 잠재적으로 여러 유형의 인증서에 대한 컴팩트 인증서의 상태를 추적.
+		*/
 		CompactCert map[protocol.CompactCertType]CompactCertState `codec:"cc,allocbound=protocol.NumCompactCertTypes"`
 
 		// ParticipationUpdates contains the information needed to mark
@@ -144,6 +161,9 @@ type (
 
 	// RewardsState represents the global parameters controlling the rate
 	// at which accounts accrue rewards.
+	/*
+		RewardsState는 계정에서 보상이 발생하는 비율을 제어하는 ​​전역 매개변수를 나타낸다.
+	*/
 	RewardsState struct {
 		_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -159,6 +179,9 @@ type (
 		// RewardsLevel specifies how many rewards, in MicroAlgos,
 		// have been distributed to each config.Protocol.RewardUnit
 		// of MicroAlgos since genesis.
+		/*
+
+		 */
 		RewardsLevel uint64 `codec:"earn"`
 
 		// The number of new MicroAlgos added to the participation stake from rewards at the next round.
@@ -621,12 +644,16 @@ func (block Block) ContentsMatchHeader() bool {
 
 // DecodePaysetGroups decodes block.Payset using DecodeSignedTxn, and returns
 // the transactions in groups.
+/*
+	블록안에 들어있는 서명된 트랜잭션 그룹을 반환한다.
+*/
 func (block Block) DecodePaysetGroups() ([][]transactions.SignedTxnWithAD, error) {
 	var res [][]transactions.SignedTxnWithAD
 	var lastGroup []transactions.SignedTxnWithAD
 	for _, txib := range block.Payset {
 		var err error
 		var stxnad transactions.SignedTxnWithAD
+		// 서명된 트랜잭션과 applyData를 반환한다.
 		stxnad.SignedTxn, stxnad.ApplyData, err = block.DecodeSignedTxn(txib)
 		if err != nil {
 			return nil, err

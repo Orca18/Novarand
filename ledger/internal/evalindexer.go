@@ -19,9 +19,9 @@ package internal
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger/ledgercore"
 )
 
 // ProcessBlockForIndexer ..

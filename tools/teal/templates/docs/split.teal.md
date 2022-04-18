@@ -25,7 +25,7 @@ This contract is intended to be used as a contract-only account, and *not* as a 
 
 ### Initial checks
 
-First, check that this is a payment transaction. This should be the case for any transaction approved by this contract. The possible valid values of this enum may be found [here](https://github.com/algorand/go-algorand/blob/9978b3aed0643751246af82f5538ba1e7de47310/data/transactions/logic/assembler.go#L569).
+First, check that this is a payment transaction. This should be the case for any transaction approved by this contract. The possible valid values of this enum may be found [here](https://github.com/Orca18/novarand/blob/9978b3aed0643751246af82f5538ba1e7de47310/data/transactions/logic/assembler.go#L569).
 
 ```
 txn TypeEnum

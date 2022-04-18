@@ -21,14 +21,14 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merklesignature"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merklesignature"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
 )
 
 // A Participation encapsulates a set of secrets which allows a root to participate in consensus.
@@ -40,12 +40,13 @@ import (
 // If this condition is violated, the Root may equivocate. (Algorand tolerates a limited fraction of misbehaving accounts.)
 //msgp:ignore Participation
 /*
-=> Participation은 root가 합의에 참여할 수 있게 하는 비밀 집합을 캡슐화한다.
+Participation은 root가 합의에 참여할 수 있게 하는 비밀 집합(여러종류의 비밀들)을 캡슐화한다.
 모든 계정은 주소를 통해 root계정과 연결되어 있다.(부모 계정(root)은 머신상에 존재하지 않는다? 논리적으로만 존재한다는건가?
-avm에 올라가지 않는다는건가?)
+avm에 올라가지 않는다는건가? 이 상태머신(흠.. 어떤 상태머신이지?)에는 존재하지 않는다. 참여계정만 존재하는건가?)
 Participation은 유저가 특정 라운드만큼 투표할 수 있는 권한이다. 모든 라운드가 끝나면 남아있는 비밀(sectret)은 모두 파괴된다.
-정확성을 위해 모든 한번에 하나의 활성화된 참여만 가질 수 있다.
-이것이 위배되면 root는 모호해진다(알고랜드는 약각의 오작동은 허용) <= equivocate뜻이 모호해진다여서 이렇게 쎃는데 뭐가 모호해진다는건지 모르겠네..
+정확성을 위해 모든 Root는 한번에 하나의 활성화된 참여만 가질 수 있다.
+이것이 위배되면 root는 모호해진다(알고랜드는 약각의 오작동은 허용) <= equivocate뜻이 모호해진다여서 이렇게 썼는데 뭐가 모호해진다는건지 모르겠네..
+(msgp가 Paticipation을 무시한다? 즉, 동작하지 않는다는건가? 흠.. 모호하다고 하긴했는데 동작을 안하는게 맞겠지?)
 */
 type Participation struct {
 	Parent basics.Address
@@ -53,6 +54,9 @@ type Participation struct {
 	VRF    *crypto.VRFSecrets
 	Voting *crypto.OneTimeSignatureSecrets
 	// StateProofSecrets is used to sign compact certificates.
+	/*
+		StateProofSecrets는 컴팩트 인증서에 서명할 때 사용됨
+	*/
 	StateProofSecrets *merklesignature.Secrets
 
 	// The first and last rounds for which this account is valid, respectively.
@@ -65,7 +69,7 @@ type Participation struct {
 }
 
 // ParticipationKeyIdentity is for msgpack encoding the participation data.
-// => 참여 데이터를 인코딩하는 msgpack.
+// ParticipationKeyIdentity는 participation을 msgpack인코딩한 데이터이다. .
 type ParticipationKeyIdentity struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 

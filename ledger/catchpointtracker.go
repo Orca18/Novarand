@@ -29,24 +29,35 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merkletrie"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merkletrie"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
 )
 
 // trieCachedNodesCount defines how many balances trie nodes we would like to keep around in memory.
 // value was calibrated using BenchmarkCalibrateCacheNodeSize
+/*
+trieCachedNodesCount는 몇개의 balances trie nodes가 메모리에 저장될 수 있는가를 정의한다.
+값은 BenchmarkCalibrateCacheNodeSize를 사용하여 보정되었다..
+1) balances trie nodes가 뭐지?
+2) balances trie nodes가 왜 메모리에 저장되지?
+*/
 var trieCachedNodesCount = 9000
 
 // merkleCommitterNodesPerPage controls how many nodes will be stored in a single page
 // value was calibrated using BenchmarkCalibrateNodesPerPage
+/*
+merkleCommitterNodesPerPage는 페이지 하나에 노드가 몇개 저장될 수 있는지를 컨트롤하는 값이다.
+1) 페이지가 뭐지?
+2) 왜 페이지에 노드를 저장하지?
+*/
 var merkleCommitterNodesPerPage = int64(116)
 
 const (
@@ -69,7 +80,10 @@ var TrieMemoryConfig = merkletrie.MemoryConfig{
 }
 
 type catchpointTracker struct {
-	// dbDirectory is the directory where the ledger and block sql file resides as well as the parent directory for the catchup files to be generated
+	//
+	/*dbDirectory is the directory where the ledger and block sql file resides as well as the parent directory for the catchup files to be generated
+	dbDirectory는 원장 및 블록 SQL 파일이 있는 디렉토리이자 생성될 캐치업 파일의 상위 디렉토리이다..
+	*/
 	dbDirectory string
 
 	// catchpointInterval is the configured interval at which the accountUpdates would generate catchpoint labels and catchpoint files.

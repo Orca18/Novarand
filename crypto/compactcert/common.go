@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // The coinChoice type defines the fields that go into the hash for choosing

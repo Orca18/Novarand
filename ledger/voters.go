@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // The votersTracker maintains the Merkle tree for the most recent
@@ -37,6 +37,14 @@ import (
 // votersTracker is kind-of like a tracker, but hangs off the acctupdates
 // rather than a direct ledger tracker.  We don't have an explicit interface
 // for such an "accounts tracker" yet, however.
+/*
+VotersTracker는 컴팩트 인증서에 대한 온라인 계정들의 가장 최근의 머클트리를 유지 관리한다.
+우리는 여러 개의 Merkle 트리를 유지 관리합니다:
+블록 X의 새 Merkle 트리를 커밋할 수 있지만 블록 X에 대한 컴팩트 인증서를 빌드하려면
+블록 X-params.CompactCertBlocks의 Merkle 트리가 필요하다.
+votersTracker는 일종의 트래커와 비슷하지만 직접 원장 트래커가 아닌 acctupdates를 중단합니다.
+그러나 아직 그러한 "계정 트래커"에 대한 명시적인 인터페이스가 없습니다.
+*/
 type votersTracker struct {
 	// round contains the top online accounts in a given round.
 	//
@@ -71,6 +79,9 @@ type votersTracker struct {
 
 // votersRoundForCertRound computes the round number whose voting participants
 // will be used to sign the compact cert for certRnd.
+/*
+VotersRoundForCertRound는 투표 참가자가 certRnd에 대한 컴팩트 인증서에 서명하는 데 사용할 라운드 번호를 계산합니다.
+*/
 func votersRoundForCertRound(certRnd basics.Round, proto config.ConsensusParams) basics.Round {
 	// To form a compact certificate for round certRnd,
 	// we need a commitment to the voters CompactCertRounds

@@ -25,32 +25,39 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/condvar"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/condvar"
 )
 
 // A TransactionPool prepares valid blocks for proposal and caches
 // validated transaction groups.
 //
 // At all times, a TransactionPool maintains a queue of transaction
-// groups slated for proposal.  TransactionPool.Remember adds a
-// properly-signed and well-formed transaction group to this queue
+// groups slated for proposal.  TransactionPool.
+// Remember adds a properly-signed and well-formed transaction group to this queue
 // only if its fees are sufficiently high and its state changes are
 // consistent with the prior transactions in the queue.
 //
 // TransactionPool.AssembleBlock constructs a valid block for
 // proposal given a deadline.
+/*
+	트랜잭션풀은 제안을 위한 검증된 블록을 준비하고 검증된 트랜잭션 그룹을 캐시(임시저장)한다.
+	트랜잭션풀은 언제나 제안을 위해 선발된 트랜잭션그룹의 큐를 관리한다.
+	TransactionPool.Remember: 트랜잭션풀은 올바르게 서명되고 잘 만들어진 트랜잭션 그룹을 이 큐에 추가한다.
+	단, 수수료가 적절히 높고 상태변화가 이미 큐에 들어있는 트랜잭션들과 동일한경우에만(GroupContext의 값. 즉, 합의버전 등이 동일한 경우겠지?).
+	TransactionPool.AssembleBlock: 주어진 deadline안에 제안될 검증된 블록을 생성한다
+*/
 type TransactionPool struct {
-	// feePerByte is stored at the beginning of this struct to ensure it has a 64 bit aligned address. This is needed as it's being used
-	// with atomic operations which require 64 bit alignment on arm.
+	// feePerByte is stored at the beginning of this struct to ensure it has a 64 bit aligned address.
+	// This is needed as it's being used with atomic operations which require 64 bit alignment on arm.
 	feePerByte uint64
 
 	// const
@@ -60,8 +67,10 @@ type TransactionPool struct {
 	txPoolMaxSize        int
 	ledger               *ledger.Ledger
 
-	mu                     deadlock.Mutex
-	cond                   sync.Cond
+	mu deadlock.Mutex
+	// 컨디션 변수
+	cond sync.Cond
+	// 특정 라운드에 종료된 tx수
 	expiredTxCount         map[basics.Round]int
 	pendingBlockEvaluator  BlockEvaluator
 	numPendingWholeBlocks  basics.Round
@@ -72,7 +81,11 @@ type TransactionPool struct {
 	assemblyCond     sync.Cond
 	assemblyDeadline time.Time
 	// assemblyRound indicates which round number we're currently waiting for or waited for last.
-	assemblyRound   basics.Round
+	/*
+		assemblyRound는 현재 기다리고 있거나 마지막으로 기다린 라운드 번호를 나타냅니다.
+	*/
+	assemblyRound basics.Round
+	// 서명된 트랜잭션들의 블록 조립 결과(검증된 블록!!)
 	assemblyResults poolAsmResults
 
 	// pendingMu protects pendingTxGroups and pendingTxids
@@ -85,6 +98,12 @@ type TransactionPool struct {
 	// pendingTxGroups and pendingTxids.  This allows us to batch the
 	// changes in OnNewBlock() without preventing a concurrent call
 	// to PendingTxGroups() or Verified().
+	/*
+		remember()를 호출하면 rememberedTxGroups 및 rememberedTxids 트랜잭션을 추가합니다.
+		rememberCommit()을 호출하면 이들이 pendingTxGroups 및 pendingTxids에 추가됩니다.
+		이를 통해 PendingTxGroups() 또는 Verified()에 대한 동시 호출을 방지하지 않고
+		OnNewBlock()의 변경 사항을 일괄 처리할 수 있습니다.
+	*/
 	rememberedTxGroups [][]transactions.SignedTxn
 	rememberedTxids    map[transactions.Txid]transactions.SignedTxn
 
@@ -95,6 +114,9 @@ type TransactionPool struct {
 }
 
 // BlockEvaluator defines the block evaluator interface exposed by the ledger package.
+/*
+	BlockEvaluator는 ledger 패키지에 의해 노출되는 인터페이스이다(ledger에서 사용한다는건가? ㅇㅇ)
+*/
 type BlockEvaluator interface {
 	TestTransactionGroup(txgroup []transactions.SignedTxn) error
 	Round() basics.Round
@@ -106,6 +128,9 @@ type BlockEvaluator interface {
 }
 
 // MakeTransactionPool makes a transaction pool.
+/*
+트랜잭션풀을 만든다.
+*/
 func MakeTransactionPool(ledger *ledger.Ledger, cfg config.Local, log logging.Logger) *TransactionPool {
 	if cfg.TxPoolExponentialIncreaseFactor < 1 {
 		cfg.TxPoolExponentialIncreaseFactor = 1
@@ -131,18 +156,32 @@ func MakeTransactionPool(ledger *ledger.Ledger, cfg config.Local, log logging.Lo
 
 // poolAsmResults is used to syncronize the state of the block assembly process. The structure reading/writing is syncronized
 // via the pool.assemblyMu lock.
+/*
+poolAsmResults는 블록 조립 프로세스의 상태를 동기화하는 데 사용된다.
+이 구조의 리딩, 라이팅은 pool.assemblyMu lock을 통해 동기화된다.
+*/
 type poolAsmResults struct {
 	// the ok variable indicates whether the assembly for the block roundStartedEvaluating was complete ( i.e. ok == true ) or
 	// whether it's still in-progress.
-	ok    bool
-	blk   *ledgercore.ValidatedBlock
+	/*
+		ok변수는 roundStartedEvaluating라운드의 블록 조립 과정이 끝났는지 여부를 나타냄
+	*/
+	ok bool
+	// 조립이 완료되고 검증된 블록
+	blk *ledgercore.ValidatedBlock
+	//서명된 트랜잭션 집합을 하나의 블록으로 조립할 때 계산된 통계치를 나타냄.
 	stats telemetryspec.AssembleBlockMetrics
 	err   error
 	// roundStartedEvaluating is the round which we were attempted to evaluate last. It's a good measure for
 	// which round we started evaluating, but not a measure to whether the evaluation is complete.
+	/*
+		roundStartedEvaluating은 마지막으로 평가하려고 시도한 라운드입니다.
+		평가를 시작한 라운드에 대한 정보이며 언제 종료됐는지는 알 수 없다.
+	*/
 	roundStartedEvaluating basics.Round
 	// assemblyCompletedOrAbandoned is *not* protected via the pool.assemblyMu lock and should be accessed only from the OnNewBlock goroutine.
 	// it's equivalent to the "ok" variable, and used for avoiding taking the lock.
+	// ok변수와 동일하지만 잠기는것을 피하기 우해 사용한다.
 	assemblyCompletedOrAbandoned bool
 }
 
@@ -232,15 +271,25 @@ func (pool *TransactionPool) pendingTxIDsCount() int {
 // be holding pool.mu.  flush indicates whether previous
 // pendingTxGroups and pendingTxids should be flushed out and
 // replaced altogether by rememberedTxGroups and rememberedTxids.
+/*
+	rememberCommit()은 메모리에 의해 추가된 변경 사항을 pendingTxGroups 및 pendingTxids에 저장합니다.
+	호출자는 pool.mu를 보유하고 있다고 가정합니다.
+	flush는 이전 pendingTxGroups 및 pendingTxids를 플러시하고
+	registeredTxGroups 및 registeredTxids로 모두 대체되어야 하는지 여부를 나타냅니다.
+	=> txPool의 remember영역에 있는 트랜잭션들을 pending영역으로 이동시킨다.
+*/
 func (pool *TransactionPool) rememberCommit(flush bool) {
 	pool.pendingMu.Lock()
 	defer pool.pendingMu.Unlock()
 
+	// pending영역에 있는 트랜잭션을 이용해서 블록을 생성한 경우 pending영역을 비워주고 remember영역에 있는 트랜잭션들을 pending으로 이동시킨다.
 	if flush {
 		pool.pendingTxGroups = pool.rememberedTxGroups
 		pool.pendingTxids = pool.rememberedTxids
+		// rember영역에 있는 트랜잭션들을 pinned 캐시로 옮겨준다.
 		pool.ledger.VerifiedTransactionCache().UpdatePinned(pool.pendingTxids)
 	} else {
+		// 가십네트워크에서 받아온 트랜잭션그룹을 저장하는 경우 remember영역에 있는데이터를 pending영역에 이어서 저장한다.
 		pool.pendingTxGroups = append(pool.pendingTxGroups, pool.rememberedTxGroups...)
 
 		for txid, txn := range pool.rememberedTxids {
@@ -248,6 +297,7 @@ func (pool *TransactionPool) rememberCommit(flush bool) {
 		}
 	}
 
+	// remember영역을 초기화한다.
 	pool.rememberedTxGroups = nil
 	pool.rememberedTxids = make(map[transactions.Txid]transactions.SignedTxn)
 }
@@ -356,6 +406,7 @@ func (pool *TransactionPool) checkSufficientFee(txgroup []transactions.SignedTxn
 // Test performs basic duplicate detection and well-formedness checks
 // on a transaction group without storing the group.
 func (pool *TransactionPool) Test(txgroup []transactions.SignedTxn) error {
+	// 이 트랜잭션 그룹을 넣으면 풀의 크기가 초과되지 않는지 체크
 	if err := pool.checkPendingQueueSize(len(txgroup)); err != nil {
 		return err
 	}
@@ -376,6 +427,9 @@ type poolIngestParams struct {
 }
 
 // remember attempts to add a transaction group to the pool.
+/*
+	트랜잭션 그룹을 remember영역에 저장한다.
+*/
 func (pool *TransactionPool) remember(txgroup []transactions.SignedTxn) error {
 	params := poolIngestParams{
 		recomputing: false,
@@ -385,6 +439,10 @@ func (pool *TransactionPool) remember(txgroup []transactions.SignedTxn) error {
 
 // add tries to add the transaction group to the pool, bypassing the fee
 // priority checks.
+/*
+	add는 수수료 우선 순위 확인을 우회하여 풀에 트랜잭션 그룹을 추가하려고 시도합니다.
+	add를 호출하면 recomputing가 true이기 때문에 새로운 블록을 생성한다!!!
+*/
 func (pool *TransactionPool) add(txgroup []transactions.SignedTxn, stats *telemetryspec.AssembleBlockMetrics) error {
 	params := poolIngestParams{
 		recomputing: true,
@@ -398,6 +456,9 @@ func (pool *TransactionPool) add(txgroup []transactions.SignedTxn, stats *teleme
 //
 // ingest assumes that pool.mu is locked.  It might release the lock
 // while it waits for OnNewBlock() to be called.
+/*
+	트랜잭션 그룹을 SignedTxWidhAd로 래핑하고 remember영역에 저장한다.
+*/
 func (pool *TransactionPool) ingest(txgroup []transactions.SignedTxn, params poolIngestParams) error {
 	if pool.pendingBlockEvaluator == nil {
 		return fmt.Errorf("TransactionPool.ingest: no pending block evaluator")
@@ -422,11 +483,13 @@ func (pool *TransactionPool) ingest(txgroup []transactions.SignedTxn, params poo
 		}
 	}
 
+	// 트랜잭션 그룹을 SignedTxWidhAd로 랩핑한다.
 	err := pool.addToPendingBlockEvaluator(txgroup, params.recomputing, params.stats)
 	if err != nil {
 		return err
 	}
 
+	// 트랜잭션풀에 트랜잭션 그룹을 추가한다.
 	pool.rememberedTxGroups = append(pool.rememberedTxGroups, txgroup)
 	for _, t := range txgroup {
 		pool.rememberedTxids[t.ID()] = t
@@ -442,7 +505,11 @@ func (pool *TransactionPool) RememberOne(t transactions.SignedTxn) error {
 
 // Remember stores the provided transaction group.
 // Precondition: Only Remember() properly-signed and well-formed transactions (i.e., ensure t.WellFormed())
+/*
+	주어진 트랜잭션을 트랜잭션풀에 저장한다.
+*/
 func (pool *TransactionPool) Remember(txgroup []transactions.SignedTxn) error {
+	// 해당 trx그룹을 풀에 넣으면 넘치는지 아닌지 체크한다.
 	if err := pool.checkPendingQueueSize(len(txgroup)); err != nil {
 		return err
 	}
@@ -482,18 +549,23 @@ func (pool *TransactionPool) Lookup(txid transactions.Txid) (tx transactions.Sig
 }
 
 // OnNewBlock excises transactions from the pool that are included in the specified Block or if they've expired
+// 새로운 블록이 원장에 저장되면 해당 메소드를 호출 한다 => 원장 저장 => 트랜잭션풀에서 트랜잭션 가져와서 새로운 블록생성의 순서인 것 같다!!
 func (pool *TransactionPool) OnNewBlock(block bookkeeping.Block, delta ledgercore.StateDelta) {
 	var stats telemetryspec.ProcessBlockMetrics
+	// 커밋된 트랜잭션 수
 	var knownCommitted uint
 	var unknownCommitted uint
 
+	// 원장에 저장된 최신 블록의 txid
 	committedTxids := delta.Txids
 	if pool.logProcessBlockStats {
 		pool.pendingMu.RLock()
 		for txid := range committedTxids {
+			// 최신 커밋된 트랜잭션이 pending영역에 있다면 knownCommitted++
 			if _, ok := pool.pendingTxids[txid]; ok {
 				knownCommitted++
 			} else {
+				// 최신 커밋된 트랜잭션이 pending영역에 없다면 knownCommitted++
 				unknownCommitted++
 			}
 		}
@@ -530,6 +602,11 @@ func (pool *TransactionPool) OnNewBlock(block bookkeeping.Block, delta ledgercor
 		// Recompute the pool by starting from the new latest block.
 		// This has the side-effect of discarding transactions that
 		// have been committed (or that are otherwise no longer valid).
+		/*
+			최신 블록에서 시작하여 트랜잭션풀을 재계산한다.
+			committedTxids: 원장에 가장 최근에 저장된 트랜잭션들의 id
+			knownCommitted: committedTxids가 pending영역에 몇개가 있는지
+		*/
 		stats = pool.recomputeBlockEvaluator(committedTxids, knownCommitted)
 	}
 
@@ -562,6 +639,10 @@ func (pool *TransactionPool) isAssemblyTimedOut() bool {
 	return time.Now().After(pool.assemblyDeadline.Add(-generateBlockDuration))
 }
 
+/*
+	[]transactions.SignedTxn의 트랜잭션 그룹데이터를 []SignedTxnWithAD형태로 래핑한다.
+	새로운 블록을 생성하는 경우 (recomputing = true) assemblyResults의 파라미터를 세팅한다.
+*/
 func (pool *TransactionPool) addToPendingBlockEvaluatorOnce(txgroup []transactions.SignedTxn, recomputing bool, stats *telemetryspec.AssembleBlockMetrics) error {
 	r := pool.pendingBlockEvaluator.Round() + pool.numPendingWholeBlocks
 	for _, tx := range txgroup {
@@ -577,12 +658,15 @@ func (pool *TransactionPool) addToPendingBlockEvaluatorOnce(txgroup []transactio
 	txgroupad := transactions.WrapSignedTxnsWithAD(txgroup)
 
 	transactionGroupStartsTime := time.Time{}
+	// 새로운 블록생성 즉, add에서 넘어왔다면 이 값이 true이다.
 	if recomputing {
 		transactionGroupStartsTime = time.Now()
 	}
 
 	err := pool.pendingBlockEvaluator.TransactionGroup(txgroupad)
 
+	// 새로운 블록생성 즉, add에서 넘어왔다면 이 값이 true이다.
+	// assemblyResults의 파라미터를 등록한다.
 	if recomputing {
 		if !pool.assemblyResults.assemblyCompletedOrAbandoned {
 			transactionGroupDuration := time.Now().Sub(transactionGroupStartsTime)
@@ -640,10 +724,17 @@ func (pool *TransactionPool) addToPendingBlockEvaluator(txgroup []transactions.S
 // recomputeBlockEvaluator constructs a new BlockEvaluator and feeds all
 // in-pool transactions to it (removing any transactions that are rejected
 // by the BlockEvaluator). Expects that the pool.mu mutex would be already taken.
+/*
+	새로운 BlockEvaluator를 구성한다.
+	또한 pool에 있는 모든 트랜잭션을 공급받는다(BlockEvaluator가 거절한 tx는 삭제한다.,)
+	그리고 새로운 블록을 생성한다.
+*/
 func (pool *TransactionPool) recomputeBlockEvaluator(committedTxIds map[transactions.Txid]basics.Round, knownCommitted uint) (stats telemetryspec.ProcessBlockMetrics) {
 	pool.pendingBlockEvaluator = nil
 
+	// 가장 최신 라운드를 가져온다
 	latest := pool.ledger.Latest()
+	// 가장 최신 라운드의 블록 헤더 정보
 	prev, err := pool.ledger.BlockHdr(latest)
 	if err != nil {
 		pool.log.Warnf("TransactionPool.recomputeBlockEvaluator: cannot get prev header for %d: %v",
@@ -668,22 +759,29 @@ func (pool *TransactionPool) recomputeBlockEvaluator(committedTxIds map[transact
 
 	// Grab the transactions to be played through the new block evaluator
 	pool.pendingMu.RLock()
+	// pending영역에 있는 모든 트랜잭션을 가져온다.
 	txgroups := pool.pendingTxGroups
+	// pending영역에 있는 트랜잭션 수를 카운팅
 	pendingCount := pool.pendingCountNoLock()
 	pool.pendingMu.RUnlock()
 
 	pool.assemblyMu.Lock()
+	// 검증을 시작하려는 라운드 => 즉, prev.Round가 원장에 저장된 최신 라운드이기 때문에 prev.Round + 1을 한다.
 	pool.assemblyResults = poolAsmResults{
 		roundStartedEvaluating: prev.Round + basics.Round(1),
 	}
 	pool.assemblyMu.Unlock()
 
+	// 이전 헤더 정보를 이용해서 빈 블록을 생성한다.
 	next := bookkeeping.MakeBlock(prev)
+	// 펜딩영역에 있는 모든 블록 수
 	pool.numPendingWholeBlocks = 0
 	hint := pendingCount - int(knownCommitted)
 	if hint < 0 || int(knownCommitted) < 0 {
 		hint = 0
 	}
+
+	// 블록의 검증 및 생성을 위한 Evaluator를 생성한다.
 	pool.pendingBlockEvaluator, err = pool.ledger.StartEvaluator(next.BlockHeader, hint, 0)
 	if err != nil {
 		// The pendingBlockEvaluator is an interface, and in case of an evaluator error
@@ -701,8 +799,11 @@ func (pool *TransactionPool) recomputeBlockEvaluator(committedTxIds map[transact
 		return
 	}
 
+	// 블록을 생성하기 위한 stat
 	var asmStats telemetryspec.AssembleBlockMetrics
+	// 블록에 들어갈 tx 길이
 	asmStats.StartCount = len(txgroups)
+	// 중지 사유
 	asmStats.StopReason = telemetryspec.AssembleBlockEmpty
 
 	firstTxnGrpTime := time.Now()
@@ -713,12 +814,19 @@ func (pool *TransactionPool) recomputeBlockEvaluator(committedTxIds map[transact
 			asmStats.InvalidCount++
 			continue
 		}
+		//
 		if _, alreadyCommitted := committedTxIds[txgroup[0].ID()]; alreadyCommitted {
 			asmStats.EarlyCommittedCount++
 			continue
 		}
+		//트랜잭션풀에 저장한다..
+		// assemblyResult파라미터를 세팅한다.
 		err := pool.add(txgroup, &asmStats)
+
+		// 트랜잭션 풀에 저장 시 에러가 발생한다면
 		if err != nil {
+			// statusCache에 txgroup을 넣는다.
+			// 에러가 난 경우 해당 tx그룹과 에러의 상태를 저장하는 캐시구나!
 			for _, tx := range txgroup {
 				pool.statusCache.put(tx, err.Error())
 			}
@@ -755,6 +863,7 @@ func (pool *TransactionPool) recomputeBlockEvaluator(committedTxIds map[transact
 		pool.assemblyResults.ok = true
 		pool.assemblyResults.assemblyCompletedOrAbandoned = true // this is not strictly needed, since the value would only get inspected by this go-routine, but we'll adjust it along with "ok" for consistency
 		blockGenerationStarts := time.Now()
+		// 블록을 생성한다.
 		lvb, err := pool.pendingBlockEvaluator.GenerateBlock()
 		if err != nil {
 			pool.assemblyResults.err = fmt.Errorf("could not generate block for %d (end): %v", pool.assemblyResults.roundStartedEvaluating, err)

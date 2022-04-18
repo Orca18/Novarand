@@ -1,4 +1,4 @@
-| rel/stable <br> [![CircleCI](https://circleci.com/gh/algorand/go-algorand/tree/rel%2Fstable.svg?style=svg)](https://circleci.com/gh/algorand/go-algorand/tree/rel%2Fstable) | rel/beta  <br> [![CircleCI](https://circleci.com/gh/algorand/go-algorand/tree/rel%2Fbeta.svg?style=svg)](https://circleci.com/gh/algorand/go-algorand/tree/rel%2Fbeta) | rel/nightly  <br> [![CircleCI](https://circleci.com/gh/algorand/go-algorand/tree/rel%2Fnightly.svg?style=svg)](https://circleci.com/gh/algorand/go-algorand/tree/rel%2Fnightly) |
+| rel/stable <br> [![CircleCI](https://circleci.com/gh/Orca18/novarand/tree/rel%2Fstable.svg?style=svg)](https://circleci.com/gh/Orca18/novarand/tree/rel%2Fstable) | rel/beta  <br> [![CircleCI](https://circleci.com/gh/Orca18/novarand/tree/rel%2Fbeta.svg?style=svg)](https://circleci.com/gh/Orca18/novarand/tree/rel%2Fbeta) | rel/nightly  <br> [![CircleCI](https://circleci.com/gh/Orca18/novarand/tree/rel%2Fnightly.svg?style=svg)](https://circleci.com/gh/Orca18/novarand/tree/rel%2Fnightly) |
 | --- | --- | --- |
 
 go-algorand + Nova 1
@@ -34,7 +34,7 @@ requirements.
 
 Initial environment setup:
 ```bash
-git clone https://github.com/algorand/go-algorand
+git clone https://github.com/Orca18/novarand
 cd go-algorand
 ./scripts/configure_dev.sh
 ./scripts/buildtools/install_buildtools.sh

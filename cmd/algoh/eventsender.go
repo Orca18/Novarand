@@ -16,7 +16,7 @@
 
 package main
 
-import "github.com/algorand/go-algorand/logging/telemetryspec"
+import "github.com/Orca18/novarand/logging/telemetryspec"
 
 // EventSender is a simple abstraction for easier mocking.
 type EventSender interface {

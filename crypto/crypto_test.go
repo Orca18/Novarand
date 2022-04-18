@@ -20,7 +20,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 type TestingHashable struct {

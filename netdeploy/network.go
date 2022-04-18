@@ -26,13 +26,13 @@ import (
 	"strings"
 	"time"
 
-	generatedV2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2/generated"
+	generatedV2 "github.com/Orca18/novarand/daemon/algod/api/server/v2/generated"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/gen"
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/nodecontrol"
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/gen"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/nodecontrol"
+	"github.com/Orca18/novarand/util"
 )
 
 const configFileName = "network.json"

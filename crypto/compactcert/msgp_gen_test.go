@@ -7,8 +7,8 @@ package compactcert
 import (
 	"testing"
 
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/algorand/msgp/msgp"
 )
 

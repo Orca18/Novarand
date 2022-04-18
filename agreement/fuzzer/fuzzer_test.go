@@ -28,16 +28,16 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/agreement"
-	"github.com/algorand/go-algorand/agreement/agreementtest"
-	"github.com/algorand/go-algorand/agreement/gossip"
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/util/db"
-	"github.com/algorand/go-algorand/util/timers"
+	"github.com/Orca18/novarand/agreement"
+	"github.com/Orca18/novarand/agreement/agreementtest"
+	"github.com/Orca18/novarand/agreement/gossip"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/util/db"
+	"github.com/Orca18/novarand/util/timers"
 )
 
 // Fuzzer is a container for the entire network stack across all the nodes.

@@ -23,10 +23,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 )
 
 var base32Encoder = base32.StdEncoding.WithPadding(base32.NoPadding)
@@ -35,6 +35,10 @@ var base32Encoder = base32.StdEncoding.WithPadding(base32.NoPadding)
 var ErrCatchpointParsingFailed = errors.New("catchpoint parsing failed")
 
 // CatchpointLabel represent a single catchpoint label. It will "assemble" a label based on the components
+/*
+	CatchpointLabel은 단일 catchpoint 레이블을 나타냅니다. 구성 요소를 기반으로 레이블을 "조립"합니다.
+	캐치업 작업 시 사용하는 라벨로써 라운드, 블록 정보를 가지고 있어 어디까지 작업이 진행됐는지 알려주는 역할을 한다.
+*/
 type CatchpointLabel struct {
 	ledgerRound          basics.Round
 	ledgerRoundBlockHash crypto.Digest

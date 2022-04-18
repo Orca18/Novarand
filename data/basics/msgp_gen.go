@@ -5,8 +5,8 @@ package basics
 import (
 	"sort"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
 	"github.com/algorand/msgp/msgp"
 )
 
@@ -502,7 +502,7 @@ func (z *AccountData) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			zb0009--
 			bts, err = (*z).MicroAlgos.UnmarshalMsg(bts)
 			if err != nil {
-				err = msgp.WrapError(err, "struct-from-array", "MicroAlgos")
+				err = msgp.WrapError(err, "struct-from-array", "MicroNovas")
 				return
 			}
 		}
@@ -518,7 +518,7 @@ func (z *AccountData) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			zb0009--
 			bts, err = (*z).RewardedMicroAlgos.UnmarshalMsg(bts)
 			if err != nil {
-				err = msgp.WrapError(err, "struct-from-array", "RewardedMicroAlgos")
+				err = msgp.WrapError(err, "struct-from-array", "RewardedMicroNovas")
 				return
 			}
 		}
@@ -910,7 +910,7 @@ func (z *AccountData) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			case "algo":
 				bts, err = (*z).MicroAlgos.UnmarshalMsg(bts)
 				if err != nil {
-					err = msgp.WrapError(err, "MicroAlgos")
+					err = msgp.WrapError(err, "MicroNovas")
 					return
 				}
 			case "ebase":
@@ -922,7 +922,7 @@ func (z *AccountData) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			case "ern":
 				bts, err = (*z).RewardedMicroAlgos.UnmarshalMsg(bts)
 				if err != nil {
-					err = msgp.WrapError(err, "RewardedMicroAlgos")
+					err = msgp.WrapError(err, "RewardedMicroNovas")
 					return
 				}
 			case "vote":
@@ -3217,7 +3217,7 @@ func (z *BalanceRecord) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			zb0009--
 			bts, err = (*z).AccountData.MicroAlgos.UnmarshalMsg(bts)
 			if err != nil {
-				err = msgp.WrapError(err, "struct-from-array", "MicroAlgos")
+				err = msgp.WrapError(err, "struct-from-array", "MicroNovas")
 				return
 			}
 		}
@@ -3233,7 +3233,7 @@ func (z *BalanceRecord) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			zb0009--
 			bts, err = (*z).AccountData.RewardedMicroAlgos.UnmarshalMsg(bts)
 			if err != nil {
-				err = msgp.WrapError(err, "struct-from-array", "RewardedMicroAlgos")
+				err = msgp.WrapError(err, "struct-from-array", "RewardedMicroNovas")
 				return
 			}
 		}
@@ -3631,7 +3631,7 @@ func (z *BalanceRecord) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			case "algo":
 				bts, err = (*z).AccountData.MicroAlgos.UnmarshalMsg(bts)
 				if err != nil {
-					err = msgp.WrapError(err, "MicroAlgos")
+					err = msgp.WrapError(err, "MicroNovas")
 					return
 				}
 			case "ebase":
@@ -3643,7 +3643,7 @@ func (z *BalanceRecord) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			case "ern":
 				bts, err = (*z).AccountData.RewardedMicroAlgos.UnmarshalMsg(bts)
 				if err != nil {
-					err = msgp.WrapError(err, "RewardedMicroAlgos")
+					err = msgp.WrapError(err, "RewardedMicroNovas")
 					return
 				}
 			case "vote":

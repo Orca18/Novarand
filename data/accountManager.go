@@ -22,23 +22,23 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // AccountManager loads and manages accounts for the node
+// 어카운트 매니져는 노드의 계정을 로드하고 관리하는 역할을 한다.
 type AccountManager struct {
 	mu deadlock.Mutex
 
 	partKeys map[account.ParticipationKeyIdentity]account.PersistedParticipation
 
-	// Map to keep track of accounts for which we've sent
-	// AccountRegistered telemetry events
+	// Map to keep track of accounts for which we've sent AccountRegistered telemetry events
 	registeredAccounts map[string]bool
 
 	registry account.ParticipationRegistry
@@ -46,6 +46,7 @@ type AccountManager struct {
 }
 
 // MakeAccountManager creates a new AccountManager with a custom logger
+// 새로운 어카운트 매니져를 만든다.
 func MakeAccountManager(log logging.Logger, registry account.ParticipationRegistry) *AccountManager {
 	manager := &AccountManager{}
 	manager.log = log

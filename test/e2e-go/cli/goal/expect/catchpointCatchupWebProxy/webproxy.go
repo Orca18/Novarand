@@ -28,7 +28,7 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/test/framework/fixtures"
+	"github.com/Orca18/novarand/test/framework/fixtures"
 )
 
 var webProxyDestination = flag.String("targetEndpoint", "", "target endpoint")

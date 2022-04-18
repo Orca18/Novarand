@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/algorand/go-algorand/data/transactions/logic"
+	"github.com/Orca18/novarand/data/transactions/logic"
 )
 
 // TEAL syntax highlighter as TM grammar.

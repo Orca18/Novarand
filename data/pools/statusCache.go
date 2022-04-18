@@ -17,7 +17,7 @@
 package pools
 
 import (
-	"github.com/algorand/go-algorand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions"
 )
 
 type statusCacheEntry struct {
@@ -25,6 +25,9 @@ type statusCacheEntry struct {
 	txErr string
 }
 
+/*
+	에러가 난 경우 해당 tx그룹과 에러의 상태를 저장하는 캐시구나!
+*/
 type statusCache struct {
 	cur  map[transactions.Txid]statusCacheEntry
 	prev map[transactions.Txid]statusCacheEntry
@@ -49,6 +52,10 @@ func (sc *statusCache) check(txid transactions.Txid) (tx transactions.SignedTxn,
 	return
 }
 
+/*
+	statusCache에 트랜잭션을 넣는다.
+	에러가 난 경우 해당 tx그룹과 에러의 상태를 저장하는 캐시구나!
+*/
 func (sc *statusCache) put(tx transactions.SignedTxn, txErr string) {
 	if len(sc.cur) >= sc.sz {
 		sc.prev = sc.cur

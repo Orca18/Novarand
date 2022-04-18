@@ -22,12 +22,12 @@ import (
 	"log"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/ledger/apply"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/ledger/apply"
+	"github.com/Orca18/novarand/protocol"
 )
 
 func protoFromString(protoString string) (name string, proto config.ConsensusParams, err error) {

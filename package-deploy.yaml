@@ -46,7 +46,7 @@ agents:
 
   - name: rpm
     dockerFilePath: docker/build/cicd.centos.Dockerfile
-    image: algorand/go-algorand-ci-linux-centos
+    image: Orca18/novarand-ci-linux-centos
     version: scripts/configure_dev-deps.sh
     buildArgs:
       - GOLANG_VERSION=`./scripts/get_golang_version.sh`

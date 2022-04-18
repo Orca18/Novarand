@@ -17,8 +17,8 @@
 package logic
 
 import (
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/protocol"
 )
 
 //go:generate stringer -type=TxnField,GlobalField,AssetParamsField,AppParamsField,AcctParamsField,AssetHoldingField,OnCompletionConstType,EcdsaCurve,Base64Encoding -output=fields_string.go

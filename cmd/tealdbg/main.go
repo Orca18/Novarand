@@ -24,7 +24,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 
-	cmdutil "github.com/algorand/go-algorand/cmd/util"
+	cmdutil "github.com/Orca18/novarand/cmd/util"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 
 var rootCmd = &cobra.Command{
 	Use:   "tealdbg",
-	Short: "Algorand TEAL Debugger",
+	Short: "Novarand TEAL Debugger",
 	Long: `Debug a local or remote TEAL code in controlled environment
 with Web or Chrome DevTools frontends`,
 	Run: func(cmd *cobra.Command, args []string) {

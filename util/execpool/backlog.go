@@ -40,6 +40,9 @@ type backlogItemTask struct {
 }
 
 // BacklogPool supports all the ExecutionPool functions plus few more that tests the pending tasks.
+/*
+BacklogPool은 모든 ExecutionPool 기능과 pending task를 테스트하는 몇 가지 기능을 추가로 지원합니다
+*/
 type BacklogPool interface {
 	ExecutionPool
 	EnqueueBacklog(enqueueCtx context.Context, t ExecFunc, arg interface{}, out chan interface{}) error

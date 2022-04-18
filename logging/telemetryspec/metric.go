@@ -38,6 +38,10 @@ type MetricDetails interface {
 // AssembleBlock
 
 // AssembleBlockStats is the set of stats captured when we compute AssemblePayset
+/*
+AssembleBlockStats는 AssemblePayset을 계산할 때 캡처된 통계 집합입니다
+즉, 서명된 트랜잭션 집합을 하나의 블록으로 조립할 때 계산된 통계치를 나타냄.
+*/
 type AssembleBlockStats struct {
 	StartCount                int
 	IncludedCount             int // number of transactions that are included in a block

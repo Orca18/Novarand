@@ -22,16 +22,19 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/compactcert"
-	"github.com/algorand/go-algorand/crypto/merklearray"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/compactcert"
+	"github.com/Orca18/novarand/crypto/merklearray"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
 )
 
 // VotersForRound tracks the top online voting accounts as of a particular
 // round, along with a Merkle tree commitment to those voting accounts.
+/*
+VotersForRound는 특정 라운드의 상위 온라인 투표 계정 및 계정들의 Merkle트리를 추적합니다.
+*/
 type VotersForRound struct {
 	// Because it can take some time to compute the top participants and the
 	// corresponding Merkle tree, the votersForRound is constructed in
@@ -43,6 +46,13 @@ type VotersForRound struct {
 	// If an error occurs while computing the tree in the background,
 	// loadTreeError might be set to non-nil instead.  That also finalizes
 	// the state of this VotersForRound.
+	/*
+		top participants 와 corresponding Merkle tree를 계산하는덴 시간이 소요된다.
+		따라서 이작업은 백그라운드에서 수행되며 이 때 participants, adddToPos, tree, and totalWeight는
+		모두 zero, 혹은 nil값이 된다.
+		따라서 값은 한번 세팅되면 변하지 않으며 lock은 더이상 필요하지 않다.
+		에러가 발생하면 loadTreeError값이 non-nil이되고 해당 VotersForRound의 상태변경은 완결시킨다.
+	*/
 	mu            deadlock.Mutex
 	cond          *sync.Cond
 	loadTreeError error
@@ -54,6 +64,9 @@ type VotersForRound struct {
 	// Participants is the array of top #CompactCertVoters online accounts
 	// in this round, sorted by normalized balance (to make sure heavyweight
 	// accounts are biased to the front).
+	/*
+		Participants는 해당 라운드의 투표자들의 배열이다.
+	*/
 	Participants basics.ParticipantsArray
 
 	// AddrToPos specifies the position of a given account address (if present)
@@ -62,13 +75,22 @@ type VotersForRound struct {
 	AddrToPos map[basics.Address]uint64
 
 	// Tree is a constructed Merkle tree of the Participants array.
+	/*
+		참가자들 배열의 머클트리
+	*/
 	Tree *merklearray.Tree
 
 	// TotalWeight is the sum of the weights from the Participants array.
+	/*
+		참가자들 배열의 총 알고양
+	*/
 	TotalWeight basics.MicroAlgos
 }
 
 // TopOnlineAccounts is the function signature for a method that would return the top online accounts.
+/*
+TopOnlineAccounts는 상위 온라인 계정들을 반환하는 메서드에 대한 함수 서명입니다.
+*/
 type TopOnlineAccounts func(rnd basics.Round, voteRnd basics.Round, n uint64) ([]*OnlineAccount, error)
 
 // MakeVotersForRound create a new VotersForRound object and initialize it's cond.

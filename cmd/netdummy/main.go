@@ -24,10 +24,10 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/protocol"
 )
 
 var serverAddress = flag.String("server", "", "Server address (host:port)")

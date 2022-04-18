@@ -23,9 +23,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	v1 "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
-	"github.com/algorand/go-algorand/test/framework/fixtures"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	v1 "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+	"github.com/Orca18/novarand/test/framework/fixtures"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func GenerateRandomBytes(n int) []byte {

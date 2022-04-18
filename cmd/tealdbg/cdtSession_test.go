@@ -22,13 +22,13 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/cmd/tealdbg/cdt"
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/cmd/tealdbg/cdt"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func TestCdtSessionProto11Common(t *testing.T) {

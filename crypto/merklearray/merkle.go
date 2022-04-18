@@ -23,7 +23,7 @@ import (
 	"hash"
 	"sort"
 
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 const (

@@ -22,8 +22,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/util"
 )
 
 // GoalFixture is a fixture for tests against the goal CLI
@@ -145,7 +145,7 @@ func (f *GoalFixture) NodeStart() error {
 	if err != nil {
 		return combineExecuteError(stdout, stderr, err)
 	}
-	if !strings.Contains(stdout, "Algorand node successfully started") {
+	if !strings.Contains(stdout, "Novarand node successfully started") {
 		err = fmt.Errorf("failed to start node: %s", stderr)
 	}
 	return err

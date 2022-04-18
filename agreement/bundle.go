@@ -20,20 +20,29 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/committee"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/committee"
+	"github.com/Orca18/novarand/logging"
 )
 
 // unauthenticatedBundle is a bundle which has not yet been verified.
+/*
+unauthenticatedBundle은 아직 검증되지 않은 증명서정보이다.
+*/
 type unauthenticatedBundle struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
-	Round    basics.Round  `codec:"rnd"`
-	Period   period        `codec:"per"`
-	Step     step          `codec:"step"`
+	// 블록 생성 라운드
+	Round basics.Round `codec:"rnd"`
+	// Period는 프로토콜에서 주어진 라운드의 진행 상황을 추적하는 데 사용됩니다.
+	Period period `codec:"per"`
+
+	// Step은 알고랜드의 개별 단계(어떤 단계지? 합의단계?)를 나타내는 시퀀스 번호입니다.
+	Step step `codec:"step"`
+
+	// 제안자, 제안기간, 블록해시의 값을 저장한 객체
 	Proposal proposalValue `codec:"prop"`
 
 	Votes             []voteAuthenticator             `codec:"vote,allocbound=config.MaxVoteThreshold"`
@@ -54,6 +63,9 @@ type bundle struct {
 
 // voteAuthenticators omit the Round, Period, Step, and Proposal for compression
 // and to simplify checking logic.
+/*
+voteAuthenticators는 압축을 위해 Round, Period, Step 및 Proposal을 생략하고 논리 확인을 단순화합니다.
+*/
 type voteAuthenticator struct {
 	_struct struct{} `codec:""` // not omitempty
 

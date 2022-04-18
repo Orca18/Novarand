@@ -17,14 +17,19 @@
 package ledgercore
 
 import (
-	"github.com/algorand/go-algorand/crypto/merklesignature"
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/crypto/merklesignature"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 // An OnlineAccount corresponds to an account whose AccountData.Status
 // is Online.  This is used for a Merkle tree commitment of online
 // accounts, which is subsequently used to validate participants for
 // a compact certificate.
+/*
+OnlineAccount는 AccountData.Status가 온라인인 계정에 해당합니다.
+이것은 온라인 계정의 Merkle 트리 확정에 사용되며,
+이후에 참가자가 컴팩트 인증서에 대해 유효성을 검사하는 데 사용됩니다.
+*/
 type OnlineAccount struct {
 	// These are a subset of the fields from the corresponding AccountData.
 	Address                 basics.Address

@@ -19,8 +19,8 @@ package network
 import (
 	"testing"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/protocol"
 )
 
 func BenchmarkGenerateMessageDigest(b *testing.B) {

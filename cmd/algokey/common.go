@@ -21,8 +21,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/passphrase"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/passphrase"
 )
 
 const (

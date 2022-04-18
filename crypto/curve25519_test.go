@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func makeCurve25519Secret() *SignatureSecrets {

@@ -20,8 +20,8 @@ import (
 	"container/heap"
 	"sync/atomic"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // NetPrioScheme is an implementation of network connection priorities

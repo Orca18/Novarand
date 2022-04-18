@@ -17,7 +17,7 @@
 package merklearray
 
 import (
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 // Proof is used to convince a verifier about membership of leaves: h0,h1...hn

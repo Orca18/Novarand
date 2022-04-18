@@ -27,13 +27,16 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/bloom"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/bloom"
 )
 
 // TxService provides a service that allows a remote caller to retrieve missing pending transactions
+/*
+	TxService는 원격 호출자가 누락된 보류 트랜잭션을 검색할 수 있는 서비스를 제공합니다.
+*/
 type TxService struct {
 	pool            PendingTxAggregate
 	pendingTxGroups [][]transactions.SignedTxn

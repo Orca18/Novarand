@@ -20,6 +20,9 @@ package transactions
 // canonical encoding of maps in msgpack format.
 //msgp:ignore SortUint64
 //msgp:sort uint64 SortUint64
+/*
+SortUint64는 msgpack 형식의 맵의 표준 인코딩을 위한 uint64 key의 정렬을 구현합니다.
+*/
 type SortUint64 []uint64
 
 func (a SortUint64) Len() int           { return len(a) }
@@ -30,6 +33,9 @@ func (a SortUint64) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 // canonical encoding of maps in msgpack format.
 //msgp:ignore SortString
 //msgp:sort string SortString
+/*
+SortString은 msgpack 형식의 맵의 표준 인코딩을 위한 string key의 정렬을 구현합니다.
+*/
 type SortString []string
 
 func (a SortString) Len() int           { return len(a) }

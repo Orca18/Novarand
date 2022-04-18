@@ -19,7 +19,7 @@ package agreement
 import (
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 //go:generate stringer -type=coserviceType

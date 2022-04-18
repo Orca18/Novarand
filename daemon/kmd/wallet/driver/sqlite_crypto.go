@@ -26,8 +26,8 @@ import (
 	"golang.org/x/crypto/nacl/secretbox"
 	"golang.org/x/crypto/scrypt"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/daemon/kmd/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/daemon/kmd/config"
 )
 
 const (
@@ -37,7 +37,7 @@ const (
 	minScryptN     = 32768
 	minScryptR     = 1
 	minScryptP     = 32
-	hkdfInfoFormat = "AlgorandDeterministicKey-%d"
+	hkdfInfoFormat = "NovarandDeterministicKey-%d"
 )
 
 type plaintextType string

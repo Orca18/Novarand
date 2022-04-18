@@ -27,12 +27,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
-	"github.com/algorand/go-algorand/util/execpool"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
+	"github.com/Orca18/novarand/util/execpool"
 )
 
 // The serializedPseudonode is the trivial implementation for the pseudonode interface

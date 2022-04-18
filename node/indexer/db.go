@@ -21,8 +21,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/util/db"
 )
 
 const (
@@ -113,6 +113,7 @@ func (idb *DB) AddBlock(b bookkeeping.Block) error {
 			return fmt.Errorf("tryign to add a future block %d, where the last one is %d", b.Round(), rnd)
 		}
 
+		// postgreSQL에 있는 transactions 테이블에 저장
 		stmt, err := tx.Prepare("INSERT INTO transactions (txid, from_addr, to_addr, round, created_at) VALUES($1,  $2, $3, $4, $5);")
 		if err != nil {
 			return err

@@ -25,15 +25,18 @@ import (
 
 	"github.com/mattn/go-sqlite3"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
 )
 
 // accountsDbQueries is used to cache a prepared SQL statement to look up
 // the state of a single account.
+/*
+accountsDbQueries는 단일 계정의 상태를 조회하기 위해 준비된 SQL 문을 캐시하는 데 사용됩니다.
+*/
 type accountsDbQueries struct {
 	listCreatablesStmt          *sql.Stmt
 	lookupStmt                  *sql.Stmt
@@ -48,6 +51,7 @@ type accountsDbQueries struct {
 	insertCatchpointStateString *sql.Stmt
 }
 
+// 계정관련 데이터를 저장하는 테이블을 생성하는 sql을 담고있는 배열
 var accountsSchema = []string{
 	`CREATE TABLE IF NOT EXISTS acctrounds (
 		id string primary key,
@@ -119,14 +123,21 @@ var accountDBVersion = int32(5)
 // persistedAccountData is used for representing a single account stored on the disk. In addition to the
 // basics.AccountData, it also stores complete referencing information used to maintain the base accounts
 // list.
+/*
+	PersistedAccountData는 디스크에 저장된 단일 계정을 나타내는 데 사용됩니다.
+	basics.AccountData 외에도 기본 계정 목록을 유지 관리하는 데 사용되는 참조 정보도 저장합니다.
+*/
 type persistedAccountData struct {
 	// The address of the account. In contrasts to maps, having this value explicitly here allows us to use this
 	// data structure in queues directly, without "attaching" the address as the address as the map key.
+	// 계정의 주소
 	addr basics.Address
 	// The underlaying account data
+	// 계정이 가지고 있는 모든 정보
 	accountData basics.AccountData
 	// The rowid, when available. If the entry was loaded from the disk, then we have the rowid for it. Entries
 	// that doesn't have rowid ( hence, rowid == 0 ) represent either deleted accounts or non-existing accounts.
+	// db에서 가져온 계정정보에 해당하는 rowid 만약 0이라면 삭제된 계정정보이다.
 	rowid int64
 	// the round number that is associated with the accountData. This field is needed so that we can maintain a correct
 	// lruAccounts cache. We use it to ensure that the entries on the lruAccounts.accountsList are the latest ones.
@@ -134,12 +145,17 @@ type persistedAccountData struct {
 	// it on the lruAccounts.pendingAccounts; The commitRound doesn't attempt to flush the pending accounts, but rather
 	// just write the latest ( which is correct ) to the lruAccounts.accountsList. later on, during on newBlockImpl, we
 	// want to ensure that the "real" written value isn't being overridden by the value from the pending accounts.
+	// 올바른 lruAccounts cache를 유지하기 위해 사용됨
 	round basics.Round
 }
 
 // compactAccountDeltas and accountDelta is an extension to ledgercore.AccountDeltas that is being used by the commitRound function for counting the
 // number of changes we've made per account. The ndeltas is used exclusively for consistency checking - making sure that
 // all the pending changes were written and that there are no outstanding writes missing.
+/*
+CompactAccountDelta 및 accountDelta는 계정당 변경한 수를 계산하기 위해 commitRound 함수에서 사용되는 ledgercore.AccountDelta의 확장입니다. n
+deltas는 일관성 검사에만 사용됩니다. 보류 중인 모든 변경 사항이 기록되었고 미해결된 쓰기가 없는지 확인합니다.
+*/
 type compactAccountDeltas struct {
 	// actual data
 	deltas []accountDelta
@@ -179,6 +195,10 @@ const (
 )
 
 // normalizedAccountBalance is a staging area for a catchpoint file account information before it's being added to the catchpoint staging tables.
+/*
+normalizedAccountBalance는 캐치포인트 스테이징 테이블에 추가되기 전에 캐치포인트 파일 계정 정보에 대한 스테이징 영역입니다.
+(캐치포인트 스테이징 테이블이 뭐지? 캐치포인트 파일 계정 정보는 또 뭐지?)
+*/
 type normalizedAccountBalance struct {
 	address            basics.Address
 	accountData        basics.AccountData
@@ -1376,12 +1396,18 @@ func (mc *MerkleCommitter) LoadPage(page uint64) (content []byte, err error) {
 }
 
 // encodedAccountsBatchIter allows us to iterate over the accounts data stored in the accountbase table.
+/*
+encodedAccountsBatchIter는 accountbase table에 저장되어있는 계졍정보를 순회할 수 있게 해주는 구조체이다.
+*/
 type encodedAccountsBatchIter struct {
 	rows *sql.Rows
 }
 
 // Next returns an array containing the account data, in the same way it appear in the database
 // returning accountCount accounts data at a time.
+/*
+Next는 account data를 포함한 배열을 반환한다.
+*/
 func (iterator *encodedAccountsBatchIter) Next(ctx context.Context, tx *sql.Tx, accountCount int) (bals []encodedBalanceRecord, err error) {
 	if iterator.rows == nil {
 		iterator.rows, err = tx.QueryContext(ctx, "SELECT address, data FROM accountbase ORDER BY address")
@@ -1481,6 +1507,9 @@ func makeOrderedAccountsIter(tx *sql.Tx, accountCount int) *orderedAccountsIter 
 }
 
 // accountAddressHash is used by Next to return a single account address and the associated hash.
+/*
+accountAddressHash는 단일 계정 주소와 관련 해시를 반환하기 위해 Next 메소드에서 사용됩니다.
+*/
 type accountAddressHash struct {
 	address basics.Address
 	digest  []byte

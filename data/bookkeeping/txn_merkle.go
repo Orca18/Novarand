@@ -19,10 +19,10 @@ package bookkeeping
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merklearray"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merklearray"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // TxnMerkleTree returns a cryptographic commitment to the transactions in the
@@ -30,6 +30,10 @@ import (
 // caller to either extract the root hash (for inclusion in the block
 // header), or to generate proofs of membership for transactions that are
 // in this block.
+/*
+블록안의 트랜잭션들에 대한 머클트리를 반환한다.
+이것은 호출자가 root hash를 추출하거나 블록안의 트랜잭션들에 대한 멤버십 증명을 생성할 수 있다.
+*/
 func (block Block) TxnMerkleTree() (*merklearray.Tree, error) {
 	return merklearray.Build(&txnMerkleArray{block: block}, crypto.HashFactory{HashType: crypto.Sha512_256})
 }
@@ -65,6 +69,9 @@ func (tma *txnMerkleArray) Marshal(pos uint64) (crypto.Hashable, error) {
 
 // txnMerkleElem represents a leaf in the Merkle tree of all transactions
 // in a block.
+/*
+txnMerkleElem은 특정 블록안의 모든 트랜잭션에 대한 머클트리 리프를 나타낸다.
+*/
 type txnMerkleElem struct {
 	txn  transactions.Transaction
 	stib transactions.SignedTxnInBlock

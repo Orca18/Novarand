@@ -20,31 +20,51 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
+	"github.com/Orca18/novarand/config"
 )
 
 // DeltaAction is an enum of actions that may be performed when applying a
 // delta to a TEAL key/value store
+/*
+	TEAL 키, 값 저장소에 사용하는 delta를 적용할 때 수행되는 행동들의 enum값이다.
+*/
 type DeltaAction uint64
 
 const (
 	// SetBytesAction indicates that a TEAL byte slice should be stored at a key
+	/*
+		TEAL byte slice가 해당 key에 저장돼야 함
+	*/
 	SetBytesAction DeltaAction = 1
 
 	// SetUintAction indicates that a Uint should be stored at a key
+	/*
+		Uint이 해당 key에 저장돼야 함
+	*/
 	SetUintAction DeltaAction = 2
 
 	// DeleteAction indicates that the value for a particular key should be deleted
+	/*
+		key에 해당하는 value를 삭제!
+	*/
 	DeleteAction DeltaAction = 3
 )
 
 // ValueDelta links a DeltaAction with a value to be set
+/*
+ValueDelta는 한 DeltaAction과 세팅될 값을 연결하는 구조체
+*/
 type ValueDelta struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
+	// 특정 key가 취할 행동의 종류를 저장하는 변수
 	Action DeltaAction `codec:"at"`
-	Bytes  string      `codec:"bs"`
-	Uint   uint64      `codec:"ui"`
+
+	// TealValue에서 사용할 바이트값
+	Bytes string `codec:"bs"`
+
+	// TealValue에서 사용할 유닛값
+	Uint uint64 `codec:"ui"`
 }
 
 // ToTealValue converts a ValueDelta into a TealValue if possible, and returns
@@ -124,6 +144,9 @@ func (sd StateDelta) Valid(proto *config.ConsensusParams) error {
 }
 
 // StateSchema sets maximums on the number of each type that may be stored
+/*
+StateSchema는 저장할 수 있는 최대량이다.
+*/
 type StateSchema struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -175,6 +198,7 @@ func (sm StateSchema) MinBalance(proto *config.ConsensusParams) (res MicroAlgos)
 }
 
 // TealType is an enum of the types in a TEAL program: Bytes and Uint
+// TEAL 프로그램의 타입: 1이면 byte, 2이면 uint
 type TealType uint64
 
 const (

@@ -25,11 +25,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/netdeploy/remote"
-	"github.com/algorand/go-algorand/tools/network/cloudflare"
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/netdeploy/remote"
+	"github.com/Orca18/novarand/tools/network/cloudflare"
+	"github.com/Orca18/novarand/util"
 )
 
 type nodeConfigurator struct {

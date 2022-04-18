@@ -26,17 +26,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	generatedV2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2/generated"
-	v1 "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/data/transactions/verify"
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	generatedV2 "github.com/Orca18/novarand/daemon/algod/api/server/v2/generated"
+	v1 "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/data/transactions/verify"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/protocol"
 
 	"github.com/spf13/cobra"
 )
@@ -81,7 +81,7 @@ func init() {
 	// send flags
 	sendCmd.Flags().StringVarP(&account, "from", "f", "", "Account address to send the money from (If not specified, uses default account)")
 	sendCmd.Flags().StringVarP(&toAddress, "to", "t", "", "Address to send to money to (required)")
-	sendCmd.Flags().Uint64VarP(&amount, "amount", "a", 0, "The amount to be transferred (required), in microAlgos")
+	sendCmd.Flags().Uint64VarP(&amount, "amount", "a", 0, "The amount to be transferred (required), in microNovas")
 	sendCmd.Flags().StringVarP(&closeToAddress, "close-to", "c", "", "Close account and send remainder to this address")
 	sendCmd.Flags().StringVar(&rekeyToAddress, "rekey-to", "", "Rekey account to the given spending key/address. (Future transactions from this account will need to be signed with the new key.)")
 	sendCmd.Flags().StringVarP(&programSource, "from-program", "F", "", "Program source to use as account logic")

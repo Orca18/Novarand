@@ -25,19 +25,25 @@ import (
 	"sync"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merkletrie"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merkletrie"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 // CatchpointCatchupAccessor is an interface for the accessor wrapping the database storage for the catchpoint catchup functionality.
+/*
+CatchpointCatchupAccessor는 캐치포인트 캐치업 기능을 위해 데이터베이스 스토리지를 래핑한 접근자에 대한 인터페이스입니다
+(캐치포인트 캐치업 기능이 뭘까? 블록체인 스냅샷(catchpoint)를 사용해 동기화(catchup)를 몇분안에 할 수 있게 해주는 기술)
+
+catchpoint file에 있는 내용을 디코딩해서 데이터베이스에 정보를 저장한다.
+*/
 type CatchpointCatchupAccessor interface {
 	// GetState returns the current state of the catchpoint catchup
 	GetState(ctx context.Context) (state CatchpointCatchupState, err error)

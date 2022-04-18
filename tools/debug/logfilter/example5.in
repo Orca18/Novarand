@@ -1,97 +1,97 @@
 === RUN   TestGoalWithExpect
 === RUN   TestGoalWithExpect/basicExpectTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/basicExpectTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/corsTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/corsTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalClerkGroupTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalClerkGroupTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/listExpiredParticipationKeyTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/listExpiredParticipationKeyTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/testInfraTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/testInfraTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/doubleSpendingTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/doubleSpendingTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalNodeStatusTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalNodeStatusTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalNodeSystemdTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalNodeSystemdTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalAssetTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalAssetTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalFormattingTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalFormattingTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalNodeConnectionTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalNodeConnectionTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/statefulTealCreateAppTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/statefulTealCreateAppTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalNodeTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalNodeTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/reportTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/reportTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/statefulTealAppInfoTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/statefulTealAppInfoTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalDryrunRestTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalDryrunRestTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalTxValidityTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalTxValidityTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/limitOrderTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/limitOrderTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/basicGoalTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/basicGoalTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/catchpointCatchupTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/catchpointCatchupTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/createWalletTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/createWalletTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalAccountInfoTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalAccountInfoTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalAppAccountAddressTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalAppAccountAddressTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/pingpongTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/pingpongTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/tealConsensusTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/tealConsensusTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalAccountTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalAccountTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/statefulTealAppReadTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/statefulTealAppReadTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/tealAndStatefulTealTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/tealAndStatefulTealTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/goalCmdFlagsTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/goalCmdFlagsTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/ledgerTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/ledgerTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 === RUN   TestGoalWithExpect/multisigCreationDeletionTest.exp
     expectFixture.go:120: algoDir: /var/folders/2s/vtjjqkk14j12_mld26p260mh0000gn/T/tmp616213338/expect/multisigCreationDeletionTest/algod
-        testDataDir:/Users/tsachi/go/src/github.com/algorand/go-algorand/test/testdata
+        testDataDir:/Users/tsachi/go/src/github.com/Orca18/novarand/test/testdata
 --- PASS: TestGoalWithExpect (1412.29s)
     --- PASS: TestGoalWithExpect/basicExpectTest.exp (0.05s)
     --- PASS: TestGoalWithExpect/corsTest.exp (10.75s)
@@ -125,4 +125,4 @@
     --- PASS: TestGoalWithExpect/ledgerTest.exp (10.54s)
     --- PASS: TestGoalWithExpect/multisigCreationDeletionTest.exp (13.22s)
 PASS
-ok  	github.com/algorand/go-algorand/test/e2e-go/cli/goal/expect	1412.538s
+ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal/expect	1412.538s

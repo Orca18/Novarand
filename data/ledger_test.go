@@ -24,43 +24,54 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/agreement"
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
-	"github.com/algorand/go-algorand/util/execpool"
+	"github.com/Orca18/novarand/agreement"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
+	"github.com/Orca18/novarand/util/execpool"
 )
 
+// rewardpool 주소
 var testPoolAddr = basics.Address{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
+
+// feesink 주소
 var testSinkAddr = basics.Address{0x2c, 0x2a, 0x6c, 0xe9, 0xa9, 0xa7, 0xc2, 0x8c, 0x22, 0x95, 0xfd, 0x32, 0x4f, 0x77, 0xa5, 0x4, 0x8b, 0x42, 0xc2, 0xb7, 0xa8, 0x54, 0x84, 0xb6, 0x80, 0xb1, 0xe1, 0x3d, 0x59, 0x9b, 0xeb, 0x36}
 
 func testGenerateInitState(tb testing.TB, proto protocol.ConsensusVersion) (genesisInitState ledgercore.InitState, initKeys map[basics.Address]*crypto.SignatureSecrets) {
-
+	// pool, sink root key
 	var poolSecret, sinkSecret *crypto.SignatureSecrets
+	// seed: key 생성 위한 값
 	var seed crypto.Seed
 
+	// reward pool 값 세팅
 	incentivePoolName := []byte("incentive pool")
 	copy(seed[:], incentivePoolName)
 	poolSecret = crypto.GenerateSignatureSecrets(seed)
 
+	// fee sink pool 값 세팅
 	feeSinkName := []byte("fee sink")
 	copy(seed[:], feeSinkName)
 	sinkSecret = crypto.GenerateSignatureSecrets(seed)
 
+	// 합의 프로토콜 버전
 	params := config.Consensus[proto]
 	poolAddr := testPoolAddr
 	sinkAddr := testSinkAddr
 
 	var zeroSeed crypto.Seed
+	// 계정 주소 10개 생성
 	var genaddrs [10]basics.Address
+	// 계정 rootkey 10개 생성
 	var gensecrets [10]*crypto.SignatureSecrets
+
+	// 10개의 root key 생성
 	for i := range genaddrs {
 		seed := zeroSeed
 		seed[0] = byte(i)
@@ -69,25 +80,36 @@ func testGenerateInitState(tb testing.TB, proto protocol.ConsensusVersion) (gene
 		gensecrets[i] = x
 	}
 
+	// key: 주소 value: rootkey 인 맵
 	initKeys = make(map[basics.Address]*crypto.SignatureSecrets)
+	// key: 주소 value: AccountData 인 맵
 	initAccounts := make(map[basics.Address]basics.AccountData)
+
 	for i := range genaddrs {
+		// 위에서 만든 10개의 계정의 키값 순서대로 initKeys에 저장
 		initKeys[genaddrs[i]] = gensecrets[i]
+
 		// Give each account quite a bit more balance than MinFee or MinBalance
+		// 온라인 계정여부 확인(1이면 온라인 즉, 합의 참여 가능한 노드 2이면 오프라인 계정)
 		accountStatus := basics.Online
 		if i%2 == 0 {
 			accountStatus = basics.NotParticipating
 		}
+		// 계정 초기화(온라인여부, 알고양)
 		initAccounts[genaddrs[i]] = basics.MakeAccountData(accountStatus, basics.MicroAlgos{Raw: uint64((i + 100) * 100000)})
 	}
+	// rewardpool, feesinkpool 정보 세팅
 	initKeys[poolAddr] = poolSecret
 	initAccounts[poolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 1234567})
 	initKeys[sinkAddr] = sinkSecret
 	initAccounts[sinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 7654321})
 
+	// 시작시 rewardpool이 가지고 있는 알고양
 	incentivePoolBalanceAtGenesis := initAccounts[poolAddr].MicroAlgos
+	// 라운드마다 제공하는 알고양
 	initialRewardsPerRound := incentivePoolBalanceAtGenesis.Raw / uint64(params.RewardsRateRefreshInterval)
 
+	// 제네시스 블록 생성
 	initBlock := bookkeeping.Block{
 		BlockHeader: bookkeeping.BlockHeader{
 			GenesisID: tb.Name(),
@@ -103,22 +125,30 @@ func testGenerateInitState(tb testing.TB, proto protocol.ConsensusVersion) (gene
 		},
 	}
 	var err error
+
 	initBlock.TxnRoot, err = initBlock.PaysetCommit()
 	require.NoError(tb, err)
+
+	// 제네시스 해시에 해당 테스트블록의 해시값 넣어줌
 	if params.SupportGenesisHash {
 		initBlock.BlockHeader.GenesisHash = crypto.Hash([]byte(tb.Name()))
 	}
 
+	// 제네시스 블록 세팅
 	genesisInitState.Block = initBlock
+	// 초기 계정 세팅
 	genesisInitState.Accounts = initAccounts
+	// 제네시스 해시 세팅
 	genesisInitState.GenesisHash = crypto.Hash([]byte(tb.Name()))
 
 	return
 }
 
+// 600라운드동안 알고전송하는 tx생성 => 블록 생성 후에 잘 동작하는지 확인하는 테스트
 func TestLedgerCirculation(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
+	// 초기상태 설정
 	genesisInitState, keys := testGenerateInitState(t, protocol.ConsensusCurrentVersion)
 
 	const inMem = true
@@ -126,16 +156,25 @@ func TestLedgerCirculation(t *testing.T) {
 	cfg.Archival = true
 	log := logging.TestingLog(t)
 	log.SetLevel(logging.Warn)
+
+	// 원장객체를 생성한다.
 	realLedger, err := ledger.OpenLedger(log, t.Name(), inMem, genesisInitState, cfg)
 	require.NoError(t, err, "could not open ledger")
+
+	// defer를 붙이면 해당 함수에서 가장 마지막에 실행됨
 	defer realLedger.Close()
 
 	l := Ledger{Ledger: realLedger}
 	require.NotNil(t, &l)
 
+	// 자산을 보내는 계정
 	var sourceAccount basics.Address
+	// 자산을 받는 계정
 	var destAccount basics.Address
+
+	// 초기상태에 있는 계정의 수만큼 반복해서 온라인인 상태인 첫번째 계정의 주소값 저장 => 자산을 보내기 위해
 	for addr, acctData := range genesisInitState.Accounts {
+		// reward나 feesink면 위로 올라감
 		if addr == testPoolAddr || addr == testSinkAddr {
 			continue
 		}
@@ -144,6 +183,8 @@ func TestLedgerCirculation(t *testing.T) {
 			break
 		}
 	}
+
+	// 초기상태에 있는 계정의 수만큼 반복해서 오프라인 상태인 첫번째 계정의 주소값 저장 => 자산을 받기 위해
 	for addr, acctData := range genesisInitState.Accounts {
 		if addr == testPoolAddr || addr == testSinkAddr {
 			continue
@@ -156,22 +197,33 @@ func TestLedgerCirculation(t *testing.T) {
 	require.False(t, sourceAccount.IsZero())
 	require.False(t, destAccount.IsZero())
 
+	// 0라운드에서 destAccount의 상태를 반환
 	data, err := realLedger.Lookup(basics.Round(0), destAccount)
 	require.NoError(t, err)
+	// 0라운드에서 destAccoun의 알고양
 	baseDestValue := data.MicroAlgos.Raw
 
 	blk := genesisInitState.Block
+	// 가장 최신라운드, 그 라운드에 모든 계정이 가지고 있는 알고양을 반환(온라인, 오프라인, 참여안하는 계정별로 나눠서)
 	totalsRound, totals, err := realLedger.LatestTotals()
 	require.NoError(t, err)
 	require.Equal(t, basics.Round(0), totalsRound)
+
+	// 온라인 상태인 모든 계정들이 가지고 있는 알고양 반환
 	baseCirculation := totals.Online.Money.Raw
 
+	// 알고를 보내는 계정의 키를 가져옴
 	srcAccountKey := keys[sourceAccount]
 	require.NotNil(t, srcAccountKey)
 
+	// 600라운드 동안 반복
 	for rnd := basics.Round(1); rnd < basics.Round(600); rnd++ {
+		// 라운드 증가
 		blk.BlockHeader.Round++
+		// 시간
 		blk.BlockHeader.TimeStamp += int64(crypto.RandUint64() % 100 * 1000)
+
+		// source가 dest계정에게 알고를 보내는 트랜잭션 생성
 		var tx transactions.Transaction
 		tx.Sender = sourceAccount
 		tx.Fee = basics.MicroAlgos{Raw: 10000}
@@ -186,6 +238,9 @@ func TestLedgerCirculation(t *testing.T) {
 				SignedTxn: signedTx,
 			},
 		}}
+
+		t.Log("round", rnd, "-txId: ", tx.ID().String())
+
 		require.NoError(t, l.AddBlock(blk, agreement.Certificate{}))
 		l.WaitForCommit(rnd)
 

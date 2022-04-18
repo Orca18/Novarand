@@ -21,7 +21,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/algorand/go-algorand/tools/network/dnssec"
+	"github.com/Orca18/novarand/tools/network/dnssec"
 )
 
 type netDialer interface {

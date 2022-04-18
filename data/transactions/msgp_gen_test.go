@@ -7,19 +7,22 @@ package transactions
 import (
 	"testing"
 
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/algorand/msgp/msgp"
 )
 
 func TestMarshalUnmarshalApplicationCallTxnFields(t *testing.T) {
 	partitiontest.PartitionTest(t)
+
 	v := ApplicationCallTxnFields{}
 	bts := v.MarshalMsg(nil)
 	left, err := v.UnmarshalMsg(bts)
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Log("left: ",left)
+	
 	if len(left) > 0 {
 		t.Errorf("%d bytes left over after UnmarshalMsg(): %q", len(left), left)
 	}

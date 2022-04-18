@@ -20,17 +20,17 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/algorand/go-algorand/agreement"
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/committee"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/agreement"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/committee"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // The Ledger object in this (data) package provides a wrapper around the
@@ -40,6 +40,11 @@ import (
 // implements various wrappers that return subsets of data exposed by
 // ledger.Ledger, or return it in different forms, or return it for the
 // latest round (as opposed to arbitrary rounds).
+/*
+	이 패키지의 원장객체는 ledger패키지의 래퍼이다.
+	이 래퍼객체는 오리지널 원장 코드의 복잡도의 증가 없이 api를 제공하기 위해 존재한다.
+	원장 객체는 또한 원장이 가지고 있는 데이터의 하위집합을 리턴하는 다양한 래퍼객체를 구현한다.
+*/
 type Ledger struct {
 	*ledger.Ledger
 
@@ -52,6 +57,7 @@ type Ledger struct {
 }
 
 // roundCirculationPair used to hold a pair of matching round number and the amount of online money
+// 프로토콜의 라운드와 온라인상에 있는 돈을 가지고 있는 구조체라.. => 라운드 번호와 그때 온라인상에 있는 algo(합의에 의해 생성된걸까? )를 가지고 있는 객체 인듯
 type roundCirculationPair struct {
 	round       basics.Round
 	onlineMoney basics.MicroAlgos
@@ -64,6 +70,8 @@ type roundCirculation struct {
 }
 
 // roundSeedPair is the cache for a single seed at a given round
+// seed가 뭘까? seed가 뭐였지.. => 위원회를 결정하기 위한 값
+// 특정 라운드와 해당하는 seed값을 저장한 구조체
 type roundSeedPair struct {
 	round basics.Round
 	seed  committee.Seed
@@ -75,8 +83,7 @@ type roundSeed struct {
 	elements [2]roundSeedPair
 }
 
-// LoadLedger creates a Ledger object to represent the ledger with the
-// specified database file prefix, initializing it if necessary.
+// LoadLedger creates a Ledger object to represent the ledger with the specified database file prefix, initializing it if necessary.
 func LoadLedger(
 	log logging.Logger, dbFilenamePrefix string, memory bool,
 	genesisProto protocol.ConsensusVersion, genesisBal bookkeeping.GenesisBalances, genesisID string, genesisHash crypto.Digest,
@@ -342,12 +349,20 @@ func (l *Ledger) EnsureValidatedBlock(vb *ledgercore.ValidatedBlock, c agreement
 // written to the ledger, or that some other block for the same round is
 // written to the ledger.
 // This function can be called concurrently.
+/*
+	블록 및 증명서가 원장에 작성되는 것을 보장하는 메소드이다.
+	이 함수는 동시에 호출될 수 있다(동시에? 블록 저장이 동시에 일어날 필요가 있나?)
+*/
 func (l *Ledger) EnsureBlock(block *bookkeeping.Block, c agreement.Certificate) {
 	round := block.Round()
 	protocolErrorLogged := false
 
+	// 원장의 마지막 라운드가 이 블록의 라운드보다 작을 때까지 반복한다
+	// (음? 동일한 블록을 계속 등록하는거야? l.LastRound()가 5고 round가 10이면 5라운드동안 동일한 블록을 등록하는건가??
+	// => 아아 아래에서 한번 등록하면 for문을 빠져나간다. 왜 이렇게 코딩한거지??)
 	for l.LastRound() < round {
 		err := l.AddBlock(*block, c)
+		// 에러가 없다면 빠져나간다.
 		if err == nil {
 			break
 		}

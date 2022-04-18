@@ -31,9 +31,9 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/timers"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/timers"
 )
 
 var maxEventQueueWait = time.Second * 3

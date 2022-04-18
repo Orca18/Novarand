@@ -6,7 +6,7 @@ echo "Building RPM package"
 
 cd "$(dirname "$0")"/..
 
-REPO_DIR="$HOME/subhome/go/src/github.com/algorand/go-algorand"
+REPO_DIR="$HOME/subhome/go/src/github.com/Orca18/novarand"
 export REPO_DIR
 DEFAULT_RELEASE_NETWORK=$("$REPO_DIR/scripts/compute_branch_release_network.sh" "$DEFAULTNETWORK")
 export DEFAULT_RELEASE_NETWORK

@@ -19,8 +19,8 @@ package compactcert
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merklearray"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merklearray"
 )
 
 // Verifier is used to verify a compact certificate.

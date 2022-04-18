@@ -21,11 +21,11 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger/ledgercore"
 )
 
 const initialLastValidArrayLen = 256
@@ -190,6 +190,10 @@ func (t txtailMissingRound) Error() string {
 
 // checkDup test to see if the given transaction id/lease already exists. It returns nil if neither exists, or
 // TransactionInLedgerError / LeaseInLedgerError respectively.
+/*
+checkDup은 주어진 트랜잭션 id와 lease가 이미 존재하는지 체크한다.
+존재하지 않고 TransactionInLedgerError / LeaseInLedgerError가 발생하지 않은 경우 nil을 반환한다.
+*/
 func (t *txTail) checkDup(proto config.ConsensusParams, current basics.Round, firstValid basics.Round, lastValid basics.Round, txid transactions.Txid, txl ledgercore.Txlease) error {
 	if lastValid < t.lowWaterMark {
 		return &txtailMissingRound{round: lastValid}
@@ -217,6 +221,7 @@ func (t *txTail) checkDup(proto config.ConsensusParams, current basics.Round, fi
 	return nil
 }
 
+// txTail의 lastValid 값을 추가한다
 func (t *txTail) putLV(lastValid basics.Round, id transactions.Txid) {
 	if _, ok := t.lastValid[lastValid]; !ok {
 		t.lastValid[lastValid] = make(map[transactions.Txid]struct{})

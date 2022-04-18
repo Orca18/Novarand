@@ -24,8 +24,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/logging"
 )
 
 func BenchmarkSQLWrites(b *testing.B) {

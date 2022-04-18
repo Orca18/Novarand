@@ -27,18 +27,21 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merklesignature"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merklesignature"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
 )
 
 const defaultTimeout = 5 * time.Second
 
 // ParticipationID identifies a particular set of participation keys.
 //msgp:ignore ParticipationID
+/*
+	ParticipationID는 특정 참여키들의 집합을 식별하는 id이다
+*/
 type ParticipationID crypto.Digest
 
 // IsZero returns true if the ParticipationID is all zero bytes.
@@ -66,6 +69,9 @@ func ParseParticipationID(str string) (d ParticipationID, err error) {
 
 type (
 	// ParticipationRecord contains all metadata relating to a set of participation keys.
+	/*
+		participation keys들의 집합과 관련된 모든 메타데이터를 포함한다.
+	*/
 	ParticipationRecord struct {
 		ParticipationID ParticipationID
 
@@ -82,14 +88,25 @@ type (
 
 		StateProof *StateProofVerifier
 		VRF        *crypto.VRFSecrets
-		Voting     *crypto.OneTimeSignatureSecrets
+		// 메시지에 대해 위조할 수 없는 서명
+		Voting *crypto.OneTimeSignatureSecrets
 	}
 
 	// StateProofVerifier defined the type used for the stateproofs public key
+	/*
+		StateProof를 검증하는 검증자
+	*/
 	StateProofVerifier merklesignature.Verifier
 
 	// StateProofKeys represents a set of ephemeral stateproof keys with their corresponding round
 	//msgp:allocbound StateProofKeys 1000
+	/*
+		특정 라운드에서 stateproof keys 정보를 나타냄
+		KeyRoundPair{
+			Round uint64               `codec:"rnd"`
+			Key   *crypto.FalconSigner `codec:"key"`
+		}
+	*/
 	StateProofKeys []merklesignature.KeyRoundPair
 
 	// ParticipationRecordForRound contains participant's secrets that corresponds to
@@ -101,9 +118,15 @@ type (
 	// StateProofRecordForRound contains participant's state proof secrets that corresponds to
 	// one specific round. In Addition, it also returns the participation metadata.
 	// If there are no secrets for the round a nil is returned in Stateproof field.
+	/*
+		StateProofRecordForRound는 하나의 특정 라운드 참가자의 state proof secrets을 포함합니다.
+		또한 참여 메타데이터도 반환합니다.
+		라운드에 대한 secrets이 없으면 Stateproof 필드에 nil이 반환됩니다.
+	*/
 	StateProofRecordForRound struct {
 		ParticipationRecord
 
+		//Signer는 지정된 라운드에 대한 StateProof 서명자를 나타냅니다.
 		StateProofSecrets *merklesignature.Signer
 	}
 
@@ -119,6 +142,9 @@ func (r ParticipationRecordForRound) IsZero() bool {
 
 // VotingSigner returns the voting secrets associated with this Participation account,
 // together with the KeyDilution value.
+/*
+OneTimeSigner는 메시지에 위조할 수 없는 일회용 서명을 할 수 있는 비밀정보이다!
+*/
 func (r *ParticipationRecordForRound) VotingSigner() crypto.OneTimeSigner {
 	return crypto.OneTimeSigner{
 		OneTimeSignatureSecrets: r.Voting,
@@ -184,6 +210,12 @@ func (r ParticipationRecord) OverlapsInterval(first, last basics.Round) bool {
 
 // ParticipationAction is used when recording participation actions.
 //msgp:ignore ParticipationAction
+/*
+ParticipationAction은 합의 참여자가 할 수 있는 행동을 저장하는 변수이다.
+1. 투표 참여
+2. 블록 제안
+3. 상태증명
+*/
 type ParticipationAction int
 
 // ParticipationAction types
@@ -224,6 +256,10 @@ var ErrNoKeyForID = errors.New("no valid key found for the participationID")
 var ErrSecretNotFound = errors.New("the participation ID did not have secrets for the requested round")
 
 // ParticipationRegistry contain all functions for interacting with the Participation Registry.
+/*
+Participation Registry 구현체에는 합의 참여자들(Participation)에 대한 정보를 저장할 수 있는 자료구조가 있다.
+따라서 이 인터페이스는 그곳에 참가자 정보를 CRUD할 수 있는 인터페이스를 제공한다.
+*/
 type ParticipationRegistry interface {
 	// Insert adds a record to storage and computes the ParticipationID
 	Insert(record Participation) (ParticipationID, error)
@@ -392,17 +428,25 @@ func dbSchemaUpgrade0(ctx context.Context, tx *sql.Tx, newDatabase bool) error {
 }
 
 // participationDB provides a concrete implementation of the ParticipationRegistry interface.
+/*
+participationDB는 ParticipationRegistry interface의 구현체이다.
+*/
 type participationDB struct {
+	//Participation 메타데이터(ParticipationRecord) 캐시
 	cache map[ParticipationID]ParticipationRecord
 
 	// dirty marked on Record(), cleared on Register(), Delete(), Flush()
 	dirty map[ParticipationID]struct{}
 
-	log   logging.Logger
+	log logging.Logger
+	// DB에 접근할 수 있는 Write, Read 접근자 쌍
 	store db.Pair
 	mutex deadlock.RWMutex
 
-	writeQueue     chan partDBWriteRecord
+	// write작업을 하는 고루틴에게 partDBWriteRecord를 넘기기 위한 큐
+	writeQueue chan partDBWriteRecord
+
+	//  write작업 완료 시 사용되는 변수
 	writeQueueDone chan struct{}
 
 	flushTimeout time.Duration
@@ -416,15 +460,27 @@ type updatingParticipationRecord struct {
 
 // partDBWriteRecord event object sent to the writeThread to facilitate async
 // database writes. Only one set of event fields should be set at a time.
+/*
+DB에 Participation정보를 저장하기 위해 사용하는 구조체!
+비동기 데이터베이스 쓰기를 용이하게 하기 위해 writeThread로 보내지는 partDBWriteRecord 이벤트 객체.
+한 번에 하나의 이벤트 필드 세트만 설정해야 합니다.
+*/
 type partDBWriteRecord struct {
+	// db에 저장될 ParticipationID
 	insertID ParticipationID
-	insert   Participation
-	keys     StateProofKeys
-
+	// db에 저장될 Participation 데이터
+	insert Participation
+	/* 특정 라운드에서의 stateproof keys
+	StateProofKeys
+	{Round uint64               `codec:"rnd"`
+	Key   *crypto.FalconSigner `codec:"key"`}
+	*/
+	keys StateProofKeys
+	// 수정될 데이터 맵
 	registerUpdated map[ParticipationID]updatingParticipationRecord
-
+	// 삭제할 ParticipationID
 	delete ParticipationID
-
+	// writing 중 에러 여부
 	flushResultChannel chan error
 }
 

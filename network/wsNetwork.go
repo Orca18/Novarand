@@ -40,15 +40,15 @@ import (
 	"github.com/algorand/websocket"
 	"github.com/gorilla/mux"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/network/limitlistener"
-	"github.com/algorand/go-algorand/protocol"
-	tools_network "github.com/algorand/go-algorand/tools/network"
-	"github.com/algorand/go-algorand/tools/network/dnssec"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/network/limitlistener"
+	"github.com/Orca18/novarand/protocol"
+	tools_network "github.com/Orca18/novarand/tools/network"
+	"github.com/Orca18/novarand/tools/network/dnssec"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 const incomingThreads = 20
@@ -165,12 +165,23 @@ type GossipNode interface {
 	// RequestConnectOutgoing asks the system to actually connect to peers.
 	// `replace` optionally drops existing connections before making new ones.
 	// `quit` chan allows cancellation. TODO: use `context`
+	/*
+		시스템에게 피어들과 연결해달라고 요청하는 함수
+		replace가 TRUE면 연결 시 기존에 연결되었던 피어들의 정보를 삭제한다.
+		quit채널로 취소할 수 있다(?)
+	*/
 	RequestConnectOutgoing(replace bool, quit <-chan struct{})
 
 	// Get a list of Peers we could potentially send a direct message to.
+	/*
+		직접적으로 메시지를 보낼 수 있는 피어배열리스트 정보를 조회한다.
+	*/
 	GetPeers(options ...PeerOption) []Peer
 
 	// Start threads, listen on sockets.
+	/*
+		쓰레드를 시작한다. 소켓연결을 기다린다.
+	*/
 	Start()
 
 	// Close sockets. Stop threads.
@@ -214,6 +225,9 @@ type GossipNode interface {
 }
 
 // IncomingMessage represents a message arriving from some peer in our p2p network
+/*
+	p2p네트워크의 다른 피어가 전송한 메시지이다.
+*/
 type IncomingMessage struct {
 	Sender Peer
 	Tag    Tag
@@ -228,6 +242,10 @@ type IncomingMessage struct {
 	// to indicate that it has started processing this message.  It
 	// is used to ensure fairness across peers in terms of processing
 	// messages.
+	/*
+		이 메시지 처리를 시작했는지 여부를 나타내기위해 messageHandlerThread에게 전달할 채널이다.
+		메시지 처리 측면에서 피어 간의 공정성을 보장하는 데 사용됩니다.
+	*/
 	processing chan struct{}
 }
 
@@ -244,6 +262,9 @@ func highPriorityTag(tags []protocol.Tag) bool {
 }
 
 // OutgoingMessage represents a message we want to send.
+/*
+	보내고 싶은 메시지이다.
+*/
 type OutgoingMessage struct {
 	Action  ForwardingPolicy
 	Tag     Tag
@@ -252,6 +273,13 @@ type OutgoingMessage struct {
 }
 
 // ForwardingPolicy is an enum indicating to whom we should send a message
+/*
+	누구에게 메시지를 보내야하는지 나타내는 enum값
+	0: 보내지 않음
+	1: 이메시지를 보낸 피어와의 연결을 해제
+	2: 전송자를 제외한 나머지 모드에게 전달
+	3: 센더에게 응답
+*/
 type ForwardingPolicy int
 
 const (
@@ -272,6 +300,11 @@ const (
 // to send to the network in response.
 // The ForwardingPolicy field of the returned OutgoingMessage indicates whether to reply directly to the sender
 // (unicast), propagate to everyone except the sender (broadcast), or do nothing (ignore).
+/*
+	IncomingMessage을 받아서 처리하고 응답을 네트워크로 전송한다.
+	OutgoingMessage의 ForwardingPolicy필드는 센더에게 직접 응답할것인디(unicast) sender를 제외한 모두에게 응답할 것인디(broascast)
+	혹은 아무것도 하지 않을 것인지를 나타낸다.
+*/
 type MessageHandler interface {
 	Handle(message IncomingMessage) OutgoingMessage
 }
@@ -285,6 +318,9 @@ func (f HandlerFunc) Handle(message IncomingMessage) OutgoingMessage {
 }
 
 // TaggedMessageHandler receives one type of broadcast messages
+/*
+	broadcast 타입의 메시지를 받는다. 이 핸들러가 처리하는 메시지는 모두 브로드캐스팅을 하는건가?
+*/
 type TaggedMessageHandler struct {
 	Tag
 	MessageHandler
@@ -298,17 +334,38 @@ func Propagate(msg IncomingMessage) OutgoingMessage {
 
 // GossipNetworkPath is the URL path to connect to the websocket gossip node at.
 // Contains {genesisID} param to be handled by gorilla/mux
+/*
+	GossipNetworkPath는 웹소켓 가십노드와 연결하기 위한 url경로이다.
+*/
 const GossipNetworkPath = "/v1/{genesisID}/gossip"
 
 // WebsocketNetwork implements GossipNode
+/*
+	가십노드를 구현한다.
+*/
 type WebsocketNetwork struct {
+	/*
+		리스너는 스트림 지향 프로토콜을 위한 일반 네트워크 리스너입니다.
+		여러 고루틴은 리스너에서 동시에 메소드를 호출할 수 있습니다.
+	*/
 	listener net.Listener
-	server   http.Server
-	router   *mux.Router
-	scheme   string // are we serving http or https ?
+	/*
+		HTTP server를 실행하기 위한 매개변수를 정의한 구조체이다.
+	*/
+	server http.Server
+	// Router registers routes to be matched and dispatches a handler.
+	/*
+		라우터는 메시지를 처리할 핸들러를 선택하고 그에게 메시지를 발송해주는 객체이다.
+	*/
+	router *mux.Router
+	// 서버가 http인지 https인지
+	scheme string // are we serving http or https ?
 
 	upgrader websocket.Upgrader
 
+	/*
+		로컬은 프로토콜에 대한 노드 인스턴스별 구성 설정이다.
+	*/
 	config config.Local
 
 	log logging.Logger

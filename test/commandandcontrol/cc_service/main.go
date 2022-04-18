@@ -23,8 +23,8 @@ import (
 
 	"github.com/algorand/websocket"
 
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/test/commandandcontrol/lib"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/test/commandandcontrol/lib"
 )
 
 var addr = flag.String("addr", "localhost:8080", "http service address")

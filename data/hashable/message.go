@@ -17,10 +17,13 @@
 package hashable
 
 import (
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // Message is used for messages with no special meaning
+/*
+아무런 의미 없는 메시지 필요 시 사용하는 구조체
+*/
 type Message struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 	Message string   `codec:"msg"`

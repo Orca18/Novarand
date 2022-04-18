@@ -29,23 +29,30 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 const (
 	// balancesFlushInterval defines how frequently we want to flush our balances to disk.
+	/*
+		얼마나 자주 잔액정보를 디스크에 저장할 것인지를 나타내는 인터벌 변수
+	*/
 	balancesFlushInterval = 5 * time.Second
+
 	// pendingDeltasFlushThreshold is the deltas count threshold above we flush the pending balances regardless of the flush interval.
+	/*
+		pendingDeltasFlushThreshold는 플러시 간격에 관계없이 보류 중인 잔액을 플러시하는 위의 델타 수 임계값입니다.
+	*/
 	pendingDeltasFlushThreshold = 128
 )
 
@@ -81,15 +88,26 @@ const accountsUpdatePerRoundHighWatermark = 1 * time.Second
 // A modifiedAccount represents an account that has been modified since
 // the persistent state stored in the account DB (i.e., in the range of
 // rounds covered by the accountUpdates tracker).
+/*
+ModifiedAccount는 account DB에 저장된 영구 상태 이후 수정된 계정을 나타냅니다(즉, accountUpdates 추적기가 포함하는 라운드 범위).
+아아 계정정보가 db에 저장완료 되고 그 이후에 수정된 계정정보를 나타내는구나.
+*/
 type modifiedAccount struct {
 	// data stores the most recent AccountData for this modified
 	// account.
+	/*
+		data는 이 수정된 계정에 대한 가장 최근의 AccountData를 저장합니다.
+	*/
 	data basics.AccountData
 
 	// ndelta keeps track of how many times this account appears in
 	// accountUpdates.deltas.  This is used to evict modifiedAccount
 	// entries when all changes to an account have been reflected in
 	// the account DB, and no outstanding modifications remain.
+	/*
+		ndelta는 이 계정이 accountUpdates.delta에 나타나는 횟수를 추적합니다.
+		계정에 대한 모든 변경 사항이 계정 DB에 반영되고 미해결 수정 사항이 남아 있지 않을 때 modifyAccount 항목을 제거하는 데 사용됩니다
+	*/
 	ndeltas int
 }
 
@@ -112,10 +130,16 @@ type accountUpdates struct {
 	cachedDBRound basics.Round
 
 	// deltas stores updates for every round after dbRound.
+	/*
+		deltas는 dbRound이후 모든 라운드에 대한 업데이트를 저장한다.
+	*/
 	deltas []ledgercore.AccountDeltas
 
 	// accounts stores the most recent account state for every
 	// address that appears in deltas.
+	/*
+		accounts는 각 주소에 대해 deltas에 있는 가장 최근에 저장된 계정의 상태를 저장한다.
+	*/
 	accounts map[basics.Address]modifiedAccount
 
 	// creatableDeltas stores creatable updates for every round after dbRound.
@@ -610,6 +634,16 @@ func (r *readCloseSizer) Size() (int64, error) {
 // without taking any locks. Note that it's not only the locks performance that is gained : by having the loadFrom disk
 // not requiring any external locks, we can safely take a trackers lock on the ledger during reloadLedger, which ensures
 // that even during catchpoint catchup mode switch, we're still correctly protected by a mutex.
+/*
+(다시 해석하기..)
+accountUpdatesLedgerEvaluator는 "원장 에뮬레이터"로 initializeCaches에 의해서만 사용되며 accountUpdates에서 제공하는 요청을 할 때
+실제 원장 객체가 취한 잠금을 바로 가기 위한 방법입니다.
+이 구조체를 사용하면 추적기 잠금을 사용할 수 있습니다.
+loadFromDisk를 호출기 전에 잠금을 사용하지 않고 작업을 완료합니다.
+얻을 수 있는 것은 잠금 성능만이 아닙니다.
+loadFrom 디스크가 외부 잠금을 필요로 하지 않도록 함으로써 reloadLedger 동안 원장에 대한 추적기 잠금을 안전하게 취할 수 있습니다.
+이는 캐치포인트 캐치업 모드 전환 중에도 여전히 뮤텍스에 의해 올바르게 보호됩니다.
+*/
 type accountUpdatesLedgerEvaluator struct {
 	// au is the associated accountUpdates structure which invoking the trackerEvalVerified function, passing this structure as input.
 	// the accountUpdatesLedgerEvaluator would access the underlying accountUpdates function directly, bypassing the balances mutex lock.

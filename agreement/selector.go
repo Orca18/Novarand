@@ -19,21 +19,27 @@ package agreement
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/committee"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/committee"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // A Selector is the input used to define proposers and members of voting
 // committees.
+/*
+	Selector는 제안자 및 투표위원회를 선택하기 위한 객체이다.
+*/
 type selector struct {
 	_struct struct{} `codec:""` // not omitempty
-
-	Seed   committee.Seed `codec:"seed"`
-	Round  basics.Round   `codec:"rnd"`
-	Period period         `codec:"per"`
-	Step   step           `codec:"step"`
+	// VRF의 인풋으로 사용될 인풋 값
+	Seed committee.Seed `codec:"seed"`
+	// 제안 혹은 투표할 라운드
+	Round basics.Round `codec:"rnd"`
+	// 프로토콜에서 주어진 라운드의 진행 상황을 추적하는 데 사용된다.
+	Period period `codec:"per"`
+	// 알고랜드의 개별 단계를 나타내는 시퀀스 번호이다(propose, soft, cert, next)
+	Step step `codec:"step"`
 }
 
 // ToBeHashed implements the crypto.Hashable interface.
@@ -56,6 +62,11 @@ func seedRound(r basics.Round, cparams config.ConsensusParams) basics.Round {
 }
 
 // a helper function for obtaining membership verification parameters.
+/*
+	멤버십 증명 파라미터를 획득하기 위한 함수
+	올바른 주소이며, 라운드에 대한 전체 알고를 알 수 있고, 라운드 시드를 알 수 있다면 무조건 반환한다.
+	즉, 계정이 올바르면 무조건 반환하는거라고 봐야겠네?
+*/
 func membership(l LedgerReader, addr basics.Address, r basics.Round, p period, s step) (m committee.Membership, err error) {
 	cparams, err := l.ConsensusParams(ParamsRound(r))
 	if err != nil {
@@ -70,6 +81,7 @@ func membership(l LedgerReader, addr basics.Address, r basics.Round, p period, s
 		return
 	}
 
+	// 특정 라운드의 전체 algo
 	total, err := l.Circulation(balanceRound)
 	if err != nil {
 		err = fmt.Errorf("Service.initializeVote (r=%d): Failed to obtain total circulation in round %d: %v", r, balanceRound, err)

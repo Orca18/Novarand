@@ -19,9 +19,9 @@ package mocks
 import (
 	"context"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/ledger"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/ledger"
 )
 
 // MockCatchpointCatchupAccessor is a dummy CatchpointCatchupAccessor implementation which doesn't do anything.

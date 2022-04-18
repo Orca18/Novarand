@@ -19,7 +19,7 @@ package crypto
 import (
 	"testing"
 
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/test/partitiontest"
 
 	"github.com/stretchr/testify/require"
 )

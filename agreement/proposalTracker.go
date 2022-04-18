@@ -19,7 +19,7 @@ package agreement
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/data/basics"
+	"github.com/Orca18/novarand/data/basics"
 )
 
 // A proposalSeeker finds the vote with the lowest credential until freeze() is

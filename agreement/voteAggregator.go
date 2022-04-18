@@ -19,7 +19,7 @@ package agreement
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // A voteAggregator is a voteMachine which applies relay rules to incoming votes

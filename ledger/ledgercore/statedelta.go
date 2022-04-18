@@ -17,10 +17,10 @@
 package ledgercore
 
 import (
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/transactions"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/transactions"
 )
 
 const (
@@ -31,7 +31,10 @@ const (
 	stateDeltaTargetOptimizationThreshold = uint64(50000000)
 )
 
-// ModifiedCreatable defines the changes to a single single creatable state
+// ModifiedCreatable defines the changes to a single creatable state
+/*
+ModifiedCreatable은 단일 creatable state에 대한 변경 사항을 정의합니다
+*/
 type ModifiedCreatable struct {
 	// Type of the creatable: app or asset
 	Ctype basics.CreatableType
@@ -61,48 +64,76 @@ type AccountApp struct {
 
 // A Txlease is a transaction (sender, lease) pair which uniquely specifies a
 // transaction lease.
+/*
+	Txlease는 트랜잭션의 전송자, lease쌍이다.
+	이것은 트랜잭션 lease를 고유하게 지정한다.
+*/
 type Txlease struct {
 	Sender basics.Address
 	Lease  [32]byte
 }
 
 // StateDelta describes the delta between a given round to the previous round
+/*
+	StateDelta는 주어진 라운드와 이전 라운드 사이의 델타(차이?)를 나타냅니다.
+	아 블록뿐만 아니라 계정, 블록헤더, 등 이전라운드와 현재 라운드의 객체들간의 차이를
+	나타내는 구조체!!
+*/
 type StateDelta struct {
 	// modified accounts
+	/*
+		이전 상태에서 수정된 계정들의 정보
+	*/
+	// 이전과 현재의 계정 정보를 가지고 있는 배열
 	Accts AccountDeltas
 
 	// new Txids for the txtail and TxnCounter, mapped to txn.LastValid
+	// the txtail과 TxnCounter 그리고 txn.LastValid에 매핑하기 위한 txId
 	Txids map[transactions.Txid]basics.Round
 
 	// new txleases for the txtail mapped to expiration
+	// 만료에 매핑된 txtail에 대한 새로운 txleases(new txleases for the txtail mapped to expiration)
 	Txleases map[Txlease]basics.Round
 
 	// new creatables creator lookup table
+	// 단일 creatable(app혹은 asset) state에 대한 변경 사항
 	Creatables map[basics.CreatableIndex]ModifiedCreatable
 
 	// new block header; read-only
+	// 새로 생성된 블록의 헤더이며 읽기만 가능
 	Hdr *bookkeeping.BlockHeader
 
 	// next round for which we expect a compact cert.
 	// zero if no compact cert is expected.
+	//우리가 컴팩트 인증서를 기대하는 다음 라운드. 컴팩트 인증서가 예상되지 않으면 0입니다
 	CompactCertNext basics.Round
 
 	// previous block timestamp
+	// 이전블록의 timestamp
 	PrevTimestamp int64
 
 	// Modified local creatable states. The value is true if the creatable local state
 	// is created and false if deleted. Used by indexer.
+	/*
+		local creatable states는 Asset과 App을 말하는 거구나!
+		이들이 새로 생성됐다면 true 삭제됐다면 false!
+	*/
 	ModifiedAssetHoldings  map[AccountAsset]bool
 	ModifiedAppLocalStates map[AccountApp]bool
 
 	// initial hint for allocating data structures for StateDelta
+	// StateDelta에 대한 데이터 구조 할당을 위한 초기 힌트
 	initialTransactionsCount int
 
 	// The account totals reflecting the changes in this StateDelta object.
+	// StateDelta를 반영한 총 계정수
 	Totals AccountTotals
 }
 
 // AccountDeltas stores ordered accounts and allows fast lookup by address
+/*
+	AccountDeltas는 정렬된 계정들을 저장하고 주소로 빠르게 조회할 수 있게 해준다.
+*/
 type AccountDeltas struct {
 	// Actual data. If an account is deleted, `accts` contains a balance record
 	// with empty `AccountData`.
@@ -114,6 +145,11 @@ type AccountDeltas struct {
 // MakeStateDelta creates a new instance of StateDelta.
 // hint is amount of transactions for evaluation, 2 * hint is for sender and receiver balance records.
 // This does not play well for AssetConfig and ApplicationCall transactions on scale
+/*
+MakeStateDelta는 StateDelta의 새 인스턴스를 만듭니다.
+힌트는 평가를 위한 총 트랜잭션량, 2 * 힌트는 발신자 및 수신자 잔액 기록용입니다.
+대규모 AssetConfig 및 ApplicationCall 트랜잭션에는 적합하지 않습니다.
+*/
 func MakeStateDelta(hdr *bookkeeping.BlockHeader, prevTimestamp int64, hint int, compactCertNext basics.Round) StateDelta {
 	return StateDelta{
 		Accts: AccountDeltas{
@@ -169,7 +205,7 @@ func (ad *AccountDeltas) GetByIdx(i int) (basics.Address, basics.AccountData) {
 	return ad.accts[i].Addr, ad.accts[i].AccountData
 }
 
-// Upsert adds new or updates existing account account
+// Upsert adds new or updates existing account
 func (ad *AccountDeltas) Upsert(addr basics.Address, data basics.AccountData) {
 	ad.upsert(basics.BalanceRecord{Addr: addr, AccountData: data})
 }

@@ -22,9 +22,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/daemon/kmd/lib/kmdapi"
-	"github.com/algorand/go-algorand/test/framework/fixtures"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/daemon/kmd/lib/kmdapi"
+	"github.com/Orca18/novarand/test/framework/fixtures"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func TestWalletCreation(t *testing.T) {

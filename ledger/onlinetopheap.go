@@ -19,10 +19,13 @@ package ledger
 import (
 	"bytes"
 
-	"github.com/algorand/go-algorand/ledger/ledgercore"
+	"github.com/Orca18/novarand/ledger/ledgercore"
 )
 
 // onlineTopHeap implements heap.Interface for tracking top N online accounts.
+/*
+	상위 N개의 온라인 계정을 트래킹하기위한 HEAP 인터페이스를 구현
+*/
 type onlineTopHeap struct {
 	accts []*ledgercore.OnlineAccount
 }

@@ -17,8 +17,8 @@
 package logic
 
 import (
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // Program is byte code to be interpreted for validating transactions.
@@ -32,6 +32,7 @@ func (lsl Program) ToBeHashed() (protocol.HashID, []byte) {
 // HashProgram takes program bytes and returns the Digest
 // This Digest can be used as an Address for a logic controlled account.
 func HashProgram(program []byte) crypto.Digest {
+	// 주소값을 넘기기 위해 타입으로 지정해줬구나!
 	pb := Program(program)
 	return crypto.HashObj(&pb)
 }

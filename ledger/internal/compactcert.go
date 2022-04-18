@@ -19,12 +19,12 @@ package internal
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto/compactcert"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto/compactcert"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // AcceptableCompactCertWeight computes the acceptable signed weight
@@ -35,6 +35,13 @@ import (
 // votersHdr.Round() + CompactCertRounds).
 //
 // logger must not be nil; use at least logging.Base()
+/*
+
+AcceptableCompactCertWeight는 특정 firstValid 라운드가 있는 트랜잭션에 나타날 경우 컴팩트 인증서의 허용 가능한 서명 가중치를 계산합니다.
+이전 라운드에는 더 작은 인증서가 필요합니다.
+VotersHdr은 이 컴팩트 인증서에 대한 투표자들의 Merkle 약속을 포함하는 블록을 지정합니다(따라서 컴팩트 인증서는 votersHdr.Round() + CompactCertRounds에 대한 것입니다).
+로거는 nil이 아니어야 합니다. 최소한 logging.Base()를 사용하십시오.
+*/
 func AcceptableCompactCertWeight(votersHdr bookkeeping.BlockHeader, firstValid basics.Round, logger logging.Logger) uint64 {
 	proto := config.Consensus[votersHdr.CurrentProtocol]
 	certRound := votersHdr.Round + basics.Round(proto.CompactCertRounds)
@@ -103,6 +110,10 @@ func AcceptableCompactCertWeight(votersHdr bookkeeping.BlockHeader, firstValid b
 
 // CompactCertParams computes the parameters for building or verifying
 // a compact cert for block hdr, using voters from block votersHdr.
+/*
+CompactCertParams는 블록 votersHdr의 투권자를 사용하여
+블록 헤더에 대한 컴팩트 인증서를 빌드하거나 확인하기 위한 매개변수를 계산합니다
+*/
 func CompactCertParams(votersHdr bookkeeping.BlockHeader, hdr bookkeeping.BlockHeader) (res compactcert.Params, err error) {
 	proto := config.Consensus[votersHdr.CurrentProtocol]
 
@@ -143,6 +154,9 @@ func CompactCertParams(votersHdr bookkeeping.BlockHeader, hdr bookkeeping.BlockH
 }
 
 // validateCompactCert checks that a compact cert is valid.
+/*
+compact cert가 유효한지 체크한다.
+*/
 func validateCompactCert(certHdr bookkeeping.BlockHeader, cert compactcert.Cert, votersHdr bookkeeping.BlockHeader, nextCertRnd basics.Round, atRound basics.Round) error {
 	proto := config.Consensus[certHdr.CurrentProtocol]
 

@@ -27,16 +27,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	v1 "github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
-	algodAcct "github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	v1 "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+	algodAcct "github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
 )
 
 func (pps *WorkerState) ensureAccounts(ac libgoal.Client, initCfg PpConfig) (accounts map[string]*pingPongAccount, cfg PpConfig, err error) {

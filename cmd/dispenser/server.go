@@ -32,7 +32,7 @@ import (
 
 	"golang.org/x/crypto/acme/autocert"
 
-	"github.com/algorand/go-algorand/libgoal"
+	"github.com/Orca18/novarand/libgoal"
 )
 
 var configFile = flag.String("config", "", "JSON configuration file")

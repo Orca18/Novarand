@@ -20,8 +20,8 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 	"github.com/algorand/go-deadlock"
 )
 
@@ -129,6 +129,13 @@ type OneTimeSignatureVerifier ed25519PublicKey
 // deleted. Thereafter, an entity can no longer sign different messages with old
 // OneTimeSignatureIdentifiers, protecting the integrity of the messages signed
 // under those identifiers.
+/*
+OneTimeSignatureSecrets는 메시지에 대해 위조할 수 없는 서명을 생성하는 데 사용됩니다.
+OneTimeSignatureSecrets.DeleteBefore(ID) 메서드가 호출되면
+ID 앞의 OneTimeSignatureIdentifiers에 해당하는 임시 암호가 삭제됩니다.
+그 후 엔터티는 이전 OneTimeSignatureIdentifiers를 사용하여
+더 이상 다른 메시지에 서명할 수 없으므로 해당 식별자로 서명된 메시지의 무결성을 보호합니다.
+*/
 type OneTimeSignatureSecrets struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 

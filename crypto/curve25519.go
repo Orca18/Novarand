@@ -36,8 +36,8 @@ import "C"
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 // TODO: Remove metrics from crypto package

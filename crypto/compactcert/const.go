@@ -17,7 +17,7 @@
 package compactcert
 
 import (
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 // HashType/ hashSize relate to the type of hash this package uses.

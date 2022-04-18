@@ -30,4 +30,4 @@
     --- PASS: TestGoalWithExpect/goalCmdFlagsTest.exp (0.38s)
     --- PASS: TestGoalWithExpect/ledgerTest.exp (10.54s)
     --- PASS: TestGoalWithExpect/multisigCreationDeletionTest.exp (13.22s)
-ok  	github.com/algorand/go-algorand/test/e2e-go/cli/goal/expect	1412.538s
+ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal/expect	1412.538s

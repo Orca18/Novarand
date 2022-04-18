@@ -20,13 +20,13 @@ import (
 	"context"
 	"errors"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/committee"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/committee"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // this file holds abstractions that agreement depends on
@@ -234,6 +234,9 @@ type KeyManager interface {
 // MessageHandle is an ID referring to a specific message.
 //
 // A MessageHandle of nil denotes that a message is "sourceless".
+/*
+	특정 메시지를 참조하는 ID이다.
+*/
 type MessageHandle interface{}
 
 // Network is an abstraction over the interface expected by the agreement
@@ -257,6 +260,9 @@ type Network interface {
 	// If the broadcasting of the message have failed or is not possible, the
 	// method returns a non-nil error describing the underlaying error.
 	// otherwise, a nil is returned.
+	/*
+		주변 모든 이웃 피어에게 Tag와 byte slice를 전달한다.
+	*/
 	Broadcast(protocol.Tag, []byte) error
 
 	// Relay attempts to send a slice of bytes under some protocol.Tag to
@@ -273,6 +279,9 @@ type Network interface {
 	// If the relaying of the message have failed or is not possible, the
 	// method returns a non-nil error describing the underlaying error.
 	// otherwise, a nil is returned.
+	/*
+		주어진 MessageHandle과 관련있는 피어를 제외한 주변 모든 이웃 피어에게 Tag와 byte slice를 전달한다.
+	*/
 	Relay(MessageHandle, protocol.Tag, []byte) error
 
 	// Disconnect sends the Network a hint to disconnect to the peer

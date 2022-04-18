@@ -19,11 +19,11 @@ package internal
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/ledger/apply"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/ledger/apply"
+	"github.com/Orca18/novarand/protocol"
 )
 
 type logicLedger struct {
@@ -213,6 +213,9 @@ func (al *logicLedger) balances() (apply.Balances, error) {
 	return balances, nil
 }
 
+/*
+	애플리케이션에서 트랜잭션을 실행한다.
+*/
 func (al *logicLedger) Perform(gi int, ep *logic.EvalParams) error {
 	txn := &ep.TxnGroup[gi]
 	balances, err := al.balances()

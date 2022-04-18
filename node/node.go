@@ -28,32 +28,32 @@ import (
 	"sync"
 	"time"
 
-	"github.com/algorand/go-algorand/agreement"
-	"github.com/algorand/go-algorand/agreement/gossip"
-	"github.com/algorand/go-algorand/catchup"
-	"github.com/algorand/go-algorand/compactcert"
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data"
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/data/committee"
-	"github.com/algorand/go-algorand/data/pools"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/data/transactions/verify"
-	"github.com/algorand/go-algorand/ledger"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/network"
-	"github.com/algorand/go-algorand/network/messagetracer"
-	"github.com/algorand/go-algorand/node/indexer"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/rpcs"
-	"github.com/algorand/go-algorand/util/db"
-	"github.com/algorand/go-algorand/util/execpool"
-	"github.com/algorand/go-algorand/util/metrics"
-	"github.com/algorand/go-algorand/util/timers"
+	"github.com/Orca18/novarand/agreement"
+	"github.com/Orca18/novarand/agreement/gossip"
+	"github.com/Orca18/novarand/catchup"
+	"github.com/Orca18/novarand/compactcert"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/data/committee"
+	"github.com/Orca18/novarand/data/pools"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions/verify"
+	"github.com/Orca18/novarand/ledger"
+	"github.com/Orca18/novarand/ledger/ledgercore"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/network"
+	"github.com/Orca18/novarand/network/messagetracer"
+	"github.com/Orca18/novarand/node/indexer"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/rpcs"
+	"github.com/Orca18/novarand/util/db"
+	"github.com/Orca18/novarand/util/execpool"
+	"github.com/Orca18/novarand/util/metrics"
+	"github.com/Orca18/novarand/util/timers"
 	"github.com/algorand/go-deadlock"
 	uuid "github.com/satori/go.uuid"
 )
@@ -210,6 +210,7 @@ func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAdd
 
 	node.transactionPool = pools.MakeTransactionPool(node.ledger.Ledger, cfg, node.log)
 
+	// 트랜잭션풀 리스너를 등록한다.
 	blockListeners := []ledger.BlockListener{
 		node.transactionPool,
 		node,
@@ -728,7 +729,7 @@ func (node *AlgorandFullNode) PoolStats() PoolStats {
 	r := node.ledger.Latest()
 	last, err := node.ledger.Block(r)
 	if err != nil {
-		node.log.Warnf("AlgorandFullNode: could not read ledger's last round: %v", err)
+		node.log.Warnf("NovarandFullNode: could not read ledger's last round: %v", err)
 		return PoolStats{}
 	}
 
@@ -940,7 +941,7 @@ func (node *AlgorandFullNode) loadParticipationKeys() error {
 	genesisDir := filepath.Join(node.rootDir, node.genesisID)
 	files, err := ioutil.ReadDir(genesisDir)
 	if err != nil {
-		return fmt.Errorf("AlgorandFullNode.loadPartitipationKeys: could not read directory %v: %v", genesisDir, err)
+		return fmt.Errorf("NovarandFullNode.loadPartitipationKeys: could not read directory %v: %v", genesisDir, err)
 	}
 
 	// For each of these files
@@ -961,7 +962,7 @@ func (node *AlgorandFullNode) loadParticipationKeys() error {
 				// we can safely ignore that fail case.
 				continue
 			}
-			return fmt.Errorf("AlgorandFullNode.loadParticipationKeys: cannot load db %v: %v", filename, err)
+			return fmt.Errorf("NovarandFullNode.loadParticipationKeys: cannot load db %v: %v", filename, err)
 		}
 
 		// Fetch an account.Participation from the database
@@ -981,7 +982,7 @@ func (node *AlgorandFullNode) loadParticipationKeys() error {
 					node.log.Warn("loadParticipationKeys: failed to rename unsupported participation key file '%s' to '%s': %v", fullname, renamedFileName, err)
 				}
 			} else {
-				return fmt.Errorf("AlgorandFullNode.loadParticipationKeys: cannot load account at %v: %v", info.Name(), err)
+				return fmt.Errorf("NovarandFullNode.loadParticipationKeys: cannot load account at %v: %v", info.Name(), err)
 			}
 		} else {
 			// Tell the AccountManager about the Participation (dupes don't matter)
@@ -1298,10 +1299,10 @@ func (node *AlgorandFullNode) AssembleBlock(round basics.Round) (agreement.Valid
 			ledgerNextRound := node.ledger.NextRound()
 			if ledgerNextRound == round {
 				// we've asked for the right round.. and the ledger doesn't think it's stale.
-				node.log.Errorf("AlgorandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger and proposal generation are synced: %v", round, err)
+				node.log.Errorf("NovarandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger and proposal generation are synced: %v", round, err)
 			} else if ledgerNextRound < round {
 				// from some reason, the ledger is behind the round that we're asking. That shouldn't happen, but error if it does.
-				node.log.Errorf("AlgorandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger next round is %d: %v", round, ledgerNextRound, err)
+				node.log.Errorf("NovarandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger next round is %d: %v", round, ledgerNextRound, err)
 			}
 			// the case where ledgerNextRound > round was not implemented here on purpose. This is the "normal case" where the
 			// ledger was advancing faster then the agreement by the catchup.
