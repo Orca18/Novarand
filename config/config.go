@@ -74,10 +74,12 @@ const ParticipationRegistryFilename = "partregistry.sqlite"
 // built-in supported consensus protocols.
 const ConfigurableConsensusProtocolsFilename = "consensus.json"
 
-// LoadConfigFromDisk returns a Local config structure based on merging the defaults
-// with settings loaded from the config file from the custom dir.  If the custom file
-// cannot be loaded, the default config is returned (with the error from loading the
-// custom file).
+// LoadConfigFromDisk returns a Local config structure based on merging the defaults with settings loaded from the config file from the custom dir.
+// If the custom file cannot be loaded, the default config is returned
+// (with the error from loading the custom file).
+// LoadConfigFromDisk는 기본값을 사용자 정의 디렉토리의 구성 파일에서 로드된 설정과 병합하여 로컬 구성 구조를 반환합니다.
+// 사용자 정의 파일을 로드할 수 없으면 기본 구성이 반환됩니다.
+// (사용자 정의 파일 로드 오류 포함).
 func LoadConfigFromDisk(custom string) (c Local, err error) {
 	return loadConfigFromFile(filepath.Join(custom, ConfigFilename))
 }
@@ -85,6 +87,7 @@ func LoadConfigFromDisk(custom string) (c Local, err error) {
 func loadConfigFromFile(configFile string) (c Local, err error) {
 	c = defaultLocal
 	c.Version = 0 // Reset to 0 so we get the version from the loaded file.
+	// 로드된 파일에서 버전을 가져오도록 0으로 재설정합니다.
 	c, err = mergeConfigFromFile(configFile, c)
 	if err != nil {
 		return

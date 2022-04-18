@@ -41,11 +41,17 @@ type Local struct {
 	// Version tracks the current version of the defaults so we can migrate old -> new
 	// This is specifically important whenever we decide to change the default value
 	// for an existing parameter. This field tag must be updated any time we add a new version.
+	// 버전이 현재 버전의 기본값을 추적하여 이전 버전 -> 새 버전으로 마이그레이션할 수 있습니다.
+	// 이 값은 기본값을 변경할 때마다 특히 중요합니다.
+	// 기존 매개 변수에 대해 선택합니다. 새 버전을 추가할 때마다 이 필드 태그를 업데이트해야 합니다.
 	Version uint32 `version[0]:"0" version[1]:"1" version[2]:"2" version[3]:"3" version[4]:"4" version[5]:"5" version[6]:"6" version[7]:"7" version[8]:"8" version[9]:"9" version[10]:"10" version[11]:"11" version[12]:"12" version[13]:"13" version[14]:"14" version[15]:"15" version[16]:"16" version[17]:"17" version[18]:"18" version[19]:"19" version[20]:"20"`
 
 	// environmental (may be overridden)
 	// When enabled, stores blocks indefinitally, otherwise, only the most recents blocks
 	// are being kept around. ( the precise number of recent blocks depends on the consensus parameters )
+	// 환경(덮어쓸 수 있음)
+	// 활성화하면 블록을 무기한으로 저장합니다. 그렇지 않으면 가장 최근의 블록만 저장합니다.
+	// 주변에 보관되고 있습니다. (최근 블록의 정확한 수는 합의된 매개 변수에 따라 다름)
 	Archival bool `version[0]:"false"`
 
 	// gossipNode.go

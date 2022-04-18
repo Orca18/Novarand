@@ -39,8 +39,10 @@ func tokenFilepath(dataDir, tokenFilename string) string {
 	return filepath.Join(dataDir, tokenFilename)
 }
 
-// GetAndValidateAPIToken reads the APIToken from the token file and validates
-// it. Always returns the potentially invalid token along with the error
+// GetAndValidateAPIToken reads the APIToken from the token file and validates it.
+// Always returns the potentially invalid token along with the error
+// GetAndValidateAPIToken은 토큰 파일에서 APIToken을 읽고 유효성을 검사합니다.
+// 항상 오류와 함께 잠재적으로 유효하지 않은 토큰을 반환합니다.
 func GetAndValidateAPIToken(dataDir, tokenFilename string) (string, error) {
 	filepath := tokenFilepath(dataDir, tokenFilename)
 	apiToken, err := util.GetFirstLineFromFile(filepath)

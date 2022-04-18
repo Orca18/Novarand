@@ -40,10 +40,8 @@ type builder struct {
 	votersHdr bookkeeping.BlockHeader
 }
 
-// Worker builds compact certificates, by broadcasting
-// signatures using this node's participation keys, by collecting
-// signatures sent by others, and by sending out the resulting
-// compact certs in a transaction.
+// Worker builds compact certificates, by broadcasting signatures using this node's participation keys, by collecting signatures sent by others, and by sending out the resulting compact certs in a transaction.
+// 작업자는 이 노드의 참여 키를 사용하여 서명을 브로드캐스트하고, 다른 사람이 보낸 서명을 수집하고, 트랜잭션에서 결과 압축 인증서를 전송하여 컴팩트 인증서를 빌드합니다.
 type Worker struct {
 	// The mutex serializes concurrent message handler invocations
 	// from the network stack.
@@ -68,6 +66,7 @@ type Worker struct {
 }
 
 // NewWorker constructs a new Worker, as used by the node.
+// NewWorker는 노드에서 사용되는 새 Worker를 생성합니다.
 func NewWorker(db db.Accessor, log logging.Logger, accts Accounts, ledger Ledger, net Network, txnSender TransactionSender) *Worker {
 	ctx, cancel := context.WithCancel(context.Background())
 

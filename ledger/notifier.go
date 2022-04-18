@@ -29,6 +29,7 @@ import (
 )
 
 // BlockListener represents an object that needs to get notified on new blocks.
+// BlockListener는 새 블록에 대해 알림을 받아야 하는 개체를 나타냅니다.
 type BlockListener interface {
 	OnNewBlock(block bookkeeping.Block, delta ledgercore.StateDelta)
 }

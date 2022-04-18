@@ -179,6 +179,7 @@ func makeListener(addr string) (net.Listener, error) {
 	var err error
 	if (addr == "127.0.0.1:0") || (addr == ":0") {
 		// if port 0 is provided, prefer port 8080 first, then fall back to port 0
+		// 포트 0이 제공되면 포트 8080을 먼저 선택한 다음 포트 0으로 폴백합니다.
 		preferredAddr := strings.Replace(addr, ":0", ":8080", -1)
 		listener, err = net.Listen("tcp", preferredAddr)
 		if err == nil {
@@ -186,6 +187,7 @@ func makeListener(addr string) (net.Listener, error) {
 		}
 	}
 	// err was not nil or :0 was not provided, fall back to originally passed addr
+	// err이 nil이 아니거나 :0이 제공되지 않은 경우 원래 전달된 addr로 대체
 	return net.Listen("tcp", addr)
 }
 
@@ -246,9 +248,8 @@ func (s *Server) Start() {
 		s.log, s.node, s.stopping, apiToken, adminAPIToken, listener,
 		cfg.RestConnectionsSoftLimit)
 
-	// Set up files for our PID and our listening address
-	// before beginning to listen to prevent 'goal node start'
-	// quit earlier than these service files get created
+	// Set up files for our PID and our listening address before beginning to listen to prevent 'goal node start' quit earlier than these service files get created
+	// 이 서비스 파일이 생성되기 전에 '목표 노드 시작'이 종료되는 것을 방지하기 위해 수신을 시작하기 전에 PID 및 수신 주소에 대한 파일을 설정합니다.
 	s.pidFile = filepath.Join(s.RootPath, "algod.pid")
 	s.netFile = filepath.Join(s.RootPath, "algod.net")
 	ioutil.WriteFile(s.pidFile, []byte(fmt.Sprintf("%d\n", os.Getpid())), 0644)

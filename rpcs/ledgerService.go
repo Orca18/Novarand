@@ -66,6 +66,7 @@ type LedgerService struct {
 }
 
 // MakeLedgerService creates a LedgerService around the provider Ledger and registers it with the HTTP router
+// MakeLedgerService는 공급자 Leader 주위에 LeaderService를 생성하고 HTTP 라우터에 등록합니다.
 func MakeLedgerService(config config.Local, ledger *data.Ledger, net network.GossipNode, genesisID string) *LedgerService {
 	service := &LedgerService{
 		ledger:        ledger,
