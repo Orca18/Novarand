@@ -143,6 +143,9 @@ func (v *verifiedTransactionCache) AddPayset(txgroup [][]transactions.SignedTxn,
 }
 
 // GetUnverifiedTranscationGroups compares the provided payset against the currently cached transactions and figure which transaction groups aren't fully cached.
+/*
+
+ */
 func (v *verifiedTransactionCache) GetUnverifiedTranscationGroups(txnGroups [][]transactions.SignedTxn, currSpecAddrs transactions.SpecialAddresses, currProto protocol.ConsensusVersion) (unverifiedGroups [][]transactions.SignedTxn) {
 	v.bucketsLock.Lock()
 	defer v.bucketsLock.Unlock()
@@ -199,6 +202,11 @@ func (v *verifiedTransactionCache) GetUnverifiedTranscationGroups(txnGroups [][]
 
 // UpdatePinned replaces the pinned entries with the one provided in the pinnedTxns map. This is typically expected to be a subset of the
 // already-pinned transactions. If a transaction is not currently pinned, and it's can't be found in the cache, a errMissingPinnedEntry error would be generated.
+/*
+	UpdatePinned는 고정된 항목을 pinnedTxns 맵에 제공된 항목으로 바꿉니다.
+	이것은 일반적으로 이미 고정된 트랜잭션의 하위 집합으로 예상됩니다.
+	입력된 트랜잭션 중 하나라고 현재 고정되어 있지 않고 캐시에서 찾을 수 없는 경우 errMissingPinnedEntry 오류가 생성됩니다.
+*/
 func (v *verifiedTransactionCache) UpdatePinned(pinnedTxns map[transactions.Txid]transactions.SignedTxn) (err error) {
 	v.bucketsLock.Lock()
 	defer v.bucketsLock.Unlock()
