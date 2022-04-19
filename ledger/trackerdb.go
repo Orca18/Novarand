@@ -121,7 +121,7 @@ func trackerDBInitializeImpl(ctx context.Context, tx *sql.Tx, params trackerDBPa
 
 	if tu.version() < accountDBVersion {
 		tu.log.Infof("trackerDBInitialize upgrading database schema from version %d to version %d", tu.version(), accountDBVersion)
-		tu.log.Infof("is Modified??")
+		tu.log.Infof("is Modified?? - ryeong")
 
 		// newDatabase is determined during the tables creations. If we're filling the database with accounts,
 		// then we set this variable to true, allowing some of the upgrades to be skipped.
