@@ -21,7 +21,9 @@ import (
 	"fmt"
 
 	"github.com/Orca18/novarand/crypto"
-	"github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+
+	v1 "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+
 	"github.com/Orca18/novarand/data/account"
 	"github.com/Orca18/novarand/data/basics"
 	"github.com/Orca18/novarand/data/transactions"

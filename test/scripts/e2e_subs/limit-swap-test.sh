@@ -50,7 +50,7 @@ sed s/TMPL_ASSET/${ASSET_ID}/g < tools/teal/templates/limit-order-b.teal.tmpl | 
 
 ACCOUNT_ASSET_TRADER=$(${gcmd} clerk compile ${TEMPDIR}/limit-order-b.teal -o ${TEMPDIR}/limit-order-b.tealc|awk '{ print $2 }')
 
-echo "setup trader with Algos"
+echo "setup trader with Novas"
 ${gcmd} clerk send --amount 1000000 --from ${ACCOUNT} --to ${ACCOUNT_ASSET_TRADER} --lastvalid ${SETUP_ROUND}
 
 # ${gcmd} account balance -a $ACCOUNT_ASSET_TRADER
@@ -79,7 +79,7 @@ ${gcmd} clerk sign -i ${TEMPDIR}/bclose.tx -p ${TEMPDIR}/limit-order-b.teal -o $
 
 ${gcmd} clerk rawsend -f ${TEMPDIR}/bclose.stx
 
-echo "recover algos"
+echo "recover novas"
 ${gcmd} clerk send -t ${ZERO_ADDRESS} -a 0 -c ${ACCOUNT} -f ${ACCOUNT_ASSET_TRADER} -o ${TEMPDIR}/bcloseA.tx
 
 ${gcmd} clerk sign -i ${TEMPDIR}/bcloseA.tx -p ${TEMPDIR}/limit-order-b.teal -o ${TEMPDIR}/bcloseA.stx
@@ -98,7 +98,7 @@ sed s/TMPL_ASSET/${ASSET_ID}/g < tools/teal/templates/limit-order-b.teal.tmpl | 
 
 ACCOUNT_ASSET_TRADER=$(${gcmd} clerk compile ${TEMPDIR}/limit-order-b.teal -o ${TEMPDIR}/limit-order-b.tealc|awk '{ print $2 }')
 
-echo "setup trader with Algos"
+echo "setup trader with Novas"
 ${gcmd} clerk send --amount 1000000 --from ${ACCOUNT} --to ${ACCOUNT_ASSET_TRADER}
 
 echo "make asset trader able to accept asset"
@@ -119,7 +119,7 @@ sed s/TMPL_ASSET/${ASSET_ID}/g < tools/teal/templates/limit-order-a.teal.tmpl | 
 
 ACCOUNT_ALGO_TRADER=$(${gcmd} clerk compile ${TEMPDIR}/limit-order-a.teal -o ${TEMPDIR}/limit-order-a.tealc|awk '{ print $2 }')
 
-echo "setup trader with Algos"
+echo "setup trader with Novas"
 ${gcmd} clerk send --amount 100000000 --from ${ACCOUNT} --to ${ACCOUNT_ALGO_TRADER}
 
 echo "build trade"

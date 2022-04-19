@@ -38,6 +38,7 @@ const (
 	deallocAction     storageAction = 3
 )
 
+// 두 TealValue의 차이를 표현하기 위한 구조체
 type valueDelta struct {
 	old, new basics.TealValue
 
@@ -51,6 +52,9 @@ type storagePtr struct {
 
 // ok is false if the provided valueDelta is redundant,
 // which means that it encodes no update.
+/*
+주어진 valueDelta가 불필요하다면 ok변수는 false가 되고 아무런 업데이트도 인코드 하지 않는다는것을 의미한다.
+*/
 func (vd valueDelta) serialize() (vdelta basics.ValueDelta, ok bool) {
 	if !vd.newExists {
 		if vd.oldExists {

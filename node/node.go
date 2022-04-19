@@ -210,6 +210,7 @@ func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAdd
 
 	node.transactionPool = pools.MakeTransactionPool(node.ledger.Ledger, cfg, node.log)
 
+	// 트랜잭션풀 리스너를 등록한다.
 	blockListeners := []ledger.BlockListener{
 		node.transactionPool,
 		node,
@@ -728,7 +729,7 @@ func (node *AlgorandFullNode) PoolStats() PoolStats {
 	r := node.ledger.Latest()
 	last, err := node.ledger.Block(r)
 	if err != nil {
-		node.log.Warnf("AlgorandFullNode: could not read ledger's last round: %v", err)
+		node.log.Warnf("NovarandFullNode: could not read ledger's last round: %v", err)
 		return PoolStats{}
 	}
 
@@ -940,7 +941,7 @@ func (node *AlgorandFullNode) loadParticipationKeys() error {
 	genesisDir := filepath.Join(node.rootDir, node.genesisID)
 	files, err := ioutil.ReadDir(genesisDir)
 	if err != nil {
-		return fmt.Errorf("AlgorandFullNode.loadPartitipationKeys: could not read directory %v: %v", genesisDir, err)
+		return fmt.Errorf("NovarandFullNode.loadPartitipationKeys: could not read directory %v: %v", genesisDir, err)
 	}
 
 	// For each of these files
@@ -961,7 +962,7 @@ func (node *AlgorandFullNode) loadParticipationKeys() error {
 				// we can safely ignore that fail case.
 				continue
 			}
-			return fmt.Errorf("AlgorandFullNode.loadParticipationKeys: cannot load db %v: %v", filename, err)
+			return fmt.Errorf("NovarandFullNode.loadParticipationKeys: cannot load db %v: %v", filename, err)
 		}
 
 		// Fetch an account.Participation from the database
@@ -981,7 +982,7 @@ func (node *AlgorandFullNode) loadParticipationKeys() error {
 					node.log.Warn("loadParticipationKeys: failed to rename unsupported participation key file '%s' to '%s': %v", fullname, renamedFileName, err)
 				}
 			} else {
-				return fmt.Errorf("AlgorandFullNode.loadParticipationKeys: cannot load account at %v: %v", info.Name(), err)
+				return fmt.Errorf("NovarandFullNode.loadParticipationKeys: cannot load account at %v: %v", info.Name(), err)
 			}
 		} else {
 			// Tell the AccountManager about the Participation (dupes don't matter)
@@ -1298,10 +1299,10 @@ func (node *AlgorandFullNode) AssembleBlock(round basics.Round) (agreement.Valid
 			ledgerNextRound := node.ledger.NextRound()
 			if ledgerNextRound == round {
 				// we've asked for the right round.. and the ledger doesn't think it's stale.
-				node.log.Errorf("AlgorandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger and proposal generation are synced: %v", round, err)
+				node.log.Errorf("NovarandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger and proposal generation are synced: %v", round, err)
 			} else if ledgerNextRound < round {
 				// from some reason, the ledger is behind the round that we're asking. That shouldn't happen, but error if it does.
-				node.log.Errorf("AlgorandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger next round is %d: %v", round, ledgerNextRound, err)
+				node.log.Errorf("NovarandFullNode.AssembleBlock: could not generate a proposal for round %d, ledger next round is %d: %v", round, ledgerNextRound, err)
 			}
 			// the case where ledgerNextRound > round was not implemented here on purpose. This is the "normal case" where the
 			// ledger was advancing faster then the agreement by the catchup.

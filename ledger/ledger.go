@@ -44,34 +44,45 @@ import (
 )
 
 // Ledger is a database storing the contents of the ledger.
+// 원장 객체는 원장의 컨텐츠들을 저장하는 데이터베이스이다.
+/*
+데이터베이스 연결정보와 블록이 임시로 저장될 큐와 데이터베이스 관리를 위한 변수,
+제네시스 해시 및 계정과 초기값, 트래커에 대한 정보를 가지고 있다.
+원장에 블록을 저장하고 관리하기 위한 메소드를 가지고 있다.
+*/
+
 type Ledger struct {
-	// Database connections to the DBs storing blocks and tracker state.
-	// We use potentially different databases to avoid SQLite contention
-	// during catchup.
+	// Database connections to the DBs storing blocks and tracker state. We use potentially different databases to avoid SQLite contention during catchup.
+	// 블록과 트래커의 상태를 저장하는 db에 대한 커넥션이다. 캐치업(기존 블록체인 정보 다운로드)동안 SQLite연결의 충돌을 방지하기 위해 다른 db를 사용한다.
 	trackerDBs db.Pair
 	blockDBs   db.Pair
 
-	// blockQ is the buffer of added blocks that will be flushed to
-	// persistent storage
+	// blockQ is the buffer of added blocks that will be flushed to persistent storage
+	// 블록Q는 영구저장영역(디스크겠지?)에 저장될 블록들이 추가될 버퍼공간이다.
 	blockQ *blockQueue
 
 	log logging.Logger
 
 	// archival determines whether the ledger keeps all blocks forever
 	// (archival mode) or trims older blocks to save space (non-archival).
+	// true이면 모든 블록정보를 저장한다(풀노드), false이면 가장 최근 1000개만 저장한다.
 	archival bool
 
 	// the synchronous mode that would be used for the ledger databases.
+	// ledger databases를 위해 사용한다(비동기모드면 어떻게 작동하는거지?)
 	synchronousMode db.SynchronousMode
 
 	// the synchronous mode that would be used while the accounts database is being rebuilt.
+	//accounts database가 재생성되는 동안 사용되는 동기화 모드
 	accountsRebuildSynchronousMode db.SynchronousMode
 
 	// genesisHash stores the genesis hash for this ledger.
 	genesisHash crypto.Digest
 
+	// genesis.json에 저장된 초기 계정보
 	genesisAccounts map[basics.Address]basics.AccountData
 
+	// 초기 합의 정보
 	genesisProto config.ConsensusParams
 
 	// State-machine trackers
@@ -82,6 +93,8 @@ type Ledger struct {
 	notifier   blockNotifier
 	metrics    metricsTracker
 
+	// 트래커 정보 및 설정 정보 등을 가지고 있는 레지스트리
+	// []ledgerTracker을 가지고 있다.
 	trackers  trackerRegistry
 	trackerMu deadlock.RWMutex
 
@@ -90,6 +103,7 @@ type Ledger struct {
 	// verifiedTxnCache holds all the verified transactions state
 	verifiedTxnCache verify.VerifiedTransactionCache
 
+	// 노드 인스턴스의 설정 정보
 	cfg config.Local
 }
 
@@ -97,6 +111,9 @@ type Ledger struct {
 // based on dbPathPrefix (in-memory if dbMem is true). genesisInitState.Blocks and
 // genesisInitState.Accounts specify the initial blocks and accounts to use if the
 // database wasn't initialized before.
+/*
+	원장객체를 생성한다. db가 이전에 초기화 된적이 없다면 최초 블록들과 계정들을 초기화한다.
+*/
 func OpenLedger(
 	log logging.Logger, dbPathPrefix string, dbMem bool, genesisInitState ledgercore.InitState, cfg config.Local,
 ) (*Ledger, error) {
@@ -127,36 +144,47 @@ func OpenLedger(
 		}
 	}()
 
+	// 트래커, 블록정보를 저장할 db에 접근할 수 있는 접근자 생성.
 	l.trackerDBs, l.blockDBs, err = openLedgerDB(dbPathPrefix, dbMem)
+
 	if err != nil {
 		err = fmt.Errorf("OpenLedger.openLedgerDB %v", err)
 		return nil, err
 	}
+	// 각 접근자에게 로거 세팅
 	l.trackerDBs.Rdb.SetLogger(log)
 	l.trackerDBs.Wdb.SetLogger(log)
 	l.blockDBs.Rdb.SetLogger(log)
 	l.blockDBs.Wdb.SetLogger(log)
 
+	// 동기화모드 세팅 => 비동기화면 어떻게 되는거지?
 	l.setSynchronousMode(context.Background(), l.synchronousMode)
 
 	start := time.Now()
+	// 블록카운트를 초기화한다. => 블록 생성시마다 올려주나?
 	ledgerInitblocksdbCount.Inc(nil)
 	err = l.blockDBs.Wdb.Atomic(func(ctx context.Context, tx *sql.Tx) error {
+		// 블록 db를 초기화한다.
 		return initBlocksDB(tx, l, []bookkeeping.Block{genesisInitState.Block}, cfg.Archival)
 	})
+
 	ledgerInitblocksdbMicros.AddMicrosecondsSince(start, nil)
 	if err != nil {
 		err = fmt.Errorf("OpenLedger.initBlocksDB %v", err)
 		return nil, err
 	}
 
+	// 제네시스 계정이 nil이라면 key: 주소 val: AccountData인 맵을 만들어준다.
 	if l.genesisAccounts == nil {
 		l.genesisAccounts = make(map[basics.Address]basics.AccountData)
 	}
 
+	// accountUpdates 초기화
 	l.accts.initialize(cfg)
+	// catchpointTracker structure 초기화
 	l.catchpoint.initialize(cfg, dbPathPrefix)
 
+	// 블록큐, 트래커등을 초기화 한다.
 	err = l.reloadLedger()
 	if err != nil {
 		return nil, err
@@ -165,6 +193,9 @@ func OpenLedger(
 	return l, nil
 }
 
+/*
+블록큐, 트래커등을 초기화 한다.
+*/
 func (l *Ledger) reloadLedger() error {
 	// similar to the Close function, we want to start by closing the blockQ first. The
 	// blockQ is having a sync goroutine which indirectly calls other trackers. We want to eliminate that go-routine first,
@@ -285,12 +316,14 @@ func openLedgerDB(dbPathPrefix string, dbMem bool) (trackerDBs db.Pair, blockDBs
 	outErr := make(chan error, 2)
 	go func() {
 		var lerr error
+		// 트래커 정보 조회, 저장할 수 있는 db접근자 생성
 		trackerDBs, lerr = db.OpenPair(trackerDBFilename, dbMem)
 		outErr <- lerr
 	}()
 
 	go func() {
 		var lerr error
+		// 블록 정보 조회, 저장할 수 있는 db접근자 생성
 		blockDBs, lerr = db.OpenPair(blockDBFilename, dbMem)
 		outErr <- lerr
 	}()
@@ -304,6 +337,7 @@ func openLedgerDB(dbPathPrefix string, dbMem bool) (trackerDBs db.Pair, blockDBs
 }
 
 // setSynchronousMode sets the writing database connections synchronous mode to the specified mode
+// 몇개의 SynchronousMode가 있는데 그 중 어떤것으로 지정한다.
 func (l *Ledger) setSynchronousMode(ctx context.Context, synchronousMode db.SynchronousMode) {
 	if synchronousMode < db.SynchronousModeOff || synchronousMode > db.SynchronousModeExtra {
 		l.log.Warnf("ledger.setSynchronousMode unable to set synchronous mode : requested value %d is invalid", synchronousMode)
@@ -326,6 +360,9 @@ func (l *Ledger) setSynchronousMode(ctx context.Context, synchronousMode db.Sync
 // initBlocksDB performs DB initialization:
 // - creates and populates it with genesis blocks
 // - ensures DB is in good shape for archival mode and resets it if not
+/*
+	블록 db 초기화를 진행한다.
+*/
 func initBlocksDB(tx *sql.Tx, l *Ledger, initBlocks []bookkeeping.Block, isArchival bool) (err error) {
 	err = blockInit(tx, initBlocks)
 	if err != nil {
@@ -460,6 +497,9 @@ func (l *Ledger) ListApplications(maxAppIdx basics.AppIndex, maxResults uint64) 
 // Lookup uses the accounts tracker to return the account state for a
 // given account in a particular round.  The account values reflect
 // the changes of all blocks up to and including rnd.
+/*
+Lookup은 특정 라운드의 해당 계정의 상태를 반환하기 위해 accounts tracker를 사용 계정 값은 rnd를 포함한 이전 모든라운드의 변화를 반영한다.
+*/
 func (l *Ledger) Lookup(rnd basics.Round, addr basics.Address) (basics.AccountData, error) {
 	l.trackerMu.RLock()
 	defer l.trackerMu.RUnlock()
@@ -502,6 +542,9 @@ func (l *Ledger) LookupWithoutRewards(rnd basics.Round, addr basics.Address) (ba
 }
 
 // LatestTotals returns the totals of all accounts for the most recent round, as well as the round number.
+/*
+LatestTotals은 가장 최신라운드와 그 라운드에 있는 모든 계정이 가지고 있는 알고양을 반환(온라인, 오프라인, 참여안하는 계정별로 나눠서)
+*/
 func (l *Ledger) LatestTotals() (basics.Round, ledgercore.AccountTotals, error) {
 	l.trackerMu.RLock()
 	defer l.trackerMu.RUnlock()
@@ -573,9 +616,14 @@ func (l *Ledger) BlockCert(rnd basics.Round) (blk bookkeeping.Block, cert agreem
 // AddBlock adds a new block to the ledger.  The block is stored in an
 // in-memory queue and is written to the disk in the background.  An error
 // is returned if this is not the expected next block number.
+/*
+	새로운 블록을 원장에 등록한다. 블록은 in-memory큐에 저장되고(블록큐!아 이게 heap에 있나보네 즉, 프로세스에서만 유지되는!)
+	백그라운드에서 디스크(영구저장영역 - hdd나 sdd)에 저장도니다.
+*/
 func (l *Ledger) AddBlock(blk bookkeeping.Block, cert agreement.Certificate) error {
 	// passing nil as the executionPool is ok since we've asking the evaluator to skip verification.
 
+	// 블록을 검증하고 stateDelta를 반환한다.
 	updates, err := internal.Eval(context.Background(), l, blk, false, l.verifiedTxnCache, nil)
 	if err != nil {
 		if errNSBE, ok := err.(ledgercore.ErrNonSequentialBlockEval); ok && errNSBE.EvaluatorRound <= errNSBE.LatestRound {
@@ -585,6 +633,7 @@ func (l *Ledger) AddBlock(blk bookkeeping.Block, cert agreement.Certificate) err
 		}
 		return err
 	}
+	// 검증된 블록을 생성한다.
 	vb := ledgercore.MakeValidatedBlock(blk, updates)
 
 	return l.AddValidatedBlock(vb, cert)
@@ -595,6 +644,10 @@ func (l *Ledger) AddBlock(blk bookkeeping.Block, cert agreement.Certificate) err
 // having to re-compute the effect of the block on the ledger state, if
 // the block has previously been validated.  Otherwise, AddValidatedBlock
 // behaves like AddBlock.
+/*
+	검증된 블록을 원장에 저장한다. 만약 검증된 블록이라면 검증을 위한 계산을 하지 않지만
+	그렇지 않다면 AddBlock와 동일하게 작동한다(검증을 하는 것 같다.)
+*/
 func (l *Ledger) AddValidatedBlock(vb ledgercore.ValidatedBlock, cert agreement.Certificate) error {
 	// Grab the tracker lock first, to ensure newBlock() is notified before committedUpTo().
 	l.trackerMu.Lock()
@@ -676,6 +729,9 @@ func (l *Ledger) trackerLog() logging.Logger {
 // trackerEvalVerified is used by the accountUpdates to reconstruct the ledgercore.StateDelta from a given block during it's loadFromDisk execution.
 // when this function is called, the trackers mutex is expected already to be taken. The provided accUpdatesLedger would allow the
 // evaluator to shortcut the "main" ledger ( i.e. this struct ) and avoid taking the trackers lock a second time.
+/*
+trackerEvalVerified는 accountUpdates가 loadFromDisk이 실행되는 동안 주어진 블록에 대한 StateDelta를 재구성하기 위해 사용하는 메소드이다.
+*/
 func (l *Ledger) trackerEvalVerified(blk bookkeeping.Block, accUpdatesLedger internal.LedgerForEvaluator) (ledgercore.StateDelta, error) {
 	// passing nil as the executionPool is ok since we've asking the evaluator to skip verification.
 	return internal.Eval(context.Background(), accUpdatesLedger, blk, false, l.verifiedTxnCache, nil)

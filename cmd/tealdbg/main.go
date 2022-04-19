@@ -36,7 +36,7 @@ func main() {
 
 var rootCmd = &cobra.Command{
 	Use:   "tealdbg",
-	Short: "Algorand TEAL Debugger",
+	Short: "Novarand TEAL Debugger",
 	Long: `Debug a local or remote TEAL code in controlled environment
 with Web or Chrome DevTools frontends`,
 	Run: func(cmd *cobra.Command, args []string) {

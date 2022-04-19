@@ -48,9 +48,11 @@ type (
 	round = basics.Round
 
 	// step is a sequence number denoting distinct stages in Algorand
+	// 알고랜드의 개별 단계를 나타내는 시퀀스 번호이다.
 	step uint64
 
 	// period is used to track progress with a given round in the protocol
+	// 프로토콜에서 주어진 라운드의 진행 상황을 추적하는 데 사용된다.
 	period uint64
 )
 

@@ -18,6 +18,7 @@ package fuzzer
 
 import (
 	"encoding/json"
+
 	"github.com/Orca18/novarand/protocol"
 )
 

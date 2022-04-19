@@ -28,6 +28,9 @@ import (
 // Allocate the map of basics.AppParams if it is nil, and return a copy. We do *not*
 // call clone on each basics.AppParams -- callers must do that for any values where
 // they intend to modify a contained reference type.
+/*
+
+ */
 func cloneAppParams(m map[basics.AppIndex]basics.AppParams) map[basics.AppIndex]basics.AppParams {
 	res := make(map[basics.AppIndex]basics.AppParams, len(m))
 	for k, v := range m {
@@ -79,6 +82,10 @@ func getAppParams(balances Balances, aidx basics.AppIndex) (params basics.AppPar
 
 // createApplication writes a new AppParams entry, allocates global storage,
 // and returns the generated application ID
+/*
+createApplication은 새 AppParams 항목을 작성하고
+전역 스토리지를 할당하고 생성된 애플리케이션 ID를 반환합니다.
+*/
 func createApplication(ac *transactions.ApplicationCallTxnFields, balances Balances, creator basics.Address, txnCounter uint64) (appIdx basics.AppIndex, err error) {
 	// Fetch the creator's (sender's) balance record
 	record, err := balances.Get(creator, false)

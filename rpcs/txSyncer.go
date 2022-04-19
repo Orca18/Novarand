@@ -43,6 +43,9 @@ type TxSyncClient interface {
 }
 
 // TxSyncer fetches pending transactions that are missing from its pool, and feeds them to the handler
+/*
+	TxSyncer는 풀에서 누락된 보류 중인 트랜잭션을 가져와서 핸들러에 제공합니다.
+*/
 type TxSyncer struct {
 	pool         PendingTxAggregate
 	clientSource network.GossipNode
@@ -162,6 +165,9 @@ func (syncer *TxSyncer) syncFromClient(client TxSyncClient) error {
 		}
 
 		// send the transaction to the trasaction pool
+		/*
+			트랜잭션을 트랜잭션 풀로 전달한다.
+		*/
 		if syncer.handler.Handle(txgroup) != nil {
 			client.Close()
 			return fmt.Errorf("TxSyncer.Sync: peer %v sent invalid transaction", client.Address())

@@ -71,6 +71,10 @@ type (
 	VrfPubkey [32]byte
 	// A VrfProof for a message can be generated with a secret key and verified against a public key, like a signature.
 	// Proofs are malleable, however, for a given message and public key, the VRF output that can be computed from a proof is unique.
+	/*
+		메시지에 대한 VrfProof는 비밀 키로 생성되고 서명과 같은 공개 키에 대해 확인할 수 있습니다.
+		증명은 가변적이지만 주어진 메시지와 공개 키에 대해 증명에서 계산할 수 있는 VRF 출력은 고유합니다
+	*/
 	VrfProof [80]byte
 	// VrfOutput is a 64-byte pseudorandom value that can be computed from a VrfProof.
 	// The VRF scheme guarantees that such output will be unique

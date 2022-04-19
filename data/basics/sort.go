@@ -20,20 +20,24 @@ import (
 	"bytes"
 )
 
-// SortUint64 implements sorting by uint64 keys for
-// canonical encoding of maps in msgpack format.
+// SortUint64 implements sorting by uint64 keys for canonical encoding of maps in msgpack format.
 //msgp:ignore SortUint64
 //msgp:sort uint64 SortUint64
+/*
+SortUint64는 msgpack 형태의 map들의 표준 인코딩에 대한 uint64 key들의 정렬을 구현함.
+*/
 type SortUint64 []uint64
 
 func (a SortUint64) Len() int           { return len(a) }
 func (a SortUint64) Less(i, j int) bool { return a[i] < a[j] }
 func (a SortUint64) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
-// SortAssetIndex implements sorting by AssetIndex keys for
-// canonical encoding of maps in msgpack format.
+// SortAssetIndex implements sorting by AssetIndex keys for canonical encoding of maps in msgpack format.
 //msgp:ignore SortAssetIndex
 //msgp:sort AssetIndex SortAssetIndex
+/*
+SortAssetIndex msgpack 형태의 맵들의 표준 인코딩에 대한 AssetIndex key들의 정렬을 구현함.
+*/
 type SortAssetIndex []AssetIndex
 
 func (a SortAssetIndex) Len() int           { return len(a) }
