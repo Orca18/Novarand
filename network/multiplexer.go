@@ -24,8 +24,17 @@ import (
 
 // Multiplexer is a message handler that sorts incoming messages by Tag and passes them along to the relevant message handler for that type of message.
 // Multiplexer는 들어오는 메시지를 태그별로 분류하고 해당 메시지 유형에 대한 관련 메시지 처리기로 전달하는 메시지 처리기입니다.
+// Multiplexer is a message handler that sorts incoming messages by Tag and passes
+// them along to the relevant message handler for that type of message.
+/*
+	Tag에 따라 인커밍 메시지를 저장하는 핸들러이다. 메시지들을 타입에 따라 관련된 메시지 핸들러에게 전달한다.
+*/
 type Multiplexer struct {
-	msgHandlers atomic.Value // stores map[Tag]MessageHandler, an immutable map.
+	// stores map[Tag]MessageHandler, an immutable map.
+	/*
+		map[Tag]MessageHandler형태의 자료구조를 저장한다.
+	*/
+	msgHandlers atomic.Value
 
 	log logging.Logger
 }

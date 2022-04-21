@@ -32,6 +32,12 @@ type (
 	// the Merkle verification path verifies that the ephemeral public key is located at the given index of the tree
 	// (for the root given in the long-term public key).
 	// More details can be found on Algorand's spec
+	/*
+		서명은 기본 암호 체계로 FalconSignature을 사용하는 머클 서명 체계의 서명을 나타냅니다.
+		임시 공개 키, 서명, 머클 검증 경로 및 인덱스로 구성됩니다.
+		머클 서명은 서명이 임시 공개 키에서 확인되고 머클 검증 경로가 임시 공개 키가
+		트리의 주어진 인덱스(장기 공개 키에 주어진 루트에 대해)에 있는지 확인하는 경우에만 유효한 것으로 간주됩니다.
+	*/
 	Signature struct {
 		_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -54,6 +60,9 @@ type (
 	}
 
 	// Signer represents the StateProof signer for a specified round.
+	/*
+		서명자는 지정된 라운드에 대한 StateProof 서명자를 나타냅니다.
+	*/
 	//msgp:ignore Signer
 	Signer struct {
 		SigningKey *crypto.FalconSigner

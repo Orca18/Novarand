@@ -41,7 +41,7 @@ Created Apps:
 \t<none>
 Opted In Apps:
 \t<none>
-Minimum Balance:\t100000 microAlgos"
+Minimum Balance:\t100000 microNovas"
 
     # Check info with no assets
     puts "goal account info -w $PRIMARY_WALLET_NAME -a $PRIMARY_ACCOUNT_ADDRESS -d $TEST_PRIMARY_NODE_DIR"
@@ -99,7 +99,7 @@ Created Apps:
 \t<none>
 Opted In Apps:
 \t<none>
-Minimum Balance:\t500000 microAlgos"
+Minimum Balance:\t500000 microNovas"
 
     # Check info with assets
     puts "goal account info -w $PRIMARY_WALLET_NAME -a $PRIMARY_ACCOUNT_ADDRESS -d $TEST_PRIMARY_NODE_DIR"
@@ -140,7 +140,7 @@ Created Apps:
 \tID $LSTATE_APP_ID, global state used 0/0 uints, 0/$LSTATE_GLOBAL_BYTE_SLICES byte slices
 Opted In Apps:
 \tID $LSTATE_APP_ID, local state used 0/1 uints, 1/$LSTATE_LOCAL_BYTE_SLICES byte slices
-Minimum Balance:\t1578500 microAlgos"
+Minimum Balance:\t1578500 microNovas"
 
     # Check info with assets and apps
     puts "goal account info -w $PRIMARY_WALLET_NAME -a $PRIMARY_ACCOUNT_ADDRESS -d $TEST_PRIMARY_NODE_DIR"

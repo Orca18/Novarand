@@ -16,6 +16,7 @@
 
 package main
 
+/*
 import (
 	"encoding/base64"
 	"fmt"
@@ -39,8 +40,8 @@ import (
 	"github.com/Orca18/novarand/protocol"
 
 	"github.com/spf13/cobra"
-)
-
+)*/
+/*
 var (
 	toAddress       string
 	account         string
@@ -1195,4 +1196,4 @@ func unmarshalSlice(accts []string) ([]basics.Address, error) {
 		result = append(result, addr)
 	}
 	return result, nil
-}
+}*/

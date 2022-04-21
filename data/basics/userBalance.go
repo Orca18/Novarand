@@ -29,8 +29,13 @@ import (
 )
 
 // Status is the delegation status of an account's MicroAlgos
+// Status는 계정 마이크로 알고의 위임 상태를 나타낸다.
 type Status byte
 
+/*
+계정의 상태(Offline, Online, NotParticipating)와
+최대 저장할 수 있는 데이터(애셋포함)의 수를 상수로 정의
+*/
 const (
 	// Offline indicates that the associated account receives rewards but does not participate in the consensus.
 	Offline Status = iota
@@ -99,10 +104,16 @@ func UnmarshalStatus(value string) (s Status, err error) {
 
 // OnlineAccountData contains the voting information for a single account.
 //msgp:ignore OnlineAccountData
+/*
+투표에 참여할 수 있는 온라인 계정정보를 가진 구조체
+*/
 type OnlineAccountData struct {
+	// 보유 알고양
 	MicroAlgosWithRewards MicroAlgos
 
-	VoteID      crypto.OneTimeSignatureVerifier
+	// 투표할 메시지에 대해 위조할 수 없는 서명을 생성
+	VoteID crypto.OneTimeSignatureVerifier
+	// 퍼블릭키
 	SelectionID crypto.VRFVerifier
 
 	VoteFirstValid  Round
@@ -114,10 +125,16 @@ type OnlineAccountData struct {
 //
 // This includes the account balance, cryptographic public keys,
 // consensus delegation status, asset data, and application data.
+/*
+AccountData는 주어진 주소에 해당하는 계정정보를 나타내는 구조체
+계정잔액, 공개키, 합의 위임상태, 에셋 데이터와 앱 데이터를 가지고 있다.
+*/
 type AccountData struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
+	// 계정의 상태 온라인, 오프라인, 참여안함
+	Status Status `codec:"onl"`
 
-	Status     Status     `codec:"onl"`
+	// 계정이 보유 알고양
 	MicroAlgos MicroAlgos `codec:"algo"`
 
 	// RewardsBase is used to implement rewards.
@@ -151,6 +168,27 @@ type AccountData struct {
 	// AccountData.Money().  That function calls
 	// AccountData.WithUpdatedRewards() to apply the deferred
 	// rewards to AccountData.MicroAlgos.
+	/*
+		RewardsBase는 보상을 구현하는 데 사용됩니다.
+		Status=NotParticipating인 계정에는 의미가 없습니다.
+		모든 블록은 참여하는 모든 계정에 일정량의 보상(알고)을 할당합니다.
+		금액은 이전 블록에서 증가한 block.RewardsLevel과 이 계정이 보유한
+		전체 config.Protocol.RewardUnit 알고리즘의 곱입니다. 성능상의 이유로
+		이러한 보상을 AccountData.MicroAlgos에 적용하기 위해 모든 계정을 살펴보고 싶지는 않습니다.
+		대신 다른 트랜잭션이 참여 계정에 닿을 때까지 보상 적용을 연기하고
+		그 시점에서 모든 보상을 계정의 AccountData.MicroAlgos에 적용합니다.
+		정확성을 위해 우리는 지연된 보상을 포함하여 시스템에 존재하는 총 알고리즘의 수를
+		결정할 수 있어야 합니다.
+		위에서 설명한 대로 계정의 AccountData.MicroAlgos에 반영됨).
+		이 총계를 효율적으로 계산하기 위해 다음까지 보상을 합성하지 않습니다(즉, 보상에 대한 보상 없음).
+		AccountData.MicroAlgos에 적용됩니다.
+		기계적으로 RewardsBase는 이미 AccountData.MicroAlgos에 보상이 반영된
+		block.RewardsLevel을 저장합니다.
+		계정이 Status=Offline 또는 Status=Online이면 AccountData.Money()에 의해
+		계산된 것처럼 유효 잔액(이 계정에 대해 트랜잭션이 발행된 경우)이 더 높을 수 있습니다.
+		이 함수는 AccountData.WithUpdatedRewards()를 호출하여
+		AccountData.MicroAlgos에 지연된 보상을 적용합니다.
+	*/
 	RewardsBase uint64 `codec:"ebase"`
 
 	// RewardedMicroAlgos is used to track how many algos were given
@@ -159,11 +197,18 @@ type AccountData struct {
 	// This field is updated along with RewardBase; note that
 	// it won't answer the question "how many algos did I make in
 	// the past week".
+	/*
+		계정이 생성된 이래로 얼마나 많은 알고를 보상으로 받았는지를 나타내는 값
+		RewardBase가 업데이트 되면 이 값도 업데이트 됨
+	*/
 	RewardedMicroAlgos MicroAlgos `codec:"ern"`
 
-	VoteID       crypto.OneTimeSignatureVerifier `codec:"vote"`
-	SelectionID  crypto.VRFVerifier              `codec:"sel"`
-	StateProofID merklesignature.Verifier        `codec:"stprf"`
+	// 투표할 메시지에 대해 위조할 수 없는 서명을 생성
+	VoteID crypto.OneTimeSignatureVerifier `codec:"vote"`
+	// 퍼블릭키
+	SelectionID crypto.VRFVerifier `codec:"sel"`
+	//merklesignature.Signature의 검증자
+	StateProofID merklesignature.Verifier `codec:"stprf"`
 
 	VoteFirstValid  Round  `codec:"voteFst"`
 	VoteLastValid   Round  `codec:"voteLst"`
@@ -181,6 +226,7 @@ type AccountData struct {
 	// NOTE: do not modify this value in-place in existing AccountData
 	// structs; allocate a copy and modify that instead.  AccountData
 	// is expected to have copy-by-value semantics.
+	// 특정 애셋이 가지고 있는 매개변수들을 저장
 	AssetParams map[AssetIndex]AssetParams `codec:"apar,allocbound=encodedMaxAssetsPerAccount"`
 
 	// Assets is the set of assets that can be held by this
@@ -198,30 +244,36 @@ type AccountData struct {
 	// NOTE: do not modify this value in-place in existing AccountData
 	// structs; allocate a copy and modify that instead.  AccountData
 	// is expected to have copy-by-value semantics.
+	// 해당계정이 보유하고 있는 애셋 정보
 	Assets map[AssetIndex]AssetHolding `codec:"asset,allocbound=encodedMaxAssetsPerAccount"`
 
 	// AuthAddr is the address against which signatures/multisigs/logicsigs should be checked.
-	// If empty, the address of the account whose AccountData this is is used.
+	// If empty, the address of the account whose AccountData is used.
 	// A transaction may change an account's AuthAddr to "re-key" the account.
 	// This allows key rotation, changing the members in a multisig, etc.
+	// re-keying을 위한 주소
 	AuthAddr Address `codec:"spend"`
 
 	// AppLocalStates stores the local states associated with any applications
 	// that this account has opted in to.
+	// 계정이 opt-in한 애플리케이션이 저장하는 로컬스테이트를 저장하는 맵
 	AppLocalStates map[AppIndex]AppLocalState `codec:"appl,allocbound=EncodedMaxAppLocalStates"`
 
 	// AppParams stores the global parameters and state associated with any
 	// applications that this account has created.
+	// 계정이 opt-in한 애플리케이션의 파라미터를 저장하는 맵
 	AppParams map[AppIndex]AppParams `codec:"appp,allocbound=EncodedMaxAppParams"`
 
 	// TotalAppSchema stores the sum of all of the LocalStateSchemas
 	// and GlobalStateSchemas in this account (global for applications
 	// we created local for applications we opted in to), so that we don't
 	// have to iterate over all of them to compute MinBalance.
+	// 계정에 연결된 로컬스테이트의 최대량 + 앱에 연결된 글로벌스테이트의 최대량
 	TotalAppSchema StateSchema `codec:"tsch"`
 
 	// TotalExtraAppPages stores the extra length in pages (MaxAppProgramLen bytes per page)
 	// requested for app program by this account
+	// 이 어카운트와 연결된 app이 가지고 있는 총 페이지수 인듯(?)
 	TotalExtraAppPages uint32 `codec:"teap"`
 }
 

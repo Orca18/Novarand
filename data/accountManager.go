@@ -32,13 +32,13 @@ import (
 )
 
 // AccountManager loads and manages accounts for the node
+// 어카운트 매니져는 노드의 계정을 로드하고 관리하는 역할을 한다.
 type AccountManager struct {
 	mu deadlock.Mutex
 
 	partKeys map[account.ParticipationKeyIdentity]account.PersistedParticipation
 
-	// Map to keep track of accounts for which we've sent
-	// AccountRegistered telemetry events
+	// Map to keep track of accounts for which we've sent AccountRegistered telemetry events
 	registeredAccounts map[string]bool
 
 	registry account.ParticipationRegistry
@@ -46,6 +46,7 @@ type AccountManager struct {
 }
 
 // MakeAccountManager creates a new AccountManager with a custom logger
+// 새로운 어카운트 매니져를 만든다.
 func MakeAccountManager(log logging.Logger, registry account.ParticipationRegistry) *AccountManager {
 	manager := &AccountManager{}
 	manager.log = log

@@ -151,6 +151,7 @@ func setupInputStream() io.ReadCloser {
 
 		if *dataDir != "" {
 			*filename = filepath.Join(*dataDir, defaultLogFilename)
+			// 여기에서 로그파일 생성시켜주면 될 것 같다.
 			fmt.Fprintf(os.Stdout, "Watching file: %s...\n", *filename)
 		}
 	}

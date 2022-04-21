@@ -23,6 +23,9 @@ import (
 )
 
 // InitState structure defines blockchain init params
+/*
+블록체인의 초기 파라미터들을 정의하는 구조체
+*/
 type InitState struct {
 	Block       bookkeeping.Block
 	Accounts    map[basics.Address]basics.AccountData

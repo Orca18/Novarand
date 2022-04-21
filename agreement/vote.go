@@ -38,6 +38,9 @@ type (
 	}
 
 	// unauthenticatedVote is a vote which has not been verified
+	/*
+		아직 검증받지 않은 vote이다.
+	*/
 	unauthenticatedVote struct {
 		_struct struct{}                            `codec:",omitempty,omitemptyarray"`
 		R       rawVote                             `codec:"r"`
@@ -46,6 +49,9 @@ type (
 	}
 
 	// A vote is an endorsement of a particular proposal in Algorand
+	/*
+		vote는 알고랜드에서 어떤 proposal에 대한 확정이다. 즉, 해당 proposal을 선택한것이다.
+	*/
 	vote struct {
 		_struct struct{}                `codec:",omitempty,omitemptyarray"`
 		R       rawVote                 `codec:"r"`
@@ -73,6 +79,14 @@ type (
 	// we ever receive such a pair, we must count this as a single
 	// "wildcard" vote to avoid violating vote propagation assumptions and
 	// causing a fork.
+	/*
+		equivocationVote는 동일한 발신자로부터 생성된 해시값이 다른 두개의 투표쌍이다.
+		이러한 쌍은 반드시 잘못된 노드에 의해 생성된다.
+		이러한 쌍을 수신하는 반드시 하나의 wildcard vote로 생각해야 한다.
+		경우 투표 전파 가정을 위반하고 포크가 발생하는 것을 방지하기 위해
+		이를 단일 "와일드카드" 투표로 계산해야 합니다.
+		=> 흠? 잘못된 노드에 의해 생성되는 값이라는거네? 그니까 두개가 생기면 안된다!!
+	*/
 	equivocationVote struct {
 		_struct   struct{}                   `codec:",omitempty,omitemptyarray"`
 		Sender    basics.Address             `codec:"snd"`
@@ -89,8 +103,12 @@ type (
 )
 
 // verify verifies that a vote that was received from the network is valid.
+/*
+	네트워크에서 전달받은 vote가 유효한 것인지 검증한다.
+*/
 func (uv unauthenticatedVote) verify(l LedgerReader) (vote, error) {
 	rv := uv.R
+	// 멤버십 정보를 반환하는지 판단.
 	m, err := membership(l, rv.Sender, rv.Round, rv.Period, rv.Step)
 	if err != nil {
 		return vote{}, fmt.Errorf("unauthenticatedVote.verify: could not get membership parameters: %w", err)

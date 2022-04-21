@@ -116,7 +116,7 @@ The only thing that is not automated is pre-setting the `gpg-agent` with the pas
 
 To complete this step, you will need to do the following:
 
-1. Change to the `$GOPATH/src/github/algorand/go-algorand/scripts/release/` directory and execute `./forward_gpg_agent.sh`:
+1. Change to the `$GOPATH/src/github/Orca18/novarand/scripts/release/` directory and execute `./forward_gpg_agent.sh`:
 
         ./forward_gpg_agent.sh
 

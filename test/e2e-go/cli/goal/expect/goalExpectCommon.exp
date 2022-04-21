@@ -27,7 +27,7 @@ namespace eval ::AlgorandGoal {
 
   # My Variables
    set version 1.0
-   set description "Algorand Goal Expect Package"
+   set description "Novarand Goal Expect Package"
 
   # Variable for the path of the script
    variable home [file join [pwd] [file dirname [info script]]]

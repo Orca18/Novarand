@@ -17,10 +17,11 @@
 package crypto
 
 import (
+	"testing"
+
 	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/algorand/falcon"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestSignAndVerifyFalcon(t *testing.T) {

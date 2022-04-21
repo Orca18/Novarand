@@ -37,7 +37,7 @@ const (
 	minScryptN     = 32768
 	minScryptR     = 1
 	minScryptP     = 32
-	hkdfInfoFormat = "AlgorandDeterministicKey-%d"
+	hkdfInfoFormat = "NovarandDeterministicKey-%d"
 )
 
 type plaintextType string

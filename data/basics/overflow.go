@@ -22,10 +22,12 @@ import (
 )
 
 // OverflowTracker is used to track when an operation causes an overflow
+// 언제 어떤 동작이 overflow를 일으크는지 여부를 추적하는 트래커
 type OverflowTracker struct {
 	Overflowed bool
 }
 
+// return이 왜 되지? => res와 overlfowed를 반환!
 // OAdd16 adds 2 uint16 values with overflow detection
 func OAdd16(a uint16, b uint16) (res uint16, overflowed bool) {
 	res = a + b

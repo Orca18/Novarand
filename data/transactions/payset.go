@@ -24,6 +24,9 @@ import (
 type (
 	// A Payset represents a common, unforgeable, consistent, ordered set of SignedTxn objects.
 	//msgp:allocbound Payset 100000
+	/*
+		Payset은 공통되고 위조불가능하고 일관되며 정렬된 서명된 트랜잭션 객체들의 집합이다.
+	*/
 	Payset []SignedTxnInBlock
 )
 

@@ -234,6 +234,9 @@ type KeyManager interface {
 // MessageHandle is an ID referring to a specific message.
 //
 // A MessageHandle of nil denotes that a message is "sourceless".
+/*
+	특정 메시지를 참조하는 ID이다.
+*/
 type MessageHandle interface{}
 
 // Network is an abstraction over the interface expected by the agreement
@@ -257,6 +260,9 @@ type Network interface {
 	// If the broadcasting of the message have failed or is not possible, the
 	// method returns a non-nil error describing the underlaying error.
 	// otherwise, a nil is returned.
+	/*
+		주변 모든 이웃 피어에게 Tag와 byte slice를 전달한다.
+	*/
 	Broadcast(protocol.Tag, []byte) error
 
 	// Relay attempts to send a slice of bytes under some protocol.Tag to
@@ -273,6 +279,9 @@ type Network interface {
 	// If the relaying of the message have failed or is not possible, the
 	// method returns a non-nil error describing the underlaying error.
 	// otherwise, a nil is returned.
+	/*
+		주어진 MessageHandle과 관련있는 피어를 제외한 주변 모든 이웃 피어에게 Tag와 byte slice를 전달한다.
+	*/
 	Relay(MessageHandle, protocol.Tag, []byte) error
 
 	// Disconnect sends the Network a hint to disconnect to the peer

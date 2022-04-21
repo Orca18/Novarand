@@ -38,6 +38,9 @@ import (
 )
 
 // LedgerForCowBase represents subset of Ledger functionality needed for cow business
+/*
+LedgerForCowBase는 cow(copy on write) 비즈니스에 필요한 Ledger 기능의 하위 집합을 나타냅니다
+*/
 type LedgerForCowBase interface {
 	BlockHdr(basics.Round) (bookkeeping.BlockHeader, error)
 	CheckDup(config.ConsensusParams, basics.Round, basics.Round, basics.Round, transactions.Txid, ledgercore.Txlease) error
@@ -381,21 +384,32 @@ func (cs *roundCowState) compactCert(certRnd basics.Round, certType protocol.Com
 
 // BlockEvaluator represents an in-progress evaluation of a block
 // against the ledger.
+/*
+	BlockEvaluator는 원장에 등록할 블록을 검증하는데 사용하는 객체이다.
+*/
 type BlockEvaluator struct {
-	state    *roundCowState
+	// 현재 라운드의 블록 상태인 것 같은데 정확하진 않음.
+	state *roundCowState
+
+	// 블록 헤더 검증여부
 	validate bool
+
+	// blockHeader.제네시스 해시, blockHeader.rewardState를 생성할건지 여부
 	generate bool
 
+	// 이전 블록 해더
 	prevHeader  bookkeeping.BlockHeader // cached
 	proto       config.ConsensusParams
 	genesisHash crypto.Digest
 
+	// 검증할 블록
 	block        bookkeeping.Block
 	blockTxBytes int
 	specials     transactions.SpecialAddresses
 
 	blockGenerated bool // prevent repeated GenerateBlock calls
 
+	// evaluator에게 필요한 ledger인터페이스
 	l LedgerForEvaluator
 
 	maxTxnBytesPerBlock int
@@ -423,6 +437,9 @@ type EvaluatorOptions struct {
 // of the block that the caller is planning to evaluate. If the length of the
 // payset being evaluated is known in advance, a paysetHint >= 0 can be
 // passed, avoiding unnecessary payset slice growth.
+/*
+	검증하길 원하는 블록의 블록헤더와 주어진 원장과 대한 BlockEvaluator를 생성한다.
+*/
 func StartEvaluator(l LedgerForEvaluator, hdr bookkeeping.BlockHeader, evalOpts EvaluatorOptions) (*BlockEvaluator, error) {
 	var proto config.ConsensusParams
 	if evalOpts.ProtoParams == nil {
@@ -735,7 +752,9 @@ func (eval *BlockEvaluator) transactionGroup(txgroup []transactions.SignedTxnWit
 		return fmt.Errorf("group size %d exceeds maximum %d", len(txgroup), eval.proto.MaxTxGroupSize)
 	}
 
+	// 블록안에 있는 서명된 트랜잭션
 	var txibs []transactions.SignedTxnInBlock
+	// 트랜잭션 그룹에 포함된 트랜잭션들의 해시값 배열
 	var group transactions.TxGroup
 	var groupTxBytes int
 
@@ -838,12 +857,16 @@ func (eval *BlockEvaluator) checkMinBalance(cow *roundCowState) error {
 // transaction tentatively executes a new transaction as part of this block evaluation.
 // If the transaction cannot be added to the block without violating some constraints,
 // an error is returned and the block evaluator state is unchanged.
+/*
+	불록평가의 한 부분으로써 새로운 트랜잭션을 실행한다.
+*/
 func (eval *BlockEvaluator) transaction(txn transactions.SignedTxn, evalParams *logic.EvalParams, gi int, ad transactions.ApplyData, cow *roundCowState, txib *transactions.SignedTxnInBlock) error {
 	var err error
 
 	// Only compute the TxID once
 	txid := txn.ID()
 
+	// AddBlock()에서 validate는 false이므로 아래코드 실행 안함
 	if eval.validate {
 		err = txn.Txn.Alive(eval.block)
 		if err != nil {
@@ -916,10 +939,16 @@ func (eval *BlockEvaluator) transaction(txn transactions.SignedTxn, evalParams *
 }
 
 // applyTransaction changes the balances according to this transaction.
+/*
+	트랜잭션을 실행한다.
+*/
 func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balances *roundCowState, evalParams *logic.EvalParams, gi int, ctr uint64) (ad transactions.ApplyData, err error) {
 	params := balances.ConsensusParams()
 
 	// move fee to pool
+	/*
+		수수료를 FeeSink계정에게 전달한다.
+	*/
 	err = balances.Move(tx.Sender, eval.specials.FeeSink, tx.Fee, &ad.SenderRewards, nil)
 	if err != nil {
 		return
@@ -1017,20 +1046,26 @@ func (eval *BlockEvaluator) TestingTxnCounter() uint64 {
 }
 
 // Call "endOfBlock" after all the block's rewards and transactions are processed.
+/*
+	모든 트랜잭션이 처리되고 블록에 대한 보상을 책정했다면(?) 이 메소드를 호출한다.
+*/
 func (eval *BlockEvaluator) endOfBlock() error {
 	if eval.generate {
 		var err error
+		// 블록의 커밋된 payset에 대한 해시값 반환
 		eval.block.TxnRoot, err = eval.block.PaysetCommit()
 		if err != nil {
 			return err
 		}
 
+		// 원장에 커밋된 트랜잭션의 수를 저장
 		if eval.proto.TxnCounter {
 			eval.block.TxnCounter = eval.state.txnCounter()
 		} else {
 			eval.block.TxnCounter = 0
 		}
 
+		// 종료된 OnlineAccount를 생성한다.
 		eval.generateExpiredOnlineAccountsList()
 
 		if eval.proto.CompactCertRounds > 0 {
@@ -1225,13 +1260,19 @@ func (eval *BlockEvaluator) resetExpiredOnlineAccountsParticipationKeys() error 
 	return nil
 }
 
-// GenerateBlock produces a complete block from the BlockEvaluator.  This is
-// used during proposal to get an actual block that will be proposed, after
+// GenerateBlock produces a complete block from the BlockEvaluator.
+// This is used during proposal to get an actual block that will be proposed, after
 // feeding in tentative transactions into this block evaluator.
 //
 // After a call to GenerateBlock, the BlockEvaluator can still be used to
 // accept transactions.  However, to guard against reuse, subsequent calls
 // to GenerateBlock on the same BlockEvaluator will fail.
+/*
+GenerateBlock은 BlockEvaluator에서 완전한 블록을 생성합니다.
+이것은 proposal될 실제 블록을 얻기위해 proposal 과정에서 사용된다.
+GenerateBlock을 호출한 후에도 BlockEvaluator를 사용하여 트랜잭션을 수락할 수 있습니다.
+그러나 재사용을 방지하기 위해 동일한 BlockEvaluator에서 GenerateBlock은 한번만 호출할 수 있다.
+*/
 func (eval *BlockEvaluator) GenerateBlock() (*ledgercore.ValidatedBlock, error) {
 	if !eval.generate {
 		logging.Base().Panicf("GenerateBlock() called but generate is false")
@@ -1259,6 +1300,9 @@ func (eval *BlockEvaluator) GenerateBlock() (*ledgercore.ValidatedBlock, error) 
 	return &vb, nil
 }
 
+/*
+	트랜잭션 검증자
+*/
 type evalTxValidator struct {
 	txcache          verify.VerifiedTransactionCache
 	block            bookkeeping.Block
@@ -1291,6 +1335,7 @@ func (validator *evalTxValidator) run() {
 		unverifiedTxnGroups = append(unverifiedTxnGroups, signedTxnGroup)
 	}
 
+	// 만약 검증되지 않은 트랜잭션이 있다면 가져온다.
 	unverifiedTxnGroups = validator.txcache.GetUnverifiedTranscationGroups(unverifiedTxnGroups, specialAddresses, validator.block.BlockHeader.CurrentProtocol)
 
 	err := verify.PaysetGroups(validator.ctx, unverifiedTxnGroups, validator.block.BlockHeader, validator.verificationPool, validator.txcache)
@@ -1305,6 +1350,9 @@ func (validator *evalTxValidator) run() {
 // Validate: Eval(ctx, l, blk, true, txcache, executionPool)
 // AddBlock: Eval(context.Background(), l, blk, false, txcache, nil)
 // tracker:  Eval(context.Background(), l, blk, false, txcache, nil)
+/*
+	evaluator의 메인 진입점이다.
+*/
 func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, validate bool, txcache verify.VerifiedTransactionCache, executionPool execpool.BacklogPool) (ledgercore.StateDelta, error) {
 	eval, err := StartEvaluator(l, blk.BlockHeader,
 		EvaluatorOptions{
@@ -1324,6 +1372,9 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 	}()
 
 	// Next, transactions
+	/*
+		블록안에 있는 서명된 트랜잭션 그룹정보를 가져온다.
+	*/
 	paysetgroups, err := blk.DecodePaysetGroups()
 	if err != nil {
 		return ledgercore.StateDelta{}, err
@@ -1339,6 +1390,9 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 		}
 	}()
 
+	// 트랜잭션풀에 아직 검증되지 않은 트랜잭션이 있는지 확인해서 검증해준다.
+	// AddBlock()메소드를 호출할 땐 validate가 false여서 아래작업을 수행하지 않는다!!
+	// 왜냐하면 이미 검증된 트랜잭션을 가지고 있기 때문에!!
 	var txvalidator evalTxValidator
 	if validate {
 		_, ok := config.Consensus[blk.CurrentProtocol]
@@ -1358,9 +1412,11 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 
 	base := eval.state.lookupParent.(*roundCowBase)
 
+	// 트랜잭션 그룹의 수만큼 반복한다!!!!
 transactionGroupLoop:
 	for {
 		select {
+		// 실질적인 작업을 수행하는 부분!
 		case txgroup, ok := <-paysetgroupsCh:
 			if !ok {
 				break transactionGroupLoop
@@ -1368,6 +1424,7 @@ transactionGroupLoop:
 				return ledgercore.StateDelta{}, txgroup.err
 			}
 
+			// roundCowBase의 accounts배열에 각 트랜잭션과 관련된 계정의 주소 및 데이터를 저장한다.
 			for _, br := range txgroup.balances {
 				base.accounts[br.Addr] = br.AccountData
 			}
@@ -1411,6 +1468,9 @@ transactionGroupLoop:
 }
 
 // loadedTransactionGroup is a helper struct to allow asynchronous loading of the account data needed by the transaction groups
+/*
+	transaction groups이 필요한 계정정보들을 비동기적으로 가져올 수 있게 해주는 구조체이다.
+*/
 type loadedTransactionGroup struct {
 	// group is the transaction group
 	group []transactions.SignedTxnWithAD
@@ -1428,6 +1488,11 @@ func maxAddressesInTxn(proto *config.ConsensusParams) int {
 
 // loadAccounts loads the account data for the provided transaction group list. It also loads the feeSink account and add it to the first returned transaction group.
 // The order of the transaction groups returned by the channel is identical to the one in the input array.
+/*
+	제공된 트랜잭션 그룹에 대한 계정정보를 가져온다(트랜잭션을 발생시킨 계정정보를 가져오는건가?).
+	feeSink계정또한 가져와 첫번째 그룹으로 반환한다.
+	채널에 의해 반환된 트랜잭션 그룹의 순서는 배열에 그대로 반영된다.
+*/
 func loadAccounts(ctx context.Context, l LedgerForEvaluator, rnd basics.Round, groups [][]transactions.SignedTxnWithAD, feeSinkAddr basics.Address, consensusParams config.ConsensusParams) chan loadedTransactionGroup {
 	outChan := make(chan loadedTransactionGroup, len(groups))
 	go func() {

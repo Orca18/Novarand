@@ -29,10 +29,18 @@ const EvalMaxArgs = 255
 // LogicSig is signed by an account, allowing delegation of operations.
 // OR
 // LogicSig defines a contract account.
+/*
+LogicSig에는 트랜잭션을 검증하기 위한 논리가 포함되어 있습니다.
+서명 권한 위임을 허용합니다.
+또는 LogicSig는 계약 계정을 정의합니다.
+*/
 type LogicSig struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
 	// Logic signed by Sig or Msig, OR hashed to be the Address of an account.
+	/*
+		Logig은 Sig 또는 Msig에 의해 서명되거나 계정의 주소로 해시됩니다.
+	*/
 	Logic []byte `codec:"l,allocbound=config.MaxLogicSigMaxSize"`
 
 	Sig  crypto.Signature   `codec:"sig"`

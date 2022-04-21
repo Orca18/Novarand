@@ -32,6 +32,7 @@ func (lsl Program) ToBeHashed() (protocol.HashID, []byte) {
 // HashProgram takes program bytes and returns the Digest
 // This Digest can be used as an Address for a logic controlled account.
 func HashProgram(program []byte) crypto.Digest {
+	// 주소값을 넘기기 위해 타입으로 지정해줬구나!
 	pb := Program(program)
 	return crypto.HashObj(&pb)
 }

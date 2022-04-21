@@ -18,6 +18,7 @@ package fuzzer
 
 import (
 	"container/heap"
+
 	"github.com/Orca18/novarand/protocol"
 )
 
