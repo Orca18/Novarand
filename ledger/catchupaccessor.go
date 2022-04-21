@@ -38,6 +38,12 @@ import (
 )
 
 // CatchpointCatchupAccessor is an interface for the accessor wrapping the database storage for the catchpoint catchup functionality.
+/*
+CatchpointCatchupAccessor는 캐치포인트 캐치업 기능을 위해 데이터베이스 스토리지를 래핑한 접근자에 대한 인터페이스입니다
+(캐치포인트 캐치업 기능이 뭘까? 블록체인 스냅샷(catchpoint)를 사용해 동기화(catchup)를 몇분안에 할 수 있게 해주는 기술)
+
+catchpoint file에 있는 내용을 디코딩해서 데이터베이스에 정보를 저장한다.
+*/
 type CatchpointCatchupAccessor interface {
 	// GetState returns the current state of the catchpoint catchup
 	GetState(ctx context.Context) (state CatchpointCatchupState, err error)

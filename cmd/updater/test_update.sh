@@ -35,7 +35,7 @@ then
 fi
 
 NODE_STOPPED="The node was successfully stopped."
-NODE_STARTED="Algorand node successfully started!"
+NODE_STARTED="Novarand node successfully started!"
 NODE_STARTED_GOAL="No systemd services, starting node with goal."
 
 # Start the node manually so we can test that the node was first shut down.

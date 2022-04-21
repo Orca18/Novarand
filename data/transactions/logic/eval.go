@@ -4441,6 +4441,9 @@ func opTxField(cx *EvalContext) {
 	cx.stack = cx.stack[:last] // pop
 }
 
+/*
+	트랜잭션 실행하는 듯?
+*/
 func opTxSubmit(cx *EvalContext) {
 	if cx.Ledger == nil {
 		cx.err = fmt.Errorf("ledger not available")

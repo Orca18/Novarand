@@ -24,14 +24,29 @@ import (
 // lruAccounts provides a storage class for the most recently used accounts data.
 // It doesn't have any synchronization primitive on it's own and require to be
 // syncronized by the caller.
+/*
+	lru 계정은 가장 최근에 사용한 계정 데이터에 대한 저장소 클래스를 제공합니다.
+	자체적으로 동기화 프리미티브가 없으며 호출자가 동기화해야 합니다.
+*/
 type lruAccounts struct {
 	// accountsList contain the list of persistedAccountData, where the front ones are the most "fresh"
 	// and the ones on the back are the oldest.
+	/*
+		AccountsList는 persistedAccountData의 목록을 포함합니다.
+		가장 앞의 것이 제일 나중에 저장된 것이고 가장 뒤의 것이 첫번째 저장된 것이다(LIFO)
+	*/
 	accountsList *persistedAccountDataList
+
 	// accounts provides fast access to the various elements in the list by using the account address
 	accounts map[basics.Address]*persistedAccountDataListNode
 	// pendingAccounts are used as a way to avoid taking a write-lock. When the caller needs to "materialize" these,
 	// it would call flushPendingWrites and these would be merged into the accounts/accountsList
+	/*
+		pendingAccounts는 쓰기 잠금을 방지하는 방법으로 사용됩니다.
+		호출자가 이것을 "구체화"해야 할 때 flushPendingWrites를 호출하고 이것들은 accounts/accountsList에 병합됩니다.
+		=> 아 고루틴간에 persistedAccountData를 전송할 때 LOCK되는걸 방지하기 위해 채널을 통해 전송하고(채널 전송이 완료 될 때까지
+			양쪽의 고루틴은 다른 동작을 하지 않아서 LOCK 안걸림) 그 후에 accounts/accountsList에 저장 하는 듯?
+	*/
 	pendingAccounts chan persistedAccountData
 	// log interface; used for logging the threshold event.
 	log logging.Logger

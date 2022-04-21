@@ -24,6 +24,10 @@ import (
 
 // AlgoCount represents a total of algos of a certain class
 // of accounts (split up by their Status value).
+/*
+AlgoCount는 특정 계정 클래스의 총 알고양을 나타냅니다(상태 값으로 분할됨).
+=> 한 계정이 아니라 특정 클래스(Online, Offline, NotParticipating)의 모든 계정의 합이다!!
+*/
 type AlgoCount struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -41,6 +45,10 @@ func (ac *AlgoCount) applyRewards(rewardsPerUnit uint64, ot *basics.OverflowTrac
 
 // AccountTotals represents the totals of algos in the system
 // grouped by different account status values.
+/*
+AccountTotals는 다른 계정 상태 값으로 그룹화된 시스템의 총 알고양을 나타냅니다.
+Online, Offline, NotParticipating
+*/
 type AccountTotals struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 

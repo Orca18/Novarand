@@ -33,9 +33,14 @@ import (
 // LedgerForEvaluator interface. Certain functions that the evaluator doesn't use
 // in the trusting mode are excluded, and the present functions only request data
 // at the latest round.
+/*
+Indexer가 구현하는 원장 인터페이스입니다.
+이것은 LedgerForEvaluator 인터페이스의 단순화된 버전입니다.
+평가자가 신뢰 모드에서 사용하지 않는 특정 기능은 제외되며, 현재 기능은 마지막 라운드에서만 데이터를 요청합니다.
+*/
 type indexerLedgerForEval interface {
 	LatestBlockHdr() (bookkeeping.BlockHeader, error)
-	// The value of the returned map is nil iff the account was not found.
+	// The value of the returned map is nil if the account was not found.
 	LookupWithoutRewards(map[basics.Address]struct{}) (map[basics.Address]*basics.AccountData, error)
 	GetAssetCreator(map[basics.AssetIndex]struct{}) (map[basics.AssetIndex]FoundAddress, error)
 	GetAppCreator(map[basics.AppIndex]struct{}) (map[basics.AppIndex]FoundAddress, error)
@@ -51,6 +56,10 @@ type FoundAddress struct {
 // EvalForIndexerResources contains resources preloaded from the Indexer database.
 // Indexer is able to do the preloading more efficiently than the evaluator loading
 // resources one by one.
+/*
+EvalForIndexerResources에는 인덱서 데이터베이스에서 미리 로드된 리소스가 포함되어 있습니다.
+인덱서는 리소스를 하나씩 로드하는 evaluator보다 효율적으로 사전 로드를 수행할 수 있습니다.
+*/
 type EvalForIndexerResources struct {
 	// The map value is nil iff the account does not exist. The account data is owned here.
 	Accounts map[basics.Address]*basics.AccountData

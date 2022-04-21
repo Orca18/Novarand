@@ -309,6 +309,8 @@ var innerTxnTypes = map[string]uint64{
 	string(protocol.AssetConfigTx):     5,
 	string(protocol.AssetFreezeTx):     5,
 	string(protocol.ApplicationCallTx): 6,
+	// (추가)
+	string(protocol.AddressPrint): 5,
 }
 
 // TxnTypeNames is the values of Txn.Type in enum order
@@ -320,6 +322,8 @@ var TxnTypeNames = []string{
 	string(protocol.AssetTransferTx),
 	string(protocol.AssetFreezeTx),
 	string(protocol.ApplicationCallTx),
+	// (추가)
+	string(protocol.AddressPrint),
 }
 
 // map TxnTypeName to its enum index, for `txn TypeEnum`

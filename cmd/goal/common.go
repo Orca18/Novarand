@@ -54,7 +54,7 @@ var (
 var dumpForDryrunFormat cmdutil.CobraStringValue = *cmdutil.MakeCobraStringValue("json", []string{"msgp"})
 
 func addTxnFlags(cmd *cobra.Command) {
-	cmd.Flags().Uint64Var(&fee, "fee", 0, "The transaction fee (automatically determined by default), in microAlgos")
+	cmd.Flags().Uint64Var(&fee, "fee", 0, "The transaction fee (automatically determined by default), in microNovas")
 	cmd.Flags().Uint64Var(&firstValid, "firstvalid", 0, "The first round where the transaction may be committed to the ledger")
 	cmd.Flags().Uint64Var(&numValidRounds, "validrounds", 0, "The number of rounds for which the transaction will be valid")
 	cmd.Flags().Uint64Var(&lastValid, "lastvalid", 0, "The last round where the transaction may be committed to the ledger")

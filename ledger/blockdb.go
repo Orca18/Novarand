@@ -31,6 +31,10 @@ import (
 )
 
 // 2019-12-15: removed column 'auxdata blob' from 'CREATE TABLE' statement. It was not explicitly removed from databases and may continue to exist with empty entries in some old databases.
+/*
+블록정보를 저장하기 위한 테이블을 생성하는 쿼리를 가지고 있는 변수
+auxdata는 더이상 사용하지 않음
+*/
 var blockSchema = []string{
 	`CREATE TABLE IF NOT EXISTS blocks (
 		rnd integer primary key,
@@ -40,11 +44,14 @@ var blockSchema = []string{
 		certdata blob)`,
 }
 
+// 블록저장 테이블을 지우는 쿼리
 var blockResetExprs = []string{
 	`DROP TABLE IF EXISTS blocks`,
 }
 
+// 블록을 저장하기 위한 테이블을 생성한다.
 func blockInit(tx *sql.Tx, initBlocks []bookkeeping.Block) error {
+	// 테이블 생성
 	for _, tableCreate := range blockSchema {
 		_, err := tx.Exec(tableCreate)
 		if err != nil {
@@ -83,6 +90,7 @@ func blockResetDB(tx *sql.Tx) error {
 	return nil
 }
 
+// 특정 라운드의 블록정보를 가져오는 쿼리
 func blockGet(tx *sql.Tx, rnd basics.Round) (blk bookkeeping.Block, err error) {
 	var buf []byte
 	err = tx.QueryRow("SELECT blkdata FROM blocks WHERE rnd=?", rnd).Scan(&buf)

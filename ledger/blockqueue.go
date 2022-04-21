@@ -34,11 +34,13 @@ import (
 	"github.com/Orca18/novarand/util/metrics"
 )
 
+// 블록 및 증명서 정보를 가지고 있는 구조체
 type blockEntry struct {
 	block bookkeeping.Block
 	cert  agreement.Certificate
 }
 
+// blockEntry데이터를 가지고 있는 큐
 type blockQueue struct {
 	l *Ledger
 
@@ -142,10 +144,14 @@ func (bq *blockQueue) syncer() {
 			bq.cond.Broadcast()
 			bq.mu.Unlock()
 
+			// 트래커들에게 committed까지 모든 블록이 db에 저장됐다는 것을 알려 줌.
+			// minToSave는 저장해야할 최소 라운드를 뜻한다.
 			minToSave := bq.l.notifyCommit(committed)
 			bfstart := time.Now()
 			ledgerSyncBlockforgetCount.Inc(nil)
 			err = bq.l.blockDBs.Wdb.Atomic(func(ctx context.Context, tx *sql.Tx) error {
+				// minToSave이전 블록들은 db에서 삭제한다.
+				// archival모드가 아니면(풀노드를 저장하지 않으면) 최신 1000개까지만 블록을 보유하고 그 이전 라운드는 삭제한다.
 				return blockForgetBefore(tx, minToSave)
 			})
 			ledgerSyncBlockforgetMicros.AddMicrosecondsSince(bfstart, nil)
@@ -179,6 +185,9 @@ func (bq *blockQueue) latestCommitted() (basics.Round, basics.Round) {
 	return bq.lastCommitted, bq.lastCommitted + basics.Round(len(bq.q))
 }
 
+/*
+	블록큐에 블록정보를 저장한다.
+*/
 func (bq *blockQueue) putBlock(blk bookkeeping.Block, cert agreement.Certificate) error {
 	bq.mu.Lock()
 	defer bq.mu.Unlock()

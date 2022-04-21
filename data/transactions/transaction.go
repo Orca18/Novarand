@@ -28,6 +28,9 @@ import (
 )
 
 // Txid is a hash used to uniquely identify individual transactions
+/*
+Txid는 각 트랜잭션을 식별해주는 해시값이다.
+*/
 type Txid crypto.Digest
 
 // String converts txid to a pretty-printable string
@@ -43,26 +46,40 @@ func (txid *Txid) UnmarshalText(text []byte) error {
 }
 
 // SpecialAddresses holds addresses with nonstandard properties.
+/*
+FeeSink와 RewardsPool의 주소를 나타내는 구조체
+*/
 type SpecialAddresses struct {
 	FeeSink     basics.Address
 	RewardsPool basics.Address
 }
 
 // Header captures the fields common to every transaction type.
+/*
+모든 트랜잭션 타입이 공통으로 가지는 헤더부분에 대한 구조체
+*/
 type Header struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
-	Sender      basics.Address    `codec:"snd"`
-	Fee         basics.MicroAlgos `codec:"fee"`
-	FirstValid  basics.Round      `codec:"fv"`
-	LastValid   basics.Round      `codec:"lv"`
-	Note        []byte            `codec:"note,allocbound=config.MaxTxnNoteBytes"` // Uniqueness or app-level data about txn
-	GenesisID   string            `codec:"gen"`
-	GenesisHash crypto.Digest     `codec:"gh"`
+	// 트랜잭션을 전송한 계정주소
+	Sender basics.Address `codec:"snd"`
+	// 트랜잭션을 전송하기 위해 필요한 수수료
+	Fee basics.MicroAlgos `codec:"fee"`
+	// 트랜잭션이 처리될 수 있는 최초의 라운드
+	FirstValid basics.Round `codec:"fv"`
+	// 트랜잭션이 처리될 수 있는 마지막 라운드
+	LastValid basics.Round `codec:"lv"`
+	// 트랜잭셔에 붙여서 보내는 내용(주석같은 느낌)
+	Note        []byte        `codec:"note,allocbound=config.MaxTxnNoteBytes"`
+	GenesisID   string        `codec:"gen"`
+	GenesisHash crypto.Digest `codec:"gh"`
 
 	// Group specifies that this transaction is part of a
 	// transaction group (and, if so, specifies the hash
 	// of a TxGroup).
+	/*
+		이 tx가 tx그룹에 속해있다는걸 말함
+	*/
 	Group crypto.Digest `codec:"grp"`
 
 	// Lease enforces mutual exclusion of transactions.  If this field is
@@ -70,16 +87,30 @@ type Header struct {
 	// lease identified by the (Sender, Lease) pair of the transaction until
 	// the LastValid round passes.  While this transaction possesses the
 	// lease, no other transaction specifying this lease can be confirmed.
+	/*
+		// 트랜잭션간의 상호배제(동일한 자원을 동시에 사용하지 못하게함)를 위해 사용되는 값
+		// 이 값이 0이 아니고 트랜잭션이 확정되면 (Sender, Lease)쌍에 의해 식별되는 lease값을 획득한다.
+		// 트랜잭션은 lease를 lastRound까지 가지고 있고 그안데 이 lease값을 가지고 있는 다른 트랜잭션은
+		// 확정될 수 없다
+	*/
 	Lease [32]byte `codec:"lx"`
 
 	// RekeyTo, if nonzero, sets the sender's AuthAddr to the given address
 	// If the RekeyTo address is the sender's actual address, the AuthAddr is set to zero
 	// This allows "re-keying" a long-lived account -- rotating the signing key, changing
 	// membership of a multisig account, etc.
+	/*
+		// 이 값이 0이 아니면 전송자의 AuthAddr값을 RekeyTo값에 넣어준다.
+		// RekeyTo값이 전송자의 실제 주소와 동일하다면  AuthAddr값은 0으로 세팅한다.
+		// 따라서 AuthAddr값이 0이라면 re-keying(서명키를 교체하거나 다중계정의 멤버십 변경)이 가능한 상태이다.
+	*/
 	RekeyTo basics.Address `codec:"rekey"`
 }
 
 // Transaction describes a transaction that can appear in a block.
+/*
+블록에 저장되는 트랜잭션을 정의 헤더, 타입에 맞는 트랜잭션 필드 구조체를 가지고 있음
+*/
 type Transaction struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -100,24 +131,32 @@ type Transaction struct {
 }
 
 // ApplyData contains information about the transaction's execution.
+/*
+트랜잭션 실행시 필요한 정보를 포함하고 있는 구조체
+*/
 type ApplyData struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
 	// Closing amount for transaction.
+	// 트랜잭션을 닫기 위해 필요한 알고양(?)
 	ClosingAmount basics.MicroAlgos `codec:"ca"`
 
 	// Closing amount for asset transaction.
+	// 애셋 트랜잭션을 닫기위해 필요한 양
 	AssetClosingAmount uint64 `codec:"aca"`
 
 	// Rewards applied to the Sender, Receiver, and CloseRemainderTo accounts.
+	// 보낸계정, 받는계정, CloseRemainderTo계정이 받는 알고양
 	SenderRewards   basics.MicroAlgos `codec:"rs"`
 	ReceiverRewards basics.MicroAlgos `codec:"rr"`
 	CloseRewards    basics.MicroAlgos `codec:"rc"`
-	EvalDelta       EvalDelta         `codec:"dt"`
+	// GlobalState와 LocalState의 StateDelta를 저장하고 있는 구조체
+	EvalDelta EvalDelta `codec:"dt"`
 
 	// If asa or app is being created, the id used. Else 0.
 	// Names chosen to match naming the corresponding txn.
 	// These are populated on when MaxInnerTransactions > 0 (TEAL 5)
+	// 애셋, 앱관련 트랜잭션에서 사용되는 값으로써 asa나 app이 생성되는 값을 갖고 그 외엔 0이다.
 	ConfigAsset   basics.AssetIndex `codec:"caid"`
 	ApplicationID basics.AppIndex   `codec:"apid"`
 }
@@ -154,6 +193,10 @@ func (ad ApplyData) Equal(o ApplyData) bool {
 
 // TxGroup describes a group of transactions that must appear
 // together in a specific order in a block.
+/*
+블록안에서 정렬되어야 할 트랜잭션 그룹의 해시 배열을 가지고 있는 구조체
+즉, tx그룹안에 있는 tx들의 해시를 저장하는 배열임!!
+*/
 type TxGroup struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -269,6 +312,7 @@ func (tx Transaction) MatchAddress(addr basics.Address, spec SpecialAddresses) b
 	return false
 }
 
+// KeyregTxn 등록 시 발생할 수 있는 에러 문자열을 정의하는 변수들
 var errKeyregTxnFirstVotingRoundGreaterThanLastVotingRound = errors.New("transaction first voting round need to be less than its last voting round")
 var errKeyregTxnNonCoherentVotingKeys = errors.New("the following transaction fields need to be clear/set together : votekey, selkey, votekd")
 var errKeyregTxnOfflineTransactionHasVotingRounds = errors.New("on going offline key registration transaction, the vote first and vote last fields should not be set")
@@ -283,6 +327,9 @@ var errKeyregTxnOfflineShouldBeEmptyStateProofPK = errors.New("offline keyreg tr
 var errKeyRegTxnValidityPeriodTooLong = errors.New("validity period for keyreg transaction is too long")
 
 // WellFormed checks that the transaction looks reasonable on its own (but not necessarily valid against the actual ledger). It does not check signatures.
+/*
+트랜잭션의 유효성검사를 진행하는 메소드, 서명은 검사하지 않는다!
+*/
 func (tx Transaction) WellFormed(spec SpecialAddresses, proto config.ConsensusParams) error {
 	switch tx.Type {
 	case protocol.PaymentTx:
@@ -694,6 +741,9 @@ func (tx Transaction) EstimateEncodedSize() int {
 // (pretty much, a block, but we don't have the definition of a block
 // here, since that would be a circular dependency).  This is used to
 // decide if a transaction is alive or not.
+/*
+어떤 트랜잭션이 활성화되었는지 아닌지를 판단하기 위한 인터페이스
+*/
 type TxnContext interface {
 	Round() basics.Round
 	ConsensusProtocol() config.ConsensusParams

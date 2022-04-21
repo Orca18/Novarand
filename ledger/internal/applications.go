@@ -213,6 +213,9 @@ func (al *logicLedger) balances() (apply.Balances, error) {
 	return balances, nil
 }
 
+/*
+	애플리케이션에서 트랜잭션을 실행한다.
+*/
 func (al *logicLedger) Perform(gi int, ep *logic.EvalParams) error {
 	txn := &ep.TxnGroup[gi]
 	balances, err := al.balances()

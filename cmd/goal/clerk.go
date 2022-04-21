@@ -81,7 +81,7 @@ func init() {
 	// send flags
 	sendCmd.Flags().StringVarP(&account, "from", "f", "", "Account address to send the money from (If not specified, uses default account)")
 	sendCmd.Flags().StringVarP(&toAddress, "to", "t", "", "Address to send to money to (required)")
-	sendCmd.Flags().Uint64VarP(&amount, "amount", "a", 0, "The amount to be transferred (required), in microAlgos")
+	sendCmd.Flags().Uint64VarP(&amount, "amount", "a", 0, "The amount to be transferred (required), in microNovas")
 	sendCmd.Flags().StringVarP(&closeToAddress, "close-to", "c", "", "Close account and send remainder to this address")
 	sendCmd.Flags().StringVar(&rekeyToAddress, "rekey-to", "", "Rekey account to the given spending key/address. (Future transactions from this account will need to be signed with the new key.)")
 	sendCmd.Flags().StringVarP(&programSource, "from-program", "F", "", "Program source to use as account logic")
