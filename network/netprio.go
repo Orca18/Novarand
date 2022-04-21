@@ -75,8 +75,8 @@ var prioHandlers = []TaggedMessageHandler{
 // 데이터 구조는 스레드로부터 안전하지 않습니다.
 // wn.peersLock에 의해 보호됩니다.
 type prioTracker struct {
-	// If a peer has a non-zero prioWeight, it will be present in
-	// this map under its peerAddress.
+	// If a peer has a non-zero prioWeight, it will be present in this map under its peerAddress.
+	// 피어에 0이 아닌 prioWeight가 있으면 이 맵의 peerAddress 아래에 표시됩니다.
 	peerByAddress map[basics.Address]*wsPeer
 
 	wn *WebsocketNetwork
