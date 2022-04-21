@@ -23,7 +23,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // ConsensusParams specifies settings that might vary based on the

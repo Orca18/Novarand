@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with go-algorand.  If not, see <https://www.gnu.org/licenses/>.
 //
+//go:build msgtrace
 // +build msgtrace
 
 package messagetracer
@@ -23,8 +24,8 @@ import (
 
 	"github.com/algorand/graphtrace/graphtrace"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
 )
 
 type graphtraceMessageTracer struct {

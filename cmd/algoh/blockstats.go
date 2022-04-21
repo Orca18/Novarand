@@ -19,8 +19,8 @@ package main
 import (
 	"time"
 
-	"github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
+	"github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+	"github.com/Orca18/novarand/logging/telemetryspec"
 )
 
 const downtimeLimit time.Duration = 5 * time.Minute

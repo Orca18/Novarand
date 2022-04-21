@@ -27,7 +27,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
+	"github.com/Orca18/novarand/config"
 )
 
 const defaultLocalVariableDeclaration = "var defaultLocal"

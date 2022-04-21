@@ -17,8 +17,8 @@
 package internal
 
 import (
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/ledger/ledgercore"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/ledger/ledgercore"
 )
 
 func (cs *roundCowState) AllocateAsset(addr basics.Address, index basics.AssetIndex, global bool) error {

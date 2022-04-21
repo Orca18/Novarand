@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 type testCase struct {

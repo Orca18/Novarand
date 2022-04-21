@@ -33,18 +33,18 @@ import (
 
 	"github.com/algorand/go-deadlock"
 
-	"github.com/algorand/go-algorand/config"
-	apiServer "github.com/algorand/go-algorand/daemon/algod/api/server"
-	"github.com/algorand/go-algorand/daemon/algod/api/server/lib"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/bookkeeping"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/network/limitlistener"
-	"github.com/algorand/go-algorand/node"
-	"github.com/algorand/go-algorand/util"
-	"github.com/algorand/go-algorand/util/metrics"
-	"github.com/algorand/go-algorand/util/tokens"
+	"github.com/Orca18/novarand/config"
+	apiServer "github.com/Orca18/novarand/daemon/algod/api/server"
+	"github.com/Orca18/novarand/daemon/algod/api/server/lib"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/bookkeeping"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/network/limitlistener"
+	"github.com/Orca18/novarand/node"
+	"github.com/Orca18/novarand/util"
+	"github.com/Orca18/novarand/util/metrics"
+	"github.com/Orca18/novarand/util/tokens"
 )
 
 var server http.Server
@@ -190,6 +190,7 @@ func makeListener(addr string) (net.Listener, error) {
 func (s *Server) Start() {
 	s.log.Info("Trying to start an Algorand node")
 	fmt.Print("Initializing the Algorand node... ")
+	fmt.Println(&s.node) //처음에는 구조체 생성해서 메모리에 띄우고, 해당 구조체의 메모리 주소 계속 참조
 	s.node.Start()
 	s.log.Info("Successfully started an Algorand node.")
 	fmt.Println("Success!")
@@ -259,6 +260,8 @@ func (s *Server) Start() {
 	errChan := make(chan error, 1)
 	go func() {
 		err := e.StartServer(&server)
+		s.log.Infof("err of start api server : %v", err)
+		println("err of start api server : %v", err)
 		errChan <- err
 	}()
 

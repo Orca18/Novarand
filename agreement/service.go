@@ -19,14 +19,15 @@ package agreement
 //go:generate dbgen -i agree.sql -p agreement -n agree -o agreeInstall.go -h ../scripts/LICENSE_HEADER
 import (
 	"context"
+	"fmt"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/util/db"
-	"github.com/algorand/go-algorand/util/execpool"
-	"github.com/algorand/go-algorand/util/timers"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/util/db"
+	"github.com/Orca18/novarand/util/execpool"
+	"github.com/Orca18/novarand/util/timers"
 )
 
 const (
@@ -160,13 +161,72 @@ func (s *Service) Shutdown() {
 // demuxLoop repeatedly executes pending actions and then requests the next event from the Service.demux.
 func (s *Service) demuxLoop(ctx context.Context, input chan<- externalEvent, output <-chan []action, ready <-chan externalDemuxSignals) {
 	for a := range output {
-		s.do(ctx, a)
+		s.do(ctx, a) //어떤 액션인지에 따라서 액션을 수행한다.
+		// 네트워크 내보내기 일수도, SM이 검증하는 것일수도 있다.
+		//내부에서 처리하는 것일 경우, 다시 do를 통해 demux로 보내서,
+		//외부에서 들어온것 처럼 externalEvent 타입으로 SM보냄.
+		fmt.Println("output action relay [av]", a)
 		extSignals := <-ready
+		//fmt.Println("output[]action", a)
+		//fmt.Println("extSignals", extSignals.CurrentRound, "dl", extSignals.Deadline, "frdl", extSignals.FastRecoveryDeadline)
+		//큐에 있는 이벤트를 가지고 와서 input 채널에 할당한다.
 		e, ok := s.demux.next(s, extSignals.Deadline, extSignals.FastRecoveryDeadline, extSignals.CurrentRound)
 		if !ok {
 			close(input)
 			break
 		}
+
+		//tokenizerCtx, cancelTokenizers := context.WithCancel(context.Background())
+		//s.demux.cancelTokenizers = cancelTokenizers
+		//var poolAddr = basics.Address{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
+		//oneTimeSecrets := crypto.GenerateOneTimeSignatureSecrets(300, 1000)
+		//id := crypto.OneTimeSignatureIdentifier{
+		//	Batch: 1000,
+		//	// Avoid generating the last few offsets (in a batch size of 256), so we can increment correctly
+		//	Offset: crypto.RandUint64() % 250,
+		//}
+		//proposal := unauthenticatedProposal{
+		//	OriginalPeriod: period(crypto.RandUint64() % 250),
+		//}
+		//var vrfProof crypto.VRFProof
+		//crypto.SystemRNG.RandBytes(vrfProof[:])
+		//var sendAddr basics.Address
+		//crypto.SystemRNG.RandBytes(sendAddr[:])
+		//uv := unauthenticatedVote{
+		//	R: rawVote{
+		//		Sender: sendAddr,
+		//		Round:  basics.Round(356),
+		//		Period: period(4),
+		//		Step:   step(3),
+		//		Proposal: proposalValue{
+		//			OriginalPeriod:   period(3),
+		//			OriginalProposer: poolAddr,
+		//			BlockDigest:      crypto.Hash([]byte{1, 2, 3}),
+		//			EncodingDigest:   crypto.Hash([]byte{5, 6, 7}),
+		//		},
+		//	},
+		//	Cred: committee.UnauthenticatedCredential{
+		//		Proof: vrfProof,
+		//	},
+		//	Sig: oneTimeSecrets.Sign(id, proposal),
+		//}
+		//msgBytes := protocol.Encode(&uv)
+		//// make sure we know how to decode this correctly.
+		//iVote, err := decodeVote(msgBytes)
+		//if err != nil {
+		//	fmt.Println("디코딩 보트 에러")
+		//}
+		//decodedVote := iVote.(unauthenticatedVote)
+		//networkMessages := s.Network.Messages(protocol.AgreementVoteTag)
+		//raw, ok := <-networkMessages
+		//msg := message{MessageHandle: raw.MessageHandle, Tag: protocol.AgreementVoteTag, UnauthenticatedVote: decodedVote}
+		//decoded := make(chan message)
+		//decoded <- msg
+		//s.demux.rawVotes = s.demux.tokenizeMessages(tokenizerCtx, s.Network, protocol.AgreementVoteTag, decodeVote)
+		//m := <-decoded
+		//e = messageEvent{T: votePresent, Input: m}
+
+		fmt.Println("input<-", e.t())
 		input <- e
 	}
 	s.demux.quit()
@@ -183,6 +243,7 @@ func (s *Service) demuxLoop(ctx context.Context, input chan<- externalEvent, out
 // 3. Drive the state machine with this input to obtain a slice of pending actions.
 // 4. If necessary, persist state to disk.
 func (s *Service) mainLoop(input <-chan externalEvent, output chan<- []action, ready chan<- externalDemuxSignals) {
+	fmt.Println("mainloop started")
 	// setup
 	var clock timers.Clock
 	var router rootRouter
@@ -198,6 +259,7 @@ func (s *Service) mainLoop(input <-chan externalEvent, output chan<- []action, r
 			s.log.Infof("decode (agreement): restored crash state from database (pending %v @ %+v)", a, status)
 		}
 	}
+	fmt.Println("장부:nextRound,", s.Ledger.NextRound(), "라운드", status.Round, "피리어드", status.Period, "스텝", status.Step)
 	// err will tell us if the restore/decode operations above completed successfully or not.
 	if err != nil || status.Round < s.Ledger.NextRound() {
 		// in this case, we don't have fresh and valid state
@@ -210,7 +272,7 @@ func (s *Service) mainLoop(input <-chan externalEvent, output chan<- []action, r
 		}
 		status = player{Round: nextRound, Step: soft, Deadline: FilterTimeout(0, nextVersion)}
 		router = makeRootRouter(status)
-
+		fmt.Println("장부:nextRound,", s.Ledger.NextRound(), "라운드", status.Round, "피리어드", status.Period, "스텝", status.Step)
 		a1 := pseudonodeAction{T: assemble, Round: s.Ledger.NextRound()}
 		a2 := rezeroAction{}
 
@@ -221,15 +283,19 @@ func (s *Service) mainLoop(input <-chan externalEvent, output chan<- []action, r
 	}
 
 	for {
+		//액션에 있는 것을 아웃풋 채널에 담는다.
 		output <- a
 		ready <- externalDemuxSignals{Deadline: status.Deadline, FastRecoveryDeadline: status.FastRecoveryDeadline, CurrentRound: status.Round}
+		//input 채널의 이벤트를 가져와 할당한다. 라우터를 통해 올바른 상태 머신으로 보냅니다.
 		e, ok := <-input
 		if !ok {
 			break
 		}
 
 		status, a = router.submitTop(s.tracer, status, e)
-
+		//fmt.Println("액션", a)
+		//fmt.Println("이벤트", e)
+		//fmt.Println("장부:nextRound,", s.Ledger.NextRound(), "라운드", status.Round, "피리어드", status.Period, "스텝", status.Step)
 		if persistent(a) {
 			s.persistRouter = router
 			s.persistStatus = status

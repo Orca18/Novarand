@@ -17,7 +17,7 @@
 package main
 
 import (
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/logging"
 )
 
 func tryMlockall(log logging.Logger) {

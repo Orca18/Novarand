@@ -19,7 +19,7 @@ package logic
 import (
 	"sort"
 
-	"github.com/algorand/go-algorand/data/transactions"
+	"github.com/Orca18/novarand/data/transactions"
 )
 
 // LogicVersion defines default assembler and max eval versions

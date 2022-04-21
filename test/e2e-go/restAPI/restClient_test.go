@@ -22,11 +22,11 @@ import (
 	"errors"
 	"flag"
 
-	algodclient "github.com/algorand/go-algorand/daemon/algod/api/client"
-	kmdclient "github.com/algorand/go-algorand/daemon/kmd/client"
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/data/transactions/logic"
-	"github.com/algorand/go-algorand/util/db"
+	algodclient "github.com/Orca18/novarand/daemon/algod/api/client"
+	kmdclient "github.com/Orca18/novarand/daemon/kmd/client"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/util/db"
 	"math"
 	"math/rand"
 	"os"
@@ -38,16 +38,16 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/merklesignature"
-	"github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/framework/fixtures"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/merklesignature"
+	"github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/framework/fixtures"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 var fixture fixtures.RestClientFixture

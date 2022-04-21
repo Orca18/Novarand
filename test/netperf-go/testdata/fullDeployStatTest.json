@@ -21,19 +21,19 @@
         {
             "StepName" : "Prepare Nework Deployment",
             "Commands" : [
-                "/bin/rm -rf ${GOPATH}/src/github.com/algorand/go-algorand/test/testdata/networks/<network>",
-                "${GOPATH}/bin/netgoal build -r ${GOPATH}/src/github.com/algorand/go-algorand/test/testdata/networks/<network> -n <network> --recipe <recipe>",
-                "bash ${GOPATH}/src/github.com/algorand/go-algorand/scripts/upload_config.sh ${GOPATH}/src/github.com/algorand/go-algorand/test/testdata/networks/<network> <channel>"
+                "/bin/rm -rf ${GOPATH}/src/github.com/Orca18/novarand/test/testdata/networks/<network>",
+                "${GOPATH}/bin/netgoal build -r ${GOPATH}/src/github.com/Orca18/novarand/test/testdata/networks/<network> -n <network> --recipe <recipe>",
+                "bash ${GOPATH}/src/github.com/Orca18/novarand/scripts/upload_config.sh ${GOPATH}/src/github.com/Orca18/novarand/test/testdata/networks/<network> <channel>"
             ]
         },
         {
             "StepName" : "Prepare Nework Deployment - Generate private build",
-            "Commands" : ["bash ${GOPATH}/src/github.com/algorand/go-algorand/scripts/deploy_private_version.sh -c <channel> -n <network> -f ${GOPATH}/src/github.com/algorand/go-algorand/test/testdata/networks/<network>/genesisdata/genesis.json"],
+            "Commands" : ["bash ${GOPATH}/src/github.com/Orca18/novarand/scripts/deploy_private_version.sh -c <channel> -n <network> -f ${GOPATH}/src/github.com/Orca18/novarand/test/testdata/networks/<network>/genesisdata/genesis.json"],
             "Disabled" : false
         },
         {
             "StepName" : "Generate terraform file",
-            "Commands" : ["algonet build ${GOPATH}/src/github.com/algorand/go-algorand/test/testdata/networks/<network>/cloudspec.config"],
+            "Commands" : ["algonet build ${GOPATH}/src/github.com/Orca18/novarand/test/testdata/networks/<network>/cloudspec.config"],
             "Disabled" : false
         },
         {
@@ -55,7 +55,7 @@
         },
         {
             "StepName" : "Remove network directories",
-            "Commands" : ["/bin/rm -rf ${GOPATH}/src/github.com/algorand/go-algorand/test/testdata/networks/<network>"]
+            "Commands" : ["/bin/rm -rf ${GOPATH}/src/github.com/Orca18/novarand/test/testdata/networks/<network>"]
         },
         {
             "StepName" : "Remove telemetry instances",

@@ -1,4 +1,4 @@
-module github.com/algorand/go-algorand/scripts/buildtools
+module github.com/Orca18/novarand/scripts/buildtools
 
 go 1.14
 

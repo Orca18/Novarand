@@ -16,6 +16,8 @@
 
 package agreement
 
+import "fmt"
+
 // A stateMachineTag uniquely identifies the type of a state machine.
 //
 // Rounds, periods, and steps may be used to further identify different state machine instances of the same type.
@@ -54,6 +56,7 @@ type routerHandle struct {
 func (h *routerHandle) dispatch(state player, e event, dest stateMachineTag, r round, p period, s step) event {
 	h.t.ein(h.src, dest, e, r, p, s)
 	e = h.r.dispatch(h.t, state, e, h.src, dest, r, p, s)
+	fmt.Println("소스", h.src, "데스티네이션", dest, "이벤트", e.t(), "순서대로 라운드,기간,스텝", r, p, s)
 	h.t.eout(h.src, dest, e, r, p, s)
 	return e
 }
@@ -142,13 +145,15 @@ func (router *rootRouter) submitTop(t *tracer, state player, e event) (player, [
 	// TODO move cadaver calls to somewhere cleaner
 	t.traceInput(state.Round, state.Period, state, e) // cadaver
 	t.ainTop(demultiplexer, playerMachine, state, e, 0, 0, 0)
+	fmt.Println("라우터 submitTop.t.ainTop", state.T().String(), e)
 
 	router.update(state, 0, true)
 	handle := routerHandle{t: t, r: router, src: playerMachine}
 	a := router.root.handle(handle, e)
-
+	//fmt.Println("action", a, "event", e)
 	t.aoutTop(demultiplexer, playerMachine, a, 0, 0, 0)
 	t.traceOutput(state.Round, state.Period, state, a) // cadaver
+	fmt.Println("라우터 submitTop.t.aoutTop", state.T().String(), a)
 
 	p := router.root.underlying().(*player)
 	return *p, a
@@ -205,8 +210,10 @@ func (router *roundRouter) dispatch(t *tracer, state player, e event, src stateM
 		handle := routerHandle{t: t, r: router, src: proposalMachineRound}
 		return router.proposalRoot.handle(handle, state, e)
 	}
+
 	if router.voteRoot.T() == dest {
 		handle := routerHandle{t: t, r: router, src: voteMachineRound}
+
 		return router.voteRoot.handle(handle, state, e)
 	}
 	return router.Children[p].dispatch(t, state, e, src, dest, r, p, s)
@@ -249,8 +256,10 @@ func (router *stepRouter) update(state player, gc bool) {
 
 func (router *stepRouter) dispatch(t *tracer, state player, e event, src stateMachineTag, dest stateMachineTag, r round, p period, s step) event {
 	router.update(state, true)
+	fmt.Println("here : stepRouter.dispatch")
 	if router.voteRoot.T() == dest {
 		handle := routerHandle{t: t, r: router, src: voteMachineStep}
+		fmt.Println("is here?")
 		return router.voteRoot.handle(handle, state, e)
 	}
 	panic("bad dispatch")

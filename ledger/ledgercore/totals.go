@@ -17,9 +17,9 @@
 package ledgercore
 
 import (
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging"
 )
 
 // AlgoCount represents a total of algos of a certain class

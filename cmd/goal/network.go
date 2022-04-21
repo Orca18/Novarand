@@ -23,9 +23,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/netdeploy"
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/netdeploy"
+	"github.com/Orca18/novarand/util"
 )
 
 var networkRootDir string

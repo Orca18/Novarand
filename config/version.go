@@ -126,6 +126,7 @@ func SetCurrentVersion(version Version) {
 // Used by algod and algoh to set built-time ephemeral version component e.g. data directory
 func UpdateVersionDataDir(dataDir string) {
 	v := GetCurrentVersion()
+	println("디렉", v.DataDirectory, "suff", v.Suffix, "ch", v.Channel, "br", v.Branch, "comh", v.CommitHash, "major", v.Major, "minor", v.Minor)
 	v.DataDirectory = dataDir
 	SetCurrentVersion(v)
 }

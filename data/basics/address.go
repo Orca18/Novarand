@@ -21,7 +21,7 @@ import (
 	"encoding/base32"
 	"fmt"
 
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 // NOTE: Another (partial) implementation of `basics.Address` is in `data/abi`.
@@ -32,8 +32,8 @@ import (
 //         impossible to up the version of `go-algorand` in `go-algorand-sdk`
 
 // This is discussed in:
-// - ISSUE https://github.com/algorand/go-algorand/issues/3355
-// - PR https://github.com/algorand/go-algorand/pull/3375
+// - ISSUE https://github.com/Orca18/novarand/issues/3355
+// - PR https://github.com/Orca18/novarand/pull/3375
 
 // There are two solutions:
 // - One is to refactoring `crypto.Digest`, `crypto.Hash` and `basics.Address`

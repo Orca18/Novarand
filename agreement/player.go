@@ -17,10 +17,11 @@
 package agreement
 
 import (
+	"fmt"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // The player implements the top-level state machine functionality of the
@@ -69,9 +70,10 @@ func (p *player) handle(r routerHandle, e event) []action {
 	if e.t() == none {
 		return nil
 	}
-
+	fmt.Println("plarHandler", e, "player.step", p.Step)
 	switch e := e.(type) {
 	case messageEvent:
+		fmt.Println("plarHandler.messageEvent", e, "player.step", p.Step)
 		return p.handleMessageEvent(r, e)
 	case thresholdEvent:
 		return p.handleThresholdEvent(r, e)
@@ -114,6 +116,7 @@ func (p *player) handle(r routerHandle, e event) []action {
 			return actions
 		}
 	case roundInterruptionEvent:
+		fmt.Println("plarHandler.roundInterruptionEvent", e, "player.step", p.Step)
 		return p.enterRound(r, e, e.Round)
 	case checkpointEvent:
 		return p.handleCheckpointEvent(r, e)
@@ -483,6 +486,7 @@ func (p *player) handleMessageEvent(r routerHandle, e messageEvent) (actions []a
 	case votePresent, voteVerified:
 		uv := e.Input.UnauthenticatedVote
 		proposalVote = (uv.R.Step == propose)
+		fmt.Println("player.handleMessageEvent", e.t(), "proposalVote", proposalVote)
 	}
 
 	// wrap message event with current player round, etc. for freshness computation
@@ -498,6 +502,7 @@ func (p *player) handleMessageEvent(r routerHandle, e messageEvent) (actions []a
 
 	// if so, process it separately
 	if proposalVote {
+		fmt.Println("proposalVoteTrue실행")
 		doneProcessing := true // TODO check that this is still required
 		defer func() {
 			tail := e.Tail
@@ -511,6 +516,7 @@ func (p *player) handleMessageEvent(r routerHandle, e messageEvent) (actions []a
 
 			ev := *tail // make sure the event we handle is messageEvent, not *messageEvent
 			suffix := p.handle(r, ev)
+			fmt.Println("proposalVoteTrue실행", actions)
 			actions = append(actions, suffix...)
 		}()
 
@@ -528,16 +534,20 @@ func (p *player) handleMessageEvent(r routerHandle, e messageEvent) (actions []a
 			doneProcessing = false
 			seq := p.Pending.push(e.Tail)
 			uv := e.Input.UnauthenticatedVote
+			fmt.Println("player.handleMessageEvent", e.t(), "proposalVote", proposalVote, "e.Tail", e.Tail)
+			fmt.Println("verifyVoteAction추가", verifyVoteAction(e, uv.R.Round, uv.R.Period, seq))
 			return append(actions, verifyVoteAction(e, uv.R.Round, uv.R.Period, seq))
 		}
 		v := e.Input.Vote
 		a := relayAction(e, protocol.AgreementVoteTag, v.u())
+		fmt.Println("player.handleMessageEvent", e.t(), "relayAction", protocol.AgreementVoteTag, "V.u()", v.u())
 		ep := ef.(proposalAcceptedEvent)
 		if ep.PayloadOk {
 			transmit := compoundMessage{
 				Proposal: ep.Payload.u(),
 				Vote:     v.u(),
 			}
+			fmt.Println("player.handleMessageEvent", e.t(), "proposalBroad_bl", ep.PayloadOk, "proposal", ep.Payload.u())
 			a = broadcastAction(protocol.ProposalPayloadTag, transmit)
 		}
 		return append(actions, a)

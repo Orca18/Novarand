@@ -16,7 +16,7 @@
 
 package merklearray
 
-import "github.com/algorand/go-algorand/crypto"
+import "github.com/Orca18/novarand/crypto"
 
 // An Array represents a dense array of leaf elements that are
 // combined into a Merkle tree. The Marshal method returns a byte slice that represents the object

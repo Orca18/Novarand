@@ -23,10 +23,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/logspec"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/logspec"
+	"github.com/Orca18/novarand/logging/telemetryspec"
 )
 
 //msgp:ignore traceLevel
@@ -133,7 +133,7 @@ func (t *tracer) ein(src, dest stateMachineTag, e event, r round, p period, s st
 	t.seq++
 	if t.level >= all {
 		// fmt.Fprintf(t.w, "%v %3v %23v  -> %23v: %30v\n", t.tag, t.seq, src, dest, e)
-		fmt.Fprintf(t.w, "%v] %23v  -> %23v: %30v\n", t.tag, src, dest, e)
+		fmt.Fprintf(t.w, "라우터 추적 ein %v] %23v  -> %23v: %30v\n", t.tag, src, dest, e)
 	}
 }
 
@@ -141,12 +141,12 @@ func (t *tracer) eout(src, dest stateMachineTag, e event, r round, p period, s s
 	t.seq++
 	if t.level >= all {
 		// fmt.Fprintf(t.w, "%v %3v %23v <-  %23v: %30v\n", t.tag, t.seq, src, dest, e)
-		fmt.Fprintf(t.w, "%v] %23v <-  %23v: %30v\n", t.tag, src, dest, e)
+		fmt.Fprintf(t.w, "라우터 추적 eout %v] %23v <-  %23v: %30v\n", t.tag, src, dest, e)
 	} else if t.level >= key {
 		switch e.t() {
 		case proposalAccepted, proposalCommittable, softThreshold, certThreshold, nextThreshold:
 			// fmt.Fprintf(t.w, "%v %3v %23v <-  %23v: %30v\n", t.tag, t.seq, src, dest, e)
-			fmt.Fprintf(t.w, "%v] %23v <-  %23v: %30v\n", t.tag, src, dest, e)
+			fmt.Fprintf(t.w, "라우터 추적 eout %v] %23v <-  %23v: %30v\n", t.tag, src, dest, e)
 		}
 	}
 }

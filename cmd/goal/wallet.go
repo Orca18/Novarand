@@ -25,9 +25,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/passphrase"
-	"github.com/algorand/go-algorand/daemon/kmd/lib/kmdapi"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/passphrase"
+	"github.com/Orca18/novarand/daemon/kmd/lib/kmdapi"
 )
 
 var (

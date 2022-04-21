@@ -17,7 +17,7 @@
 package agreement
 
 import (
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // A message represents an internal message which is passed between components
@@ -52,6 +52,7 @@ type compoundMessage struct {
 
 // streamTokenizer is a function that returns an object of some type after
 // deserializing from some stream.
+//함수 원형 정의
 type streamTokenizer func([]byte) (interface{}, error)
 
 // decodeVote reads a vote from the given stream.

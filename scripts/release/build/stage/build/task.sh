@@ -31,8 +31,8 @@ else
 fi
 
 # Run RPM build in Centos 7 & 8 Docker container
-sg docker "docker build -t algocentosbuild - < $HOME/go/src/github.com/algorand/go-algorand/scripts/release/common/docker/centos.Dockerfile"
-sg docker "docker run --rm --env-file ${HOME}/build_env_docker --mount type=bind,src=${HOME},dst=/root/subhome algocentosbuild /root/subhome/go/src/github.com/algorand/go-algorand/scripts/release/build/rpm/build.sh"
+sg docker "docker build -t algocentosbuild - < $HOME/go/src/github.com/Orca18/novarand/scripts/release/common/docker/centos.Dockerfile"
+sg docker "docker run --rm --env-file ${HOME}/build_env_docker --mount type=bind,src=${HOME},dst=/root/subhome algocentosbuild /root/subhome/go/src/github.com/Orca18/novarand/scripts/release/build/rpm/build.sh"
 
 echo
 date "+build_release end BUILD stage %Y%m%d_%H%M%S"

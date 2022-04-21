@@ -21,7 +21,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/algorand/go-algorand/util"
+	"github.com/Orca18/novarand/util"
 )
 
 // NodeController provides an object for controlling a specific algod node instance

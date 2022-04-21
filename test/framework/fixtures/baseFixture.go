@@ -22,7 +22,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/algorand/go-algorand/config"
+	"github.com/Orca18/novarand/config"
 )
 
 type baseFixture struct {
@@ -49,7 +49,7 @@ func (f *baseFixture) initialize(instance Fixture) {
 	}
 	f.testDataDir = os.Getenv("TESTDATADIR")
 	if f.testDataDir == "" {
-		f.testDataDir = os.ExpandEnv("${GOPATH}/src/github.com/algorand/go-algorand/test/testdata")
+		f.testDataDir = os.ExpandEnv("${GOPATH}/src/github.com/Orca18/novarand/test/testdata")
 	}
 }
 

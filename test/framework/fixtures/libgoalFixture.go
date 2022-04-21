@@ -30,15 +30,15 @@ import (
 	"github.com/algorand/go-deadlock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/data/account"
-	"github.com/algorand/go-algorand/gen"
-	"github.com/algorand/go-algorand/libgoal"
-	"github.com/algorand/go-algorand/netdeploy"
-	"github.com/algorand/go-algorand/nodecontrol"
-	"github.com/algorand/go-algorand/protocol"
-	"github.com/algorand/go-algorand/test/e2e-go/globals"
-	"github.com/algorand/go-algorand/util/db"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/gen"
+	"github.com/Orca18/novarand/libgoal"
+	"github.com/Orca18/novarand/netdeploy"
+	"github.com/Orca18/novarand/nodecontrol"
+	"github.com/Orca18/novarand/protocol"
+	"github.com/Orca18/novarand/test/e2e-go/globals"
+	"github.com/Orca18/novarand/util/db"
 )
 
 // LibGoalFixture is a test fixture for tests requiring a running node with a algod and kmd clients

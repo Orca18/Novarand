@@ -24,8 +24,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
 )
 
 // RequestLogger is a middleware helps logging all the incoming http requests.

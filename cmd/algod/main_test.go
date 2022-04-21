@@ -25,7 +25,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/algorand/go-algorand/config"
+	"github.com/Orca18/novarand/config"
 )
 
 func BenchmarkAlgodStartup(b *testing.B) {

@@ -17,7 +17,7 @@
 package driver
 
 import (
-	"github.com/algorand/go-algorand/crypto"
+	"github.com/Orca18/novarand/crypto"
 )
 
 func publicKeyToAddress(pk crypto.PublicKey) (addr crypto.Digest) {

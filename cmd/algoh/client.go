@@ -19,8 +19,8 @@ package main
 import (
 	"context"
 
-	generatedV2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2/generated"
-	"github.com/algorand/go-algorand/daemon/algod/api/spec/v1"
+	generatedV2 "github.com/Orca18/novarand/daemon/algod/api/server/v2/generated"
+	"github.com/Orca18/novarand/daemon/algod/api/spec/v1"
 )
 
 // Client is a minimal interface for the RestClient

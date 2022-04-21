@@ -20,9 +20,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
 )
 
 var errKeyregGoingOnlineExpiredParticipationKey = errors.New("transaction tries to mark an account as online with last voting round in the past")

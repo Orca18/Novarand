@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/algorand/go-algorand/config"
+	"github.com/Orca18/novarand/config"
 )
 
 func main() {

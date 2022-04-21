@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"math/bits"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // ErrGetOutOfBound returned when trying to retrieve an element which is out of the padded array bound.

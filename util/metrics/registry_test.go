@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with go-algorand.  If not, see <https://www.gnu.org/licenses/>.
 
+//go:build telemetry
 // +build telemetry
 
 package metrics
@@ -22,7 +23,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/stretchr/testify/require"
 )
 

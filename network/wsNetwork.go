@@ -40,15 +40,15 @@ import (
 	"github.com/algorand/websocket"
 	"github.com/gorilla/mux"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
-	"github.com/algorand/go-algorand/network/limitlistener"
-	"github.com/algorand/go-algorand/protocol"
-	tools_network "github.com/algorand/go-algorand/tools/network"
-	"github.com/algorand/go-algorand/tools/network/dnssec"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/logging/telemetryspec"
+	"github.com/Orca18/novarand/network/limitlistener"
+	"github.com/Orca18/novarand/protocol"
+	tools_network "github.com/Orca18/novarand/tools/network"
+	"github.com/Orca18/novarand/tools/network/dnssec"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 const incomingThreads = 20
@@ -281,6 +281,7 @@ type HandlerFunc func(message IncomingMessage) OutgoingMessage
 
 // Handle implements MessageHandler.Handle, calling the handler with the IncomingKessage and returning the OutgoingMessage
 func (f HandlerFunc) Handle(message IncomingMessage) OutgoingMessage {
+	fmt.Println("NW 인커밍메세지", message.Tag)
 	return f(message)
 }
 
@@ -1142,6 +1143,7 @@ func (wn *WebsocketNetwork) messageHandlerThread(peersConnectivityCheckCh <-chan
 		case <-wn.ctx.Done():
 			return
 		case msg := <-wn.readBuffer:
+			fmt.Println("리드버퍼", msg.Tag)
 			if msg.processing != nil {
 				// The channel send should never block, but just in case..
 				select {

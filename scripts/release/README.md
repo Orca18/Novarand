@@ -181,5 +181,5 @@ The failure is saying that there is no terminal attached to the session and so n
 [this explanation]: https://stackoverflow.com/questions/30058030/how-to-use-gpg-signing-key-on-a-remote-server
 [releases page]: https://releases.algorand.com/
 [running a python script]:https://github.com/algorand/go-algorand-ci/blob/master/scripts/downloads_page.py
-[`reverse_hex_timestamp`]: https://github.com/algorand/go-algorand/blob/master/scripts/release/prod/reverse_hex_timestamp
+[`reverse_hex_timestamp`]: https://github.com/Orca18/novarand/blob/master/scripts/release/prod/reverse_hex_timestamp
 

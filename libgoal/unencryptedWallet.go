@@ -19,8 +19,8 @@ package libgoal
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/transactions"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/transactions"
 )
 
 var unencryptedWalletDriver = "sqlite"

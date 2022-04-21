@@ -17,7 +17,7 @@
 package timers
 
 import (
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/test/partitiontest"
 	"math/rand"
 	"testing"
 	"time"

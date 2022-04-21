@@ -22,8 +22,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/algorand/go-algorand/daemon/algod/api/server/lib"
-	"github.com/algorand/go-algorand/util/metrics"
+	"github.com/Orca18/novarand/daemon/algod/api/server/lib"
+	"github.com/Orca18/novarand/util/metrics"
 )
 
 // Metrics returns data collected by util/metrics

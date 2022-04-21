@@ -20,7 +20,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 var errUnableUnmarshallMessage = errors.New("unmarshalMessageOfInterest: could not unmarshall message")

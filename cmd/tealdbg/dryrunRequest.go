@@ -19,11 +19,11 @@ package main
 import (
 	"log"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/protocol"
 
-	v2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2"
-	generatedV2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2/generated"
+	v2 "github.com/Orca18/novarand/daemon/algod/api/server/v2"
+	generatedV2 "github.com/Orca18/novarand/daemon/algod/api/server/v2/generated"
 )
 
 // ddrFromParams converts serialized DryrunRequest to v2.DryrunRequest

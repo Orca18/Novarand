@@ -136,5 +136,4 @@ echo "Cleaning up."
 
 systemctl --user stop "algorand@$(systemd-escape "$DATADIR")"
 rm -f "$HOMEDIR/.config/systemd/user/algorand@.service"
-systemctl --user daemon-reload
-
+systemctl --user da

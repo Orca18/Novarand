@@ -68,14 +68,14 @@ endif
 GOTAGS      := --tags "$(GOTAGSLIST)"
 GOTRIMPATH	:= $(shell GOPATH=$(GOPATH) && go help build | grep -q .-trimpath && echo -trimpath)
 
-GOLDFLAGS_BASE  := -X github.com/algorand/go-algorand/config.BuildNumber=$(BUILDNUMBER) \
-		 -X github.com/algorand/go-algorand/config.CommitHash=$(COMMITHASH) \
-		 -X github.com/algorand/go-algorand/config.Branch=$(BUILDBRANCH) \
-		 -X github.com/algorand/go-algorand/config.DefaultDeadlock=$(DEFAULT_DEADLOCK) \
+GOLDFLAGS_BASE  := -X github.com/Orca18/novarand/config.BuildNumber=$(BUILDNUMBER) \
+		 -X github.com/Orca18/novarand/config.CommitHash=$(COMMITHASH) \
+		 -X github.com/Orca18/novarand/config.Branch=$(BUILDBRANCH) \
+		 -X github.com/Orca18/novarand/config.DefaultDeadlock=$(DEFAULT_DEADLOCK) \
 		 -extldflags \"$(EXTLDFLAGS)\"
 
 GOLDFLAGS := $(GOLDFLAGS_BASE) \
-		 -X github.com/algorand/go-algorand/config.Channel=$(CHANNEL)
+		 -X github.com/Orca18/novarand/config.Channel=$(CHANNEL)
 
 UNIT_TEST_SOURCES := $(sort $(shell GOPATH=$(GOPATH) && GO111MODULE=off && go list ./... | grep -v /go-algorand/test/ ))
 ALGOD_API_PACKAGES := $(sort $(shell GOPATH=$(GOPATH) && GO111MODULE=off && cd daemon/algod/api; go list ./... ))

@@ -25,14 +25,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/crypto/passphrase"
-	"github.com/algorand/go-algorand/daemon/algod/api/client"
-	generatedV2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2/generated"
-	"github.com/algorand/go-algorand/daemon/algod/api/spec/common"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/data/transactions"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/crypto/passphrase"
+	"github.com/Orca18/novarand/daemon/algod/api/client"
+	generatedV2 "github.com/Orca18/novarand/daemon/algod/api/server/v2/generated"
+	"github.com/Orca18/novarand/daemon/algod/api/spec/common"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/data/transactions"
+	"github.com/Orca18/novarand/protocol"
 )
 
 const transactionBlockSize = 800

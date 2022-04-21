@@ -30,8 +30,8 @@ import (
 	"github.com/algorand/go-deadlock"
 	"github.com/algorand/websocket"
 
-	"github.com/algorand/go-algorand/cmd/tealdbg/cdt"
-	"github.com/algorand/go-algorand/data/transactions/logic"
+	"github.com/Orca18/novarand/cmd/tealdbg/cdt"
+	"github.com/Orca18/novarand/data/transactions/logic"
 )
 
 type cdtSession struct {

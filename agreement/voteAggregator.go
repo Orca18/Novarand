@@ -19,7 +19,7 @@ package agreement
 import (
 	"fmt"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // A voteAggregator is a voteMachine which applies relay rules to incoming votes
@@ -72,7 +72,7 @@ func (agg *voteAggregator) handle(r routerHandle, pr player, em event) (res even
 	defer func() {
 		r.t.logVoteAggregatorResult(e, res)
 	}()
-
+	fmt.Println("voteAggregator", e.t())
 	switch e.t() {
 	case votePresent:
 		if e.Proto.Err != nil {
@@ -191,12 +191,16 @@ func (agg *voteAggregator) filterVote(proto protocol.ConsensusVersion, p player,
 		return fmt.Errorf("voteAggregator: rejected vote due to age: %v", err)
 	}
 	filterReq := voteFilterRequestEvent{RawVote: uv.R}
+	fmt.Println("여기????", filterReq.String(), filterReq.t(), p.T(), r, "라우터핸들/소스", r.src)
 	filterRes := r.dispatch(p, filterReq, voteMachineStep, uv.R.Round, uv.R.Period, uv.R.Step)
+	fmt.Println("filterRes", filterRes.t())
 	switch filterRes.t() {
 	case voteFilteredStep:
 		// we'll rebuild the filtered event later
+		fmt.Println("여기1111")
 		return fmt.Errorf("voteAggregator: rejected vote: sender %v had already sent a vote in round %d period %d step %d", uv.R.Sender, uv.R.Round, uv.R.Period, uv.R.Step)
 	case none:
+		fmt.Println("여기2222")
 		return nil
 	}
 	r.t.log.Panicf("voteAggregator: bad event type: while filtering, observed an event of type %v", filterRes.t())

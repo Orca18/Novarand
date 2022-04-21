@@ -25,9 +25,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	generatedV2 "github.com/algorand/go-algorand/daemon/algod/api/server/v2/generated"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/libgoal"
+	generatedV2 "github.com/Orca18/novarand/daemon/algod/api/server/v2/generated"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/libgoal"
 )
 
 // AccountsList holds a mapping between the account's address, its friendly name and whether it's a default one.

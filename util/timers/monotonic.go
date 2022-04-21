@@ -19,8 +19,8 @@ package timers
 import (
 	"time"
 
-	"github.com/algorand/go-algorand/logging"
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/logging"
+	"github.com/Orca18/novarand/protocol"
 )
 
 // Monotonic uses the system's monotonic clock to emit timeouts.

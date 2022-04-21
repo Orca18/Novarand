@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"hash"
 
-	"github.com/algorand/go-algorand/protocol"
+	"github.com/Orca18/novarand/protocol"
 	"github.com/algorand/go-sumhash"
 )
 

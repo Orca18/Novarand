@@ -19,8 +19,8 @@ package ledger
 import (
 	"testing"
 
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/test/partitiontest"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/test/partitiontest"
 )
 
 func checkLen(list *persistedAccountDataList) int {

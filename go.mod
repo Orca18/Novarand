@@ -1,4 +1,4 @@
-module github.com/algorand/go-algorand
+module github.com/Orca18/novarand
 
 go 1.14
 

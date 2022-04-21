@@ -136,7 +136,7 @@ REPO_ROOT="${GOPATH}"/src/github.com/algorand/go-algorand
 PLATFORM=$("${REPO_ROOT}"/scripts/osarchtype.sh)
 PLATFORM_SPLIT=(${PLATFORM//\// })
 
-CHANNEL=${CHANNEL:-$("${GOPATH}"/src/github.com/algorand/go-algorand/scripts/compute_branch_channel.sh "$BRANCH")}
+CHANNEL=${CHANNEL:-$("${GOPATH}"/src/github.com/Orca18/novarand/scripts/compute_branch_channel.sh "$BRANCH")}
 
 # a bash user might `source build_env` to manually continue a broken build
 cat << EOF > "${HOME}"/build_env
@@ -145,7 +145,7 @@ export CHANNEL=${CHANNEL}
 export COMMIT_HASH=${COMMIT_HASH}
 export DEFAULTNETWORK=$(PATH=${PATH} "${REPO_ROOT}"/scripts/compute_branch_network.sh)
 export DC_IP=$(curl --silent http://169.254.169.254/latest/meta-data/local-ipv4)
-export FULLVERSION=$("${GOPATH}"/src/github.com/algorand/go-algorand/scripts/compute_build_number.sh -f)
+export FULLVERSION=$("${GOPATH}"/src/github.com/Orca18/novarand/scripts/compute_build_number.sh -f)
 export PKG_ROOT=${HOME}/node_pkg
 export PLATFORM=${PLATFORM}
 export OS=${PLATFORM_SPLIT[0]}
@@ -153,8 +153,8 @@ export ARCH=${PLATFORM_SPLIT[1]}
 export REPO_ROOT=${REPO_ROOT}
 export RELEASE_GENESIS_PROCESS=true
 export VARIATIONS=base
-export ALGORAND_PACKAGE_NAME=$("${GOPATH}"/src/github.com/algorand/go-algorand/scripts/compute_package_name.sh "${CHANNEL:-stable}")
-export DEVTOOLS_PACKAGE_NAME=$("${GOPATH}"/src/github.com/algorand/go-algorand/scripts/compute_package_name.sh "${CHANNEL:-stable}" algorand-devtools)
+export ALGORAND_PACKAGE_NAME=$("${GOPATH}"/src/github.com/Orca18/novarand/scripts/compute_package_name.sh "${CHANNEL:-stable}")
+export DEVTOOLS_PACKAGE_NAME=$("${GOPATH}"/src/github.com/Orca18/novarand/scripts/compute_package_name.sh "${CHANNEL:-stable}" algorand-devtools)
 EOF
 
 # strip leading 'export ' for docker --env-file

@@ -18,12 +18,13 @@ package agreement
 
 import (
 	"bytes"
+	"fmt"
 	"sort"
 
-	"github.com/algorand/go-algorand/config"
-	"github.com/algorand/go-algorand/crypto"
-	"github.com/algorand/go-algorand/data/basics"
-	"github.com/algorand/go-algorand/logging/telemetryspec"
+	"github.com/Orca18/novarand/config"
+	"github.com/Orca18/novarand/crypto"
+	"github.com/Orca18/novarand/data/basics"
+	"github.com/Orca18/novarand/logging/telemetryspec"
 )
 
 type proposalVoteCounter struct {
@@ -93,7 +94,7 @@ func (tracker *voteTracker) count(proposal proposalValue) uint64 {
 // proves the validity of the event to any other player.
 func (tracker *voteTracker) handle(r routerHandle, p player, e0 event) event {
 	voteCausesStateChange := true
-
+	fmt.Println("voteTracker ", e0.t())
 	switch e0.t() {
 	case voteAccepted:
 		e := e0.(voteAcceptedEvent)
@@ -129,14 +130,14 @@ func (tracker *voteTracker) handle(r routerHandle, p player, e0 event) event {
 				PreviousProposalHash2: eqVote.Proposals[1].BlockDigest.String(),
 			}
 			r.t.log.EventWithDetails(telemetryspec.ApplicationState, telemetryspec.EquivocatedVoteEvent, equivocationDetails)
-
+			fmt.Println("equivocator true")
 			return thresholdEvent{}
 		}
 
 		_, overBefore := tracker.overThreshold(proto, e.Vote.R.Step, r.t.log)
 
 		oldVote, voted := tracker.Voters[sender]
-
+		fmt.Println("oldVote, voted", voted)
 		if !voted {
 			// not an equivocator, and there's no earlier vote
 			tracker.Voters[sender] = e.Vote
@@ -151,6 +152,7 @@ func (tracker *voteTracker) handle(r routerHandle, p player, e0 event) event {
 			proposalVote.Count += e.Vote.Cred.Weight
 			// store the vote by the sender
 			proposalVote.Votes[sender] = e.Vote
+			//fmt.Println("proposalVoteCount ", proposalVote.Votes)
 			tracker.Counts[e.Vote.R.Proposal] = proposalVote
 		} else {
 
@@ -228,14 +230,14 @@ func (tracker *voteTracker) handle(r routerHandle, p player, e0 event) event {
 		}
 
 		prop, overAfter := tracker.overThreshold(proto, e.Vote.R.Step, r.t.log)
-
+		fmt.Println("overBefore || !overAfter", overBefore, overAfter)
 		if overBefore || !overAfter {
+			fmt.Println("res", res)
 			return res
 		}
 
 		// overThreshold is gurentee to return a valid proposal when overAfter is true
 		proposalVote := tracker.Counts[prop]
-
 		round := e.Vote.R.Round
 		period := e.Vote.R.Period
 		step := e.Vote.R.Step
