@@ -37,6 +37,7 @@ import (
 )
 
 // UniversalFetcher fetches blocks either from an http peer or ws peer.
+// UniversalFetcher는 http 피어 또는 ws 피어에서 블록을 가져옵니다.
 type universalBlockFetcher struct {
 	config config.Local
 	net    network.GossipNode
@@ -44,6 +45,7 @@ type universalBlockFetcher struct {
 }
 
 // makeUniversalFetcher returns a fetcher for http and ws peers.
+// makeUniversalFetcher는 http 및 ws 피어에 대한 페처를 반환합니다.
 func makeUniversalBlockFetcher(log logging.Logger, net network.GossipNode, config config.Local) *universalBlockFetcher {
 	return &universalBlockFetcher{
 		config: config,
@@ -52,6 +54,7 @@ func makeUniversalBlockFetcher(log logging.Logger, net network.GossipNode, confi
 }
 
 // fetchBlock returns a block from the peer. The peer can be either an http or ws peer.
+// fetchBlock은 피어에서 블록을 반환합니다. 피어는 http 또는 ws 피어일 수 있습니다.
 func (uf *universalBlockFetcher) fetchBlock(ctx context.Context, round basics.Round, peer network.Peer) (blk *bookkeeping.Block,
 	cert *agreement.Certificate, downloadDuration time.Duration, err error) {
 
@@ -114,6 +117,7 @@ func processBlockBytes(fetchedBuf []byte, r basics.Round, peerAddr string) (blk 
 }
 
 // a stub fetcherClient to satisfy the NetworkFetcher interface
+// NetworkFetcher 인터페이스를 만족시키는 스텁 fetcherClient
 type wsFetcherClient struct {
 	target network.UnicastPeer // the peer where we're going to send the request.
 	config *config.Local
@@ -122,6 +126,7 @@ type wsFetcherClient struct {
 }
 
 // getBlockBytes implements FetcherClient
+// getBlockBytes는 FetcherClient를 구현합니다.
 func (w *wsFetcherClient) getBlockBytes(ctx context.Context, r basics.Round) ([]byte, error) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
@@ -131,8 +136,8 @@ func (w *wsFetcherClient) getBlockBytes(ctx context.Context, r basics.Round) ([]
 
 	defer func() {
 		cancelFunc()
-		// note that we don't need to have additional Unlock here since
-		// we already have a defered Unlock above ( which executes in reversed order )
+		// note that we don't need to have additional Unlock here since we already have a defered Unlock above ( which executes in reversed order )
+		// 위에서 이미 지연된 잠금 해제가 있으므로 여기에 추가 잠금 해제가 필요하지 않습니다(역순으로 실행됨).
 		w.mu.Lock()
 	}()
 
@@ -152,6 +157,7 @@ func (w *wsFetcherClient) address() string {
 }
 
 // requestBlock send a request for block <round> and wait until it receives a response or a context expires.
+// requestBlock은 <round> 블록에 대한 요청을 보내고 응답을 받거나 컨텍스트가 만료될 때까지 기다립니다.
 func (w *wsFetcherClient) requestBlock(ctx context.Context, round basics.Round) ([]byte, error) {
 	roundBin := make([]byte, binary.MaxVarintLen64)
 	binary.PutUvarint(roundBin, uint64(round))
@@ -188,11 +194,13 @@ func (w *wsFetcherClient) requestBlock(ctx context.Context, round basics.Round) 
 }
 
 // set max fetcher size to 5MB, this is enough to fit the block and certificate
+// 최대 페처 크기를 5MB로 설정합니다. 블록과 인증서에 충분합니다.
 const fetcherMaxBlockBytes = 5 << 20
 
 var errNoBlockForRound = errors.New("No block available for given round")
 
 // HTTPFetcher implements FetcherClient doing an HTTP GET of the block
+// HTTPFetcher는 블록의 HTTP GET을 수행하는 FetcherClient를 구현합니다.
 type HTTPFetcher struct {
 	peer    network.HTTPPeer
 	rootURL string
@@ -206,6 +214,8 @@ type HTTPFetcher struct {
 
 // getBlockBytes gets a block.
 // Core piece of FetcherClient interface
+// getBlockBytes는 블록을 가져옵니다.
+// FetcherClient 인터페이스의 핵심 부분
 func (hf *HTTPFetcher) getBlockBytes(ctx context.Context, r basics.Round) (data []byte, err error) {
 	parsedURL, err := network.ParseHostOrURL(hf.rootURL)
 	if err != nil {
@@ -246,8 +256,10 @@ func (hf *HTTPFetcher) getBlockBytes(ctx context.Context, r basics.Round) (data 
 		return nil, err
 	}
 
-	// at this point, we've already receieved the response headers. ensure that the
-	// response content type is what we'd like it to be.
+	// at this point, we've already receieved the response headers.
+	// ensure that the response content type is what we'd like it to be.
+	// 이 시점에서 우리는 이미 응답 헤더를 수신했습니다.
+	// 응답 콘텐츠 유형이 우리가 원하는 것과 같은지 확인합니다.
 	contentTypes := response.Header["Content-Type"]
 	if len(contentTypes) != 1 {
 		err = errHTTPResponseContentType{contentTypeCount: len(contentTypes)}
@@ -257,7 +269,9 @@ func (hf *HTTPFetcher) getBlockBytes(ctx context.Context, r basics.Round) (data 
 	}
 
 	// TODO: Temporarily allow old and new content types so we have time for lazy upgrades
+	// TODO: 이전 및 새 콘텐츠 유형을 일시적으로 허용하여 지연 업그레이드 시간을 갖습니다.
 	// Remove this 'old' string after next release.
+	// 다음 릴리스 이후에 이 '이전' 문자열을 제거합니다.
 	const blockResponseContentTypeOld = "application/algorand-block-v1"
 	if contentTypes[0] != rpcs.BlockResponseContentType && contentTypes[0] != blockResponseContentTypeOld {
 		hf.log.Warnf("http block fetcher response has an invalid content type : %s", contentTypes[0])
@@ -270,6 +284,8 @@ func (hf *HTTPFetcher) getBlockBytes(ctx context.Context, r basics.Round) (data 
 
 // Address is part of FetcherClient interface.
 // Returns the root URL of the connected peer.
+// 주소는 FetcherClient 인터페이스의 일부입니다.
+// 연결된 피어의 루트 URL을 반환합니다.
 func (hf *HTTPFetcher) address() string {
 	return hf.rootURL
 }

@@ -62,7 +62,6 @@ func (f *messageFilter) CheckIncomingMessage(tag protocol.Tag, msg []byte, add b
 
 // CheckDigest checks if the given digest already in the collection, and return true if it was there before the call.
 // CheckDigest 는 주어진 다이제스트가 이미 컬렉션에 있는지 확인하고 호출 전에 존재했다면 true를 반환합니다.
-
 // CheckDigest is used on outgoing messages, either given a hash from a peer notifying us of messages it doesn't need, or as we are about to send a message to see if we should send it.
 // CheckDigest 는 필요하지 않은 메시지를 알려주는 피어로부터 해시가 제공되거나 메시지를 보내야 하는지 확인하기 위해 메시지를 보내려고 할 때 나가는 메시지에 사용됩니다.
 func (f *messageFilter) CheckDigest(msgHash crypto.Digest, add bool, promote bool) bool {

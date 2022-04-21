@@ -102,6 +102,7 @@ func registerHandlers(router *echo.Echo, prefix string, routes lib.Routes, ctx l
 }
 
 // NewRouter builds and returns a new router with our REST handlers registered.
+// NewRouter는 등록된 REST 핸들러와 함께 새 라우터를 빌드하고 반환합니다.
 func NewRouter(logger logging.Logger, node *node.AlgorandFullNode, shutdown <-chan struct{}, apiToken string, adminAPIToken string, listener net.Listener, numConnectionsLimit uint64) *echo.Echo {
 	if err := tokens.ValidateAPIToken(apiToken); err != nil {
 		logger.Errorf("Invalid apiToken was passed to NewRouter ('%s'): %v", apiToken, err)

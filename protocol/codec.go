@@ -109,9 +109,10 @@ func EncodeReflect(obj interface{}) []byte {
 	codecBytes.enc.ResetBytes(&codecBytes.buf)
 	codecBytes.enc.MustEncode(obj)
 	res := codecBytes.buf
-	// Don't use defer because it incurs a non-trivial overhead
-	// for encoding small objects.  If MustEncode panics, we will
-	// let the GC deal with the codecBytes object.
+	// Don't use defer because it incurs a non-trivial overhead for encoding small objects.
+	// If MustEncode panics, we will let the GC deal with the codecBytes object.
+	// defer를 사용하면 작은 개체를 인코딩하는 데 적지 않은 오버헤드가 발생하므로 사용하지 마십시오.
+	// MustEncode가 패닉하면 GC가 codecBytes 개체를 처리하도록 합니다.
 	codecBytesPool.Put(codecBytes)
 	return res
 }
@@ -236,21 +237,25 @@ func NewEncoder(w io.Writer) *codec.Encoder {
 }
 
 // NewJSONEncoder returns an encoder object writing bytes into [w].
+// NewJSONEncoder는 [w]에 바이트를 쓰는 인코더 객체를 반환합니다.
 func NewJSONEncoder(w io.Writer) *codec.Encoder {
 	return codec.NewEncoder(w, JSONHandle)
 }
 
 // NewDecoder returns a decoder object reading bytes from [r].
+// NewDecoder는 [r]에서 바이트를 읽는 디코더 객체를 반환합니다.
 func NewDecoder(r io.Reader) Decoder {
 	return codec.NewDecoder(r, CodecHandle)
 }
 
 // NewJSONDecoder returns a json decoder object reading bytes from [r].
+// NewJSONDecoder는 [r]에서 바이트를 읽는 json 디코더 객체를 반환합니다.
 func NewJSONDecoder(r io.Reader) Decoder {
 	return codec.NewDecoder(r, JSONHandle)
 }
 
 // NewDecoderBytes returns a decoder object reading bytes from [b].
+// NewDecoderBytes는 [b]에서 바이트를 읽는 디코더 객체를 반환합니다.
 func NewDecoderBytes(b []byte) Decoder {
 	return codec.NewDecoderBytes(b, CodecHandle)
 }

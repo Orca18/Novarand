@@ -75,8 +75,8 @@ type roundSeed struct {
 	elements [2]roundSeedPair
 }
 
-// LoadLedger creates a Ledger object to represent the ledger with the
-// specified database file prefix, initializing it if necessary.
+// LoadLedger creates a Ledger object to represent the ledger with the specified database file prefix, initializing it if necessary.
+// LoadLedger는 지정된 데이터베이스 파일 접두사로 원장을 나타내는 Ledger 객체를 생성하고 필요한 경우 초기화합니다.
 func LoadLedger(
 	log logging.Logger, dbFilenamePrefix string, memory bool,
 	genesisProto protocol.ConsensusVersion, genesisBal bookkeeping.GenesisBalances, genesisID string, genesisHash crypto.Digest,

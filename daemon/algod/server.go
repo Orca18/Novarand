@@ -50,6 +50,7 @@ import (
 var server http.Server
 
 // Server represents an instance of the REST API HTTP server
+// 서버는 REST API HTTP 서버의 인스턴스를 나타냅니다.
 type Server struct {
 	RootPath             string
 	Genesis              bookkeeping.Genesis
@@ -64,6 +65,7 @@ type Server struct {
 }
 
 // Initialize creates a Node instance with applicable network services
+// Initialize는 적용 가능한 네트워크 서비스로 노드 인스턴스를 생성합니다.
 func (s *Server) Initialize(cfg config.Local, phonebookAddresses []string, genesisText string) error {
 	// set up node
 	s.log = logging.Base()
@@ -171,11 +173,13 @@ func (s *Server) Initialize(cfg config.Local, phonebookAddresses []string, genes
 }
 
 // helper handles startup of tcp listener
+// 헬퍼는 tcp 리스너의 시작을 처리합니다.
 func makeListener(addr string) (net.Listener, error) {
 	var listener net.Listener
 	var err error
 	if (addr == "127.0.0.1:0") || (addr == ":0") {
 		// if port 0 is provided, prefer port 8080 first, then fall back to port 0
+		// 포트 0이 제공되면 포트 8080을 먼저 선택한 다음 포트 0으로 폴백합니다.
 		preferredAddr := strings.Replace(addr, ":0", ":8080", -1)
 		listener, err = net.Listen("tcp", preferredAddr)
 		if err == nil {
@@ -183,10 +187,12 @@ func makeListener(addr string) (net.Listener, error) {
 		}
 	}
 	// err was not nil or :0 was not provided, fall back to originally passed addr
+	// err이 nil이 아니거나 :0이 제공되지 않은 경우 원래 전달된 addr로 대체
 	return net.Listen("tcp", addr)
 }
 
 // Start starts a Node instance and its network services
+// Start는 Node 인스턴스와 네트워크 서비스를 시작합니다.
 func (s *Server) Start() {
 	s.log.Info("Trying to start an Algorand node")
 	fmt.Print("Initializing the Algorand node... ")
@@ -242,9 +248,8 @@ func (s *Server) Start() {
 		s.log, s.node, s.stopping, apiToken, adminAPIToken, listener,
 		cfg.RestConnectionsSoftLimit)
 
-	// Set up files for our PID and our listening address
-	// before beginning to listen to prevent 'goal node start'
-	// quit earlier than these service files get created
+	// Set up files for our PID and our listening address before beginning to listen to prevent 'goal node start' quit earlier than these service files get created
+	// 이 서비스 파일이 생성되기 전에 '목표 노드 시작'이 종료되는 것을 방지하기 위해 수신을 시작하기 전에 PID 및 수신 주소에 대한 파일을 설정합니다.
 	s.pidFile = filepath.Join(s.RootPath, "algod.pid")
 	s.netFile = filepath.Join(s.RootPath, "algod.net")
 	ioutil.WriteFile(s.pidFile, []byte(fmt.Sprintf("%d\n", os.Getpid())), 0644)
@@ -284,12 +289,14 @@ func (s *Server) Start() {
 }
 
 // Stop initiates a graceful shutdown of the node by shutting down the network server.
+// 중지는 네트워크 서버를 종료하여 노드의 정상적인 종료를 시작합니다.
 func (s *Server) Stop() {
-	// close the s.stopping, which would signal the rest api router that any pending commands
-	// should be aborted.
+	// close the s.stopping, which would signal the rest api router that any pending commands should be aborted.
+	// s.stopping을 닫으면 나머지 API 라우터에 보류 중인 명령이 중단되어야 함을 알립니다.
 	close(s.stopping)
 
 	// Attempt to log a shutdown event before we exit...
+	// 종료하기 전에 종료 이벤트를 기록하려고 시도합니다...
 	s.log.Event(telemetryspec.ApplicationState, telemetryspec.ShutdownEvent)
 
 	s.node.Stop()

@@ -1268,6 +1268,8 @@ func wrapCtx(ctx reqContext, handler func(reqContext, http.ResponseWriter, *http
 // reqCallbackMiddlware calls the reqCB function once per request that passes
 // through. We use this in server.go to kick a watchdog timer, so that we can
 // kill kmd if we haven't received a request in a while.
+// reqCallbackMiddleware는 통과하는 요청당 한 번 reqCB 함수를 호출합니다.
+// 우리는 이것을 server.go에서 사용하여 감시 타이머를 작동시키므로 잠시 동안 요청을 받지 못하면 kmd를 종료할 수 있습니다.
 func reqCallbackMiddleware(reqCB func()) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

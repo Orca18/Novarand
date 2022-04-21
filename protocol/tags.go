@@ -18,6 +18,8 @@ package protocol
 
 // Tag represents a message type identifier.  Messages have a Tag field. Handlers can register to a given Tag.
 // e.g., the agreement service can register to handle agreements with the Agreement tag.
+// 태그는 메시지 유형 식별자를 나타냅니다. 메시지에는 태그 필드가 있습니다. 핸들러는 주어진 태그에 등록할 수 있습니다.
+// 예를 들어 계약 서비스는 계약 태그를 사용하여 계약을 처리하도록 등록할 수 있습니다.
 type Tag string
 
 // Tags, in lexicographic sort order of tag values to avoid duplicates.

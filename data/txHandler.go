@@ -67,6 +67,7 @@ type TxHandler struct {
 }
 
 // MakeTxHandler makes a new handler for transaction messages
+// MakeTxHandler는 트랜잭션 메시지에 대한 새로운 핸들러를 만듭니다.
 func MakeTxHandler(txPool *pools.TransactionPool, ledger *Ledger, net network.GossipNode, genesisID string, genesisHash crypto.Digest, executionPool execpool.BacklogPool) *TxHandler {
 
 	if txPool == nil {
