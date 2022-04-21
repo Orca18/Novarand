@@ -357,7 +357,7 @@ func run() int {
 		log.EventWithDetails(telemetryspec.ApplicationState, telemetryspec.StartupEvent, startupDetails)
 
 		// Send a heartbeat event every 10 minutes as a sign of life
-		// 생명의 표시로 10분마다 하트비트 이벤트를 보냅니다.
+		// 살아있다고 10분마다 하트비트 이벤트를 보냅니다.
 		go func() {
 			ticker := time.NewTicker(10 * time.Minute)
 			defer ticker.Stop()
