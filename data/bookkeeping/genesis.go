@@ -41,6 +41,10 @@ const (
 // talk to each other, agree on the ledger contents, etc.  This is defined
 // by the initial account states (GenesisAllocation), the initial
 // consensus protocol (GenesisProto), and the schema of the ledger.
+/*
+Genesis객체는 알고랜드의 세계를 정의한다 - 서로 통신할 수 있고, 원장 콘텐츠에 대해 동의 하는 등의 일을 수행할 수 있는 노드
+이것은 최초 계정 상태(GenesisAllocation)와 최초 합의 프로토콜(GenesisProto)과 원장의 스키마에 의해 정의된다.
+*/
 type Genesis struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
@@ -106,6 +110,10 @@ func (genesis Genesis) ID() string {
 // short address.  Comment is a note about what this address is
 // representing, and is purely informational.  State is the initial
 // account state.
+/*
+GenesisAllocation은 제네시스블록(최초블록)의 주소에 할당된 알고의양을 나타낸다.
+State는 최초 계정의 상태이다(AccountData)
+*/
 type GenesisAllocation struct {
 	// Unfortunately we forgot to specify omitempty, and now
 	// this struct must be encoded without omitempty for the
@@ -123,6 +131,7 @@ func (genesis Genesis) ToBeHashed() (protocol.HashID, []byte) {
 }
 
 // GenesisBalances contains the information needed to generate a new ledger
+// GenesisBalances는 새로운 원장을 생성하기위해 필요한 정보들을 포함한다.
 type GenesisBalances struct {
 	Balances    map[basics.Address]basics.AccountData
 	FeeSink     basics.Address

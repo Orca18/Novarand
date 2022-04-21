@@ -18,11 +18,20 @@ package ledger
 
 // persistedAccountDataList represents a doubly linked list.
 // must initiate with newPersistedAccountList.
+/*
+persistedAccountDataList는 디스크에 저장되어있는 계정정보를 가지고 있는 더블 링크드 리스트이다.
+*/
 type persistedAccountDataList struct {
-	root     persistedAccountDataListNode  // sentinel list element, only &root, root.prev, and root.next are used
+	// 루트 노드(시작 노드), &root, root.prev, and root.next만 사용된다.
+	root persistedAccountDataListNode // sentinel list element, only &root, root.prev, and root.next are used
+
+	// 노드정보를 저장하는 리스트
 	freeList *persistedAccountDataListNode // preallocated nodes location
 }
 
+/*
+디스크에 저장되어있는 계정데이터와 앞, 뒤 계정 노드의 포인터를 가지고 있는 구조체
+*/
 type persistedAccountDataListNode struct {
 	// Next and previous pointers in the doubly-linked list of elements.
 	// To simplify the implementation, internally a list l is implemented

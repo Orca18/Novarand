@@ -21,7 +21,9 @@ import (
 	"fmt"
 
 	"github.com/Orca18/novarand/crypto"
-	"github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+
+	v1 "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+
 	"github.com/Orca18/novarand/data/account"
 	"github.com/Orca18/novarand/data/basics"
 	"github.com/Orca18/novarand/data/transactions"
@@ -158,6 +160,9 @@ func (c *Client) MultisigSignProgramWithWallet(walletHandle, pw, program []byte,
 }
 
 // BroadcastTransaction broadcasts a signed transaction to the network using algod
+/*
+	algod를 사용해서 서명된 트랜잭션을 네트워크로 전송한다.
+*/
 func (c *Client) BroadcastTransaction(stx transactions.SignedTxn) (txid string, err error) {
 	algod, err := c.ensureAlgodClient()
 	if err != nil {
@@ -171,6 +176,10 @@ func (c *Client) BroadcastTransaction(stx transactions.SignedTxn) (txid string, 
 }
 
 // BroadcastTransactionGroup broadcasts a signed transaction group to the network using algod
+/*
+	algod를 사용해서 서명된 트랜잭션 그룹을 네트워크로 전송한다.
+	아!! 클라이언트가 이 메소드를 사용해서 보낸 트랜잭션을 syncer가 특정주기마다 받는거구나!!
+*/
 func (c *Client) BroadcastTransactionGroup(txgroup []transactions.SignedTxn) error {
 	algod, err := c.ensureAlgodClient()
 	if err != nil {
@@ -741,6 +750,11 @@ func (c *Client) MakeUnsignedAssetFreezeTx(index uint64, accountToChange string,
 	tx.AssetFrozen = newFreezeSetting
 
 	return tx, nil
+}
+
+// (추가) AddressPrint트랜잭션을 생성할 수 있는 함수 추가
+func (c *Client) MakeUnsignedAddressPrint() {
+
 }
 
 // GroupID computes the group ID for a group of transactions.

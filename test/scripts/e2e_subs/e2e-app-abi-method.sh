@@ -30,8 +30,8 @@ fi
 APPID=$(echo "$RES" | grep Created | awk '{ print $6 }')
 
 # Opt in
-RES=$(${gcmd} app method --method "optIn(string)string" --arg "\"Algorand Fan\"" --on-completion optin --app-id $APPID --from $ACCOUNT 2>&1 || true)
-EXPECTED="method optIn(string)string succeeded with output: \"hello Algorand Fan\""
+RES=$(${gcmd} app method --method "optIn(string)string" --arg "\"Novarand Fan\"" --on-completion optin --app-id $APPID --from $ACCOUNT 2>&1 || true)
+EXPECTED="method optIn(string)string succeeded with output: \"hello Novarand Fan\""
 if [[ $RES != *"${EXPECTED}"* ]]; then
     date '+app-abi-method-test FAIL the method call to optIn(string)string should not fail %Y%m%d_%H%M%S'
     false

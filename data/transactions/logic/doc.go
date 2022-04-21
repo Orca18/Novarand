@@ -379,6 +379,8 @@ var TypeNameDescriptions = map[string]string{
 	string(protocol.AssetTransferTx):   "AssetTransfer",
 	string(protocol.AssetFreezeTx):     "AssetFreeze",
 	string(protocol.ApplicationCallTx): "ApplicationCall",
+	// (추가)
+	//string(protocol.AddressPrint): "AddressPrint",
 }
 
 var onCompletionDescriptions = map[OnCompletionConstType]string{
@@ -406,7 +408,7 @@ var txnFieldDocs = map[string]string{
 	"Type":           "Transaction type as bytes",
 	"TypeEnum":       "See table below",
 	"Sender":         "32 byte address",
-	"Fee":            "microalgos",
+	"Fee":            "microNovas",
 	"FirstValid":     "round number",
 	"FirstValidTime": "Causes program to fail; reserved for future use",
 	"LastValid":      "round number",
@@ -418,7 +420,7 @@ var txnFieldDocs = map[string]string{
 	"TxID":       "The computed ID for this transaction. 32 bytes.",
 
 	"Receiver":         "32 byte address",
-	"Amount":           "microalgos",
+	"Amount":           "microNovas",
 	"CloseRemainderTo": "32 byte address",
 
 	"VotePK":           "32 byte address",
@@ -478,8 +480,8 @@ var txnFieldDocs = map[string]string{
 }
 
 var globalFieldDocs = map[string]string{
-	"MinTxnFee":                 "microalgos",
-	"MinBalance":                "microalgos",
+	"MinTxnFee":                 "microNovas",
+	"MinBalance":                "microNovas",
 	"MaxTxnLife":                "rounds",
 	"ZeroAddress":               "32 byte address of all zero bytes",
 	"GroupSize":                 "Number of transactions in this atomic transaction group. At least 1",
@@ -546,8 +548,8 @@ var appParamsFieldDocs = map[string]string{
 
 // acctParamsFieldDocs are notes on fields available in `app_params_get`
 var acctParamsFieldDocs = map[string]string{
-	"AcctBalance":    "Account balance in microalgos",
-	"AcctMinBalance": "Minimum required blance for account, in microalgos",
+	"AcctBalance":    "Account balance in microNovas",
+	"AcctMinBalance": "Minimum required blance for account, in microNovas",
 	"AcctAuthAddr":   "Address the account is rekeyed to.",
 }
 

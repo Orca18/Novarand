@@ -32,9 +32,13 @@ import (
 type (
 	// An UnauthenticatedCredential is a Credential which has not yet been
 	// authenticated.
+	/*
+		UnauthenticatedCredential은 아직 권한을 받지 않은 자격증이다.
+	*/
 	UnauthenticatedCredential struct {
-		_struct struct{}        `codec:",omitempty,omitemptyarray"`
-		Proof   crypto.VrfProof `codec:"pf"`
+		_struct struct{} `codec:",omitempty,omitemptyarray"`
+		// vrf 검증 시 사용되는 증명값
+		Proof crypto.VrfProof `codec:"pf"`
 	}
 
 	// A Credential represents a proof of committee membership.
@@ -46,22 +50,37 @@ type (
 	// Upgrades: whether or not domain separation is enabled is cached.
 	// If this flag is set, this flag also includes original hashable
 	// credential.
+	/*
+		Credential은 위원회의 멤버십의 증명을 나타낸다.
+		weight가 0이상이면 선택이 된것이다(블록제안 혹은 투표 참여겠지?)
+		 VRF output hash 또한 캐싱된다.
+	*/
 	Credential struct {
-		_struct struct{}      `codec:",omitempty,omitemptyarray"`
-		Weight  uint64        `codec:"wt"`
-		VrfOut  crypto.Digest `codec:"h"`
+		_struct struct{} `codec:",omitempty,omitemptyarray"`
+		// 제안자 혹은 투표자로 선출여부를 판단하기 위한 값
+		Weight uint64 `codec:"wt"`
+		// RawOut  crypto.VrfOutput의 해시값.
+		VrfOut crypto.Digest `codec:"h"`
 
-		DomainSeparationEnabled bool               `codec:"ds"`
-		Hashable                hashableCredential `codec:"hc"`
+		// 설정값 중에 하나. 이미 설정된 값을 사용한다.
+		DomainSeparationEnabled bool `codec:"ds"`
+		//
+		Hashable hashableCredential `codec:"hc"`
 
+		// 아직 권한을 받지 않은 자격증
 		UnauthenticatedCredential
 	}
 
+	// 해싱할 수 있는 vrfoutput, 주소값 => 이 객체를 해싱해서 해당 주소를 사용하는
+	// 계정의 위원회 선정여부를 확인한다.
 	hashableCredential struct {
-		_struct struct{}         `codec:",omitempty,omitemptyarray"`
-		RawOut  crypto.VrfOutput `codec:"v"`
-		Member  basics.Address   `codec:"m"`
-		Iter    uint64           `codec:"i"`
+		_struct struct{} `codec:",omitempty,omitemptyarray"`
+		// Vrf에 의해 출력된 VrfOutput. UnauthenticatedCredential.Proof와 함께 검증에 사용
+		RawOut crypto.VrfOutput `codec:"v"`
+		// 주소
+		Member basics.Address `codec:"m"`
+		// 반복을 위한 값
+		Iter uint64 `codec:"i"`
 	}
 )
 
@@ -72,8 +91,15 @@ type (
 //
 // If it is, the returned Credential constitutes a proof of this fact.
 // Otherwise, an error is returned.
+/*
+	네트워크에서 수신한  unauthenticated Credential 검증합니다.
+	제공된  unauthenticated Credential이 유효한 멤버십 proof인지 확인합니다.
+	유효하다면 Credential을 반환하고 그렇지 않으면 오류가 반환됩니다.
+*/
 func (cred UnauthenticatedCredential) Verify(proto config.ConsensusParams, m Membership) (res Credential, err error) {
 	selectionKey := m.Record.SelectionID
+
+	// proof값이 올바르다면 랜덤한 vrfOutput을 반환한다.
 	ok, vrfOut := selectionKey.Verify(cred.Proof, m.Selector)
 
 	hashable := hashableCredential{
@@ -82,6 +108,9 @@ func (cred UnauthenticatedCredential) Verify(proto config.ConsensusParams, m Mem
 	}
 
 	// Also hash in the address. This is necessary to decorrelate the selection of different accounts that have the same VRF key.
+	/*
+
+	 */
 	var h crypto.Digest
 	if proto.CredentialDomainSeparationEnabled {
 		h = crypto.HashObj(hashable)
@@ -123,6 +152,9 @@ func (cred UnauthenticatedCredential) Verify(proto config.ConsensusParams, m Mem
 }
 
 // MakeCredential creates a new unauthenticated Credential given some selector.
+/*
+	주어진 selector로부터 새로운 unauthenticated Credential를 생성한다.
+*/
 func MakeCredential(secrets *crypto.VrfPrivkey, sel Selector) UnauthenticatedCredential {
 	pf, ok := secrets.Prove(sel)
 	if !ok {
@@ -166,6 +198,14 @@ func (cred Credential) Selected() bool {
 // This is because a weight w credential is simulating being selected to be on the
 // leader committee w times, so each of the w proposals would have a different hash,
 // and the lowest would win.
+/*
+여러 제안이 있을 때 관계를 끊는 데 최저출력이 사용됩니다.
+사람들은 자격 증명이 가장 낮은 출력을 갖는 제안에 투표할 것입니다.
+자격 증명을 해시하고 출력을 bigint로 해석합니다.
+가중치 w > 1인 자격 증명의 경우 자격 증명을 w번 해시하고(다른 카운터 값으로) 가장 낮은 출력을 사용합니다.
+이것은 가중치 w 자격 증명이 리더 위원회에 w번 선정되도록 시뮬레이션하고 있으므로 w
+제안마다 다른 해시를 가지며 가장 낮은 것이 승리하기 때문입니다
+*/
 func (cred Credential) lowestOutput() *big.Int {
 	var lowest big.Int
 

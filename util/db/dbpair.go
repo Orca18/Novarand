@@ -34,11 +34,13 @@ func (p Pair) Close() {
 
 // OpenPair opens the filename with both reading and writing accessors.
 func OpenPair(filename string, memory bool) (p Pair, err error) {
+	// db에 접근해서 조회만 할 수 있는 접근자 생성
 	p.Rdb, err = MakeAccessor(filename, true, memory)
 	if err != nil {
 		return
 	}
 
+	// db에 접근해서 작성 할 수 있는 접근자 생성
 	p.Wdb, err = MakeAccessor(filename, false, memory)
 	if err != nil {
 		p.Rdb.Close()

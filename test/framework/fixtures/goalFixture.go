@@ -145,7 +145,7 @@ func (f *GoalFixture) NodeStart() error {
 	if err != nil {
 		return combineExecuteError(stdout, stderr, err)
 	}
-	if !strings.Contains(stdout, "Algorand node successfully started") {
+	if !strings.Contains(stdout, "Novarand node successfully started") {
 		err = fmt.Errorf("failed to start node: %s", stderr)
 	}
 	return err

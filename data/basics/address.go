@@ -41,8 +41,10 @@ import (
 // - The other is wrapping `libsodium` in a driver interface to make crypto
 //   package importable (even if `libsodium` does not exist)
 
+// 아 이렇게 사용하는건 type A B와 동일하고 A를 사용하면 B타입과 동일하다가 되는거구나.
 type (
 	// Address is a unique identifier corresponding to ownership of money
+	// 주소는 돈의 소유권과 관련된 유니크한 식별자다
 	Address crypto.Digest
 )
 
@@ -50,6 +52,7 @@ const (
 	checksumLength = 4
 )
 
+// 알고랜드에서 주소는 base32로 인코딩함
 var base32Encoder = base32.StdEncoding.WithPadding(base32.NoPadding)
 
 // GetChecksum returns the checksum as []byte

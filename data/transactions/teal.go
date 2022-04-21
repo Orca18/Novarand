@@ -26,6 +26,11 @@ import (
 // EvalDelta stores StateDeltas for an application's global key/value store, as
 // well as StateDeltas for some number of accounts holding local state for that
 // application
+/*
+EvalDelta는 어플리케이션의 GlobalState(전역 키/값 저장소)에 대한 StateDelta와 LocalState(해당 어플리케이션에 대한
+로컬 상태를 보유하고 있는 계정(즉, 해당 애플리케이션에 대해 optin tx를 실행한 계정))에 대한 StateDelta를 저장합니다
+=> GlobalState와 LocalState의 StateDelta를 저장하고 있는 구조체
+*/
 type EvalDelta struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 

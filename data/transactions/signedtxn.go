@@ -122,6 +122,9 @@ func (s *SignedTxnInBlock) Hash() crypto.Digest {
 
 // WrapSignedTxnsWithAD takes an array SignedTxn and returns the same as SignedTxnWithAD
 // Each txn's ApplyData is the default empty state.
+/*
+	[]transactions.SignedTxn의 트랜잭션 그룹데이터를 []SignedTxnWithAD형태로 래핑한다.
+*/
 func WrapSignedTxnsWithAD(txgroup []SignedTxn) []SignedTxnWithAD {
 	txgroupad := make([]SignedTxnWithAD, len(txgroup))
 	for i, tx := range txgroup {

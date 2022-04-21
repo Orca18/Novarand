@@ -168,6 +168,9 @@ func AssetConfig(cc transactions.AssetConfigTxnFields, header transactions.Heade
 	return balances.Put(creator, record)
 }
 
+/*
+특정 계정의 자산을 빼낸다.
+*/
 func takeOut(balances Balances, addr basics.Address, asset basics.AssetIndex, amount uint64, bypassFreeze bool) error {
 	if amount == 0 {
 		return nil
@@ -198,6 +201,9 @@ func takeOut(balances Balances, addr basics.Address, asset basics.AssetIndex, am
 	return balances.Put(addr, snd)
 }
 
+/*
+특정 계정에 자산을 집어 넣는다.
+*/
 func putIn(balances Balances, addr basics.Address, asset basics.AssetIndex, amount uint64, bypassFreeze bool) error {
 	if amount == 0 {
 		return nil
@@ -229,6 +235,9 @@ func putIn(balances Balances, addr basics.Address, asset basics.AssetIndex, amou
 }
 
 // AssetTransfer applies an AssetTransfer transaction using the Balances interface.
+/*
+AssetTransfer transaction을 적용한다.
+*/
 func AssetTransfer(ct transactions.AssetTransferTxnFields, header transactions.Header, balances Balances, spec transactions.SpecialAddresses, ad *transactions.ApplyData) error {
 	// Default to sending from the transaction sender's account.
 	source := header.Sender
@@ -389,6 +398,9 @@ func AssetTransfer(ct transactions.AssetTransferTxnFields, header transactions.H
 }
 
 // AssetFreeze applies an AssetFreeze transaction using the Balances interface.
+/*
+AssetFreeze transaction을 적용한다.
+*/
 func AssetFreeze(cf transactions.AssetFreezeTxnFields, header transactions.Header, balances Balances, spec transactions.SpecialAddresses, ad *transactions.ApplyData) error {
 	// Only the Freeze address can change the freeze value.
 	params, _, err := getParams(balances, cf.FreezeAsset)

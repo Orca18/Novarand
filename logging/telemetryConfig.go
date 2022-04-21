@@ -24,7 +24,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 
 	"github.com/Orca18/novarand/config"

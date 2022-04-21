@@ -52,6 +52,9 @@ var enableFullfsyncStatements []string
 var sqliteInitOnce sync.Once
 
 // An Accessor manages a sqlite database handle and any outstanding batching operations.
+/*
+Accessor는 sqlite db를 다루고 배칭 오퍼레이션을 수행한다.
+*/
 type Accessor struct {
 	Handle   *sql.DB
 	readOnly bool

@@ -38,6 +38,10 @@ import (
 const (
 	// BalancesPerCatchpointFileChunk defines the number of accounts that would be stored in each chunk in the catchpoint file.
 	// note that the last chunk would typically be less than this number.
+	/*
+		BalancesPerCatchpointFileChunk는 캐치포인트 파일의 각 청크(계정의 묶음)에 저장될 계정 수를 정의합니다.
+		마지막 청크는 일반적으로 이 숫자보다 작습니다
+	*/
 	BalancesPerCatchpointFileChunk = 512
 
 	// catchpointFileVersion is the catchpoint file version
@@ -48,6 +52,11 @@ const (
 // it's designed to work in a step fashion : a caller will call the WriteStep method in a loop until
 // the writing is complete. It might take multiple steps until the operation is over, and the caller
 // has the option of throttling the CPU utilization in between the calls.
+/*
+catchpointWriter는 캐치포인트 파일에 대한 계정 데이터의 영속성을 관리하는 구조체입니다 => catchpoint 파일에 계정정보를 작성하는걸까?
+단계적으로 작동하도록 설계되었습니다. 호출자는 쓰기가 완료될 때까지 루프에서 WriteStep(파일에 계정정보를 저장) 메서드를 호출합니다.
+작업이 끝날 때까지 여러 단계가 필요할 수 있으며 호출자는 호출 사이에 CPU 사용률을 조절할 수 있습니다.
+*/
 type catchpointWriter struct {
 	ctx               context.Context
 	hasher            hash.Hash
@@ -78,6 +87,10 @@ type encodedBalanceRecord struct {
 
 // CatchpointFileHeader is the content we would have in the "content.msgpack" file in the catchpoint tar archive.
 // we need it to be public, as it's being decoded externally by the catchpointdump utility.
+/*
+CatchpointFileHeader는 catchpoint.tar 아카이브의 "content.msgpack" 파일에 있는 내용입니다.
+catchpointdump 유틸리티에 의해 외부적으로 디코딩되기 때문에 공개되어야 합니다
+*/
 type CatchpointFileHeader struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 

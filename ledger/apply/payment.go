@@ -48,6 +48,14 @@ func checkSpender(payment transactions.PaymentTxnFields, header transactions.Hea
 // than overwriting it.  For example, Transaction.Apply() may
 // have updated ad.SenderRewards, and this function should only
 // add to ad.SenderRewards (if needed), but not overwrite it.
+/*
+Payment은 이 transaction에 따라 잔액을 변경합니다.
+ApplyData 인수는 apply()에 의해 변경된 사항을 반영해야 합니다.
+호출자(즉, Transaction.Apply)가 변경한 사항이 이미 포함되어 있을 수 있으므로
+apply()는 덮어쓰지 않고 업데이트해야 합니다.
+예를 들어 Transaction.Apply()는 ad.SenderRewards를 업데이트했을 수 있으며
+이 함수는 ad.SenderRewards(필요한 경우)에만 추가해야 하지만 덮어쓰면 안 됩니다.
+*/
 func Payment(payment transactions.PaymentTxnFields, header transactions.Header, balances Balances, spec transactions.SpecialAddresses, ad *transactions.ApplyData) error {
 	// move tx money
 	if !payment.Amount.IsZero() || payment.Receiver != (basics.Address{}) {

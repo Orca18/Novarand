@@ -32,13 +32,20 @@ import (
 
 // A Root encapsulates a set of secrets which controls some store of money.
 //
-// A Root is authorized to spend money and create Participations
-// for which this account is the parent.
+// A Root is authorized to spend money and create Participations for which this account is the parent.
 //
 // It handles persistence and secure deletion of secrets.
+/*
+Root는 어떤 돈의 저장소(?)를 통제하는 비밀세트(rootkey)를 압축하기위해 사용한다.
+Root는 돈을 사용하고 이 계정을 부모로 두는 Participations를 생성하기 위한 권한을 받는다(참여노드를 만드는건가?)
+Root는 비밀의 영구저장 및 안전한 삭제를 담당한다.
+*/
 type Root struct {
+	// 위조할 수 없는 서명을 만들기 위해 사용 됨
+	// SignatureVerifier(PublicKey), SK ed25519PrivateKey(PrivateKey)로 구성됨
 	secrets *crypto.SignatureSecrets
 
+	// SQLite db를 관리하는 구조체이다.
 	store db.Accessor
 }
 

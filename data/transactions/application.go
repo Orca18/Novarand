@@ -51,11 +51,19 @@ const (
 // OnCompletion is an enum representing some layer 1 side effect that an
 // ApplicationCall transaction will have if it is included in a block.
 //go:generate stringer -type=OnCompletion -output=application_string.go
+/*
+OnCompletion은 ApplicationCall 트랜잭션이 블록에 포함된 경우 갖게 될
+일부 레이어1의 부수효과를 나타내는 열거형입니다
+*/
 type OnCompletion uint64
 
+// 부수효과을 나타내는 상수값: application call이 하는 어떤 행동에 따른 상수값
 const (
 	// NoOpOC indicates that an application transaction will simply call its
 	// ApprovalProgram
+	/*
+		ApprovalProgram은 애플리케이션의 주요 로직을 처리하는 프로그램
+	*/
 	NoOpOC OnCompletion = 0
 
 	// OptInOC indicates that an application transaction will allocate some
@@ -85,6 +93,9 @@ const (
 
 // ApplicationCallTxnFields captures the transaction fields used for all
 // interactions with applications
+/*
+	ApplicationCallTxnFields는 애플리케이션과의 모든 상호 작용에 사용되는 트랜잭션 필드를 가지고 있다.
+*/
 type ApplicationCallTxnFields struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 

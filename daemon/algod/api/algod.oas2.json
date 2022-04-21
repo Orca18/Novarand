@@ -14,7 +14,7 @@
     "description": "API endpoint for algod operations.",
     "title": "Algod REST API.",
     "contact": {
-      "name": "algorand",
+      "name": "novarand",
       "url": "https://www.algorand.com/get-in-touch/contact",
       "email": "contact@algorand.com"
     },
