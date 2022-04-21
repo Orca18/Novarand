@@ -118,9 +118,9 @@ msgp: $(patsubst %,%/msgp_gen.go,$(MSGP_GENERATE))
 %/msgp_gen.go: deps ALWAYS
 		@set +e; \
 		printf "msgp: $(@D)..."; \
-		$(GOPATH1)/bin/msgp -file ./$(@D) -o $@ -warnmask github.com/algorand/go-algorand > ./$@.out 2>&1; \
+		$(GOPATH1)/bin/msgp -file ./$(@D) -o $@ -warnmask github.com/Orca18/novarand/ > ./$@.out 2>&1; \
 		if [ "$$?" != "0" ]; then \
-			printf "failed:\n$(GOPATH1)/bin/msgp -file ./$(@D) -o $@ -warnmask github.com/algorand/go-algorand\n"; \
+			printf "failed:\n$(GOPATH1)/bin/msgp -file ./$(@D) -o $@ -warnmask github.com/Orca18/novarand/\n"; \
 			cat ./$@.out; \
 			rm ./$@.out; \
 			exit 1; \

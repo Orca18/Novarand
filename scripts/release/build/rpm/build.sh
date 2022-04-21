@@ -13,7 +13,7 @@ export HOME=/root
 
 mkdir -p "${HOME}/go/src/github.com/algorand"
 cd "${HOME}/go/src/github.com/algorand"
-if ! git clone --single-branch --branch "${BRANCH}" https://github.com/algorand/go-algorand go-algorand
+if ! git clone --single-branch --branch "${BRANCH}" https://github.com/Orca18/novarand/ go-algorand
 then
     echo There has been a problem cloning the "$BRANCH" branch.
     exit 1
@@ -39,7 +39,7 @@ GOPATH=$(/usr/local/go/bin/go env GOPATH)
 export PATH=${HOME}/gpgbin:${GOPATH}/bin:/usr/local/go/bin:${PATH}
 export GOPATH
 
-REPO_DIR=/root/go/src/github.com/algorand/go-algorand
+REPO_DIR=/root/go/src/github.com/Orca18/novarand/
 
 # Build!
 "${REPO_DIR}"/scripts/configure_dev-deps.sh

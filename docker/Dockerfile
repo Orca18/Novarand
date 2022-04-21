@@ -12,7 +12,7 @@ ENV GOBIN /go/bin
 ENV PATH   $GOPATH/bin:$GOROOT/bin:$PATH
 RUN mkdir -p $GOPATH/src/github.com/algorand
 WORKDIR $GOPATH/src/github.com/algorand
-RUN git clone https://github.com/algorand/go-algorand
-WORKDIR $GOPATH/src/github.com/algorand/go-algorand
+RUN git clone https://github.com/Orca18/novarand/
+WORKDIR $GOPATH/src/github.com/Orca18/novarand/
 RUN git checkout master && ./scripts/configure_dev.sh && make install
 ENTRYPOINT ["/bin/bash"]

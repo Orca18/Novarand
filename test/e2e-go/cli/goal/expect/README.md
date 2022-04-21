@@ -10,7 +10,7 @@ From the go-algorand root directory, setup the environment and build the binarie
 
 #### Initialize the project
 ```bash
-git clone https://github.com/algorand/go-algorand
+git clone https://github.com/Orca18/novarand/
 cd go-algorand
 ./scripts/configure_dev.sh
 ```

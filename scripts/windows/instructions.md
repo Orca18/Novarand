@@ -16,7 +16,7 @@
 	pacman -S --disable-download-timeout --noconfirm git
 	```
 
-5. Clone repository with `git clone https://github.com/algorand/go-algorand`.
+5. Clone repository with `git clone https://github.com/Orca18/novarand/`.
 
 6. Switch to source code directory with `cd go-algorand`.
 

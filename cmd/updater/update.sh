@@ -191,7 +191,7 @@ function get_updater_url() {
         exit 1
     fi
     UPDATER_FILENAME="install_master_${OS}-${ARCH}.tar.gz"
-    UPDATER_URL="https://github.com/algorand/go-algorand-doc/raw/master/downloads/installers/${OS}_${ARCH}/${UPDATER_FILENAME}"
+    UPDATER_URL="https://github.com/Orca18/novarand/-doc/raw/master/downloads/installers/${OS}_${ARCH}/${UPDATER_FILENAME}"
 }
 
 # check to see if the binary updater exists. if not, it will automatically the correct updater binary for the current platform

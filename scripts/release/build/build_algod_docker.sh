@@ -38,7 +38,7 @@ DOCKER_IMAGE="algorand/algod_${CHANNEL_VERSION}:${DOCKER_TAG}"
 RESULT_DIR="${HOME}/node_pkg/"
 DOCKERFILE="${HOME}/go/src/github.com/Orca18/novarand/docker/build/algod.Dockerfile"
 START_ALGOD_FILE="start_algod_docker.sh"
-pushd "${HOME}/go/src/github.com/algorand/go-algorand"
+pushd "${HOME}/go/src/github.com/Orca18/novarand/"
 if ! ./scripts/check_golang_version.sh
 then
     exit 1

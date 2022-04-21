@@ -13,12 +13,12 @@ ENV GOROOT=/usr/local/go \
     GOPATH=$HOME/go \
     ARCH_TYPE=${ARCH}
 RUN mkdir -p $GOPATH/src/github.com/algorand
-COPY . $GOPATH/src/github.com/algorand/go-algorand
+COPY . $GOPATH/src/github.com/Orca18/novarand/
 ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH \
     GOPROXY=https://proxy.golang.org,https://pkg.go.dev,https://goproxy.io,direct
-WORKDIR $GOPATH/src/github.com/algorand/go-algorand
+WORKDIR $GOPATH/src/github.com/Orca18/novarand/
 RUN make clean
-RUN rm -rf $GOPATH/src/github.com/algorand/go-algorand && \
-    mkdir -p $GOPATH/src/github.com/algorand/go-algorand
+RUN rm -rf $GOPATH/src/github.com/Orca18/novarand/ && \
+    mkdir -p $GOPATH/src/github.com/Orca18/novarand/
 RUN echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
 CMD ["/bin/bash"]

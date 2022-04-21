@@ -38,7 +38,7 @@ export BRANCH
 # Check out
 mkdir -p "${HOME}/go/src/github.com/algorand"
 cd "${HOME}/go/src/github.com/algorand"
-if ! git clone --single-branch --branch "${BRANCH}" https://github.com/algorand/go-algorand go-algorand
+if ! git clone --single-branch --branch "${BRANCH}" https://github.com/Orca18/novarand/ go-algorand
 then
     echo There has been a problem cloning the "$BRANCH" branch.
     exit 1
@@ -132,7 +132,7 @@ cd aptly && git fetch
 git checkout v1.4.0
 make install
 
-REPO_ROOT="${GOPATH}"/src/github.com/algorand/go-algorand
+REPO_ROOT="${GOPATH}"/src/github.com/Orca18/novarand/
 PLATFORM=$("${REPO_ROOT}"/scripts/osarchtype.sh)
 PLATFORM_SPLIT=(${PLATFORM//\// })
 
