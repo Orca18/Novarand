@@ -3,7 +3,8 @@
 
 go-algorand + Nova 1
 ====================
-Algorand's official implementation in Go.
+novarand's official implementation in Go.
+go-algorand + Nova 1
 
 Algorand is a permissionless, pure proof-of-stake blockchain that delivers
 decentralization, scalability, security, and transaction finality.
