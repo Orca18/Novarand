@@ -62,6 +62,7 @@ var (
 	rekeyToAddress  string
 	signerAddress   string
 	rawOutput       bool
+	ex              string
 )
 
 func init() {
@@ -74,6 +75,7 @@ func init() {
 	clerkCmd.AddCommand(compileCmd)
 	clerkCmd.AddCommand(dryrunCmd)
 	clerkCmd.AddCommand(dryrunRemoteCmd)
+	clerkCmd.AddCommand(inspectCmd2)
 
 	// Wallet to be used for the clerk operation
 	clerkCmd.PersistentFlags().StringVarP(&walletName, "wallet", "w", "", "Set the wallet to be used for the selected operation")
@@ -139,6 +141,9 @@ func init() {
 	dryrunRemoteCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "print more info")
 	dryrunRemoteCmd.Flags().BoolVarP(&rawOutput, "raw", "r", false, "output raw response from algod")
 	dryrunRemoteCmd.MarkFlagRequired("dryrun-state")
+
+	inspectCmd2.Flags().StringVarP(&ex, "example", "e", "", "example")
+	inspectCmd2.MarkFlagRequired("example")
 
 }
 
@@ -670,6 +675,15 @@ var inspectCmd = &cobra.Command{
 				count++
 			}
 		}
+	},
+}
+
+var inspectCmd2 = &cobra.Command{
+	Use:   "inspect2 ",
+	Short: "222",
+	Long:  `22222`,
+	Run: func(cmd *cobra.Command, args []string) {
+		reportInfof("example success " + ex)
 	},
 }
 
