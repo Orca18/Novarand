@@ -128,6 +128,7 @@ type Transaction struct {
 	AssetFreezeTxnFields
 	ApplicationCallTxnFields
 	CompactCertTxnFields
+	//AddressPrintTxnFields
 }
 
 // ApplyData contains information about the transaction's execution.
@@ -537,6 +538,7 @@ func (tx Transaction) WellFormed(spec SpecialAddresses, proto config.ConsensusPa
 		if tx.Lease != [32]byte{} {
 			return fmt.Errorf("lease must be zero")
 		}
+	//case protocol.AddressPrint:
 
 	default:
 		return fmt.Errorf("unknown tx type %v", tx.Type)
@@ -696,6 +698,8 @@ func (tx Transaction) RelevantAddrs(spec SpecialAddresses) []basics.Address {
 		if !tx.AssetTransferTxnFields.AssetSender.IsZero() {
 			addrs = append(addrs, tx.AssetTransferTxnFields.AssetSender)
 		}
+		//case protocol.AddressPrint:
+
 	}
 
 	return addrs
@@ -719,6 +723,7 @@ func (tx Transaction) GetReceiverAddress() basics.Address {
 		return tx.PaymentTxnFields.Receiver
 	case protocol.AssetTransferTx:
 		return tx.AssetTransferTxnFields.AssetReceiver
+	//case protocol.AddressPrint:
 	default:
 		return basics.Address{}
 	}

@@ -316,7 +316,9 @@ var sendCmd = &cobra.Command{
 
 		checkTxValidityPeriodCmdFlags(cmd)
 
+		// "ALGORAND_DATA"에 저장되어있는 경로의 데이터 폴더를 가져온다.
 		dataDir := ensureSingleDataDir()
+		// accountlist.json에 있는 계정정보를 가져온다(흠.. 이러면 내 계정정보 밖에 안가져오는거 아닌가?)
 		accountList := makeAccountsList(dataDir)
 
 		var fromAddressResolved string
@@ -512,6 +514,7 @@ var sendCmd = &cobra.Command{
 	},
 }
 
+// 파일에 저장된 트랜잭션을 전송한다.
 var rawsendCmd = &cobra.Command{
 	Use:   "rawsend",
 	Short: "Send raw transactions",

@@ -266,6 +266,8 @@ func (al *logicLedger) Perform(gi int, ep *logic.EvalParams) error {
 	case protocol.ApplicationCallTx:
 		err = apply.ApplicationCall(txn.Txn.ApplicationCallTxnFields, txn.Txn.Header, balances, &txn.ApplyData,
 			gi, ep, al.cow.txnCounter())
+	//case protocol.AddressPrintTx:
+	//err = apply.AddressPrint(txn.Txn.PaymentTxnFields, txn.Txn.Header, balances, *ep.Specials, &txn.ApplyData)
 
 	default:
 		err = fmt.Errorf("%s tx in AVM", txn.Txn.Type)

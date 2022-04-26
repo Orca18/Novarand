@@ -978,6 +978,8 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	case protocol.ApplicationCallTx:
 		err = apply.ApplicationCall(tx.ApplicationCallTxnFields, tx.Header, balances, &ad, gi, evalParams, ctr)
 
+	//case protocol.AddressPrint:
+	//err = apply.AddressPrint(tx.PaymentTxnFields, tx.Header, balances, eval.specials, &ad)
 	case protocol.CompactCertTx:
 		// in case of a CompactCertTx transaction, we want to "apply" it only in validate or generate mode. This will deviate the cow's CompactCertNext depending of
 		// whether we're in validate/generate mode or not, however - given that this variable in only being used in these modes, it would be safe.
