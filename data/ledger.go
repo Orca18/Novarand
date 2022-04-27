@@ -387,3 +387,7 @@ func (l *Ledger) EnsureBlock(block *bookkeeping.Block, c agreement.Certificate) 
 		time.Sleep(100 * time.Millisecond)
 	}
 }
+
+func (l *Ledger) SetDirInData(dir string) {
+	l.SetLedgerRootDir(dir)
+}

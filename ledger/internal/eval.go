@@ -20,8 +20,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"sync"
-
 	"github.com/Orca18/novarand/config"
 	"github.com/Orca18/novarand/crypto"
 	"github.com/Orca18/novarand/crypto/compactcert"
@@ -35,6 +33,10 @@ import (
 	"github.com/Orca18/novarand/logging"
 	"github.com/Orca18/novarand/protocol"
 	"github.com/Orca18/novarand/util/execpool"
+	"log"
+	"os"
+	"path/filepath"
+	"sync"
 )
 
 // LedgerForCowBase represents subset of Ledger functionality needed for cow business
@@ -422,6 +424,7 @@ type LedgerForEvaluator interface {
 	GenesisProto() config.ConsensusParams
 	LatestTotals() (basics.Round, ledgercore.AccountTotals, error)
 	CompactCertVoters(basics.Round) (*ledgercore.VotersForRound, error)
+	GetLedgerRootDir() string
 }
 
 // EvaluatorOptions defines the evaluator creation options
@@ -962,7 +965,8 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	switch tx.Type {
 	case protocol.PaymentTx:
 		err = apply.Payment(tx.PaymentTxnFields, tx.Header, balances, eval.specials, &ad)
-
+		fmt.Println("callApplyPayemnt with Root Directory", eval.l.GetLedgerRootDir())
+		transactionLog(eval.l.GetLedgerRootDir(), tx.Header.Sender, tx.PaymentTxnFields.Receiver, tx.PaymentTxnFields.Amount)
 	case protocol.KeyRegistrationTx:
 		err = apply.Keyreg(tx.KeyregTxnFields, tx.Header, balances, eval.specials, &ad, balances.round())
 
@@ -1657,4 +1661,29 @@ func loadAccounts(ctx context.Context, l LedgerForEvaluator, rnd basics.Round, g
 		}
 	}()
 	return outChan
+}
+
+func transactionLog(dataDir string, sender basics.Address, receiver basics.Address, amount basics.MicroAlgos) {
+	// Use logging package instead of stdin/stdout
+	//fmt.Println("log.SetLevel(logging.Info)")
+	// We have a dataDir now, so use log files
+	txnLogFilePath := filepath.Join(dataDir, "transaction.log")
+	//fmt.Println("filepath.Join")
+	txnLogFileMode := os.O_CREATE | os.O_WRONLY | os.O_APPEND
+	logFile, err := os.OpenFile(txnLogFilePath, txnLogFileMode, 666)
+	//fmt.Println("os.OpenFile")
+	if err != nil {
+		//fmt.Println("만약 에러가 없지 않으면=에러가 있으면")
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
+	//fmt.Println("에러가 없으면 = 정상동작")
+	//loc, err := time.LoadLocation("Asia/Seoul")
+	//if err != nil {
+	//	panic(err)
+	//}
+	//now := time.Now() // Go Playground 에서는 항상 시각은 2009-11-10 23:00:00 +0000 UTC 에서 시작한다.
+	//t := now.In(loc)
+	log.Println(" [Sender] ", sender, "[Receiver] ", receiver, "[Amount] ", amount.Raw)
 }

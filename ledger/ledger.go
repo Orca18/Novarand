@@ -107,6 +107,8 @@ type Ledger struct {
 
 	// 노드 인스턴스의 설정 정보
 	cfg config.Local
+	//현재 노드 루트 디렉토리
+	rootDir string
 }
 
 // OpenLedger creates a Ledger object, using SQLite database filenames
@@ -812,6 +814,13 @@ type DebuggerLedger = internal.LedgerForCowBase
 // MakeDebugBalances creates a ledger suitable for dryrun and debugger
 func MakeDebugBalances(l DebuggerLedger, round basics.Round, proto protocol.ConsensusVersion, prevTimestamp int64) apply.Balances {
 	return internal.MakeDebugBalances(l, round, proto, prevTimestamp)
+}
+
+func (l *Ledger) SetLedgerRootDir(directory string) {
+	l.rootDir = directory
+}
+func (l *Ledger) GetLedgerRootDir() string {
+	return l.rootDir
 }
 
 var ledgerInitblocksdbCount = metrics.NewCounter("ledger_initblocksdb_count", "calls")

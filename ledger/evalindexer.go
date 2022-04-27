@@ -208,3 +208,8 @@ func EvalForIndexer(il indexerLedgerForEval, block *bookkeeping.Block, proto con
 
 	return eval.ProcessBlockForIndexer(block)
 }
+
+//ilc가 internal.LedgerForEvaluator 형식(타입)으로 사용되기 위해는, makeIndexerLedgerConnector로 반환되는 makeIndexerLedgerConnector가 internal.LedgerForEvaluator 인터페이스에서 필요로하는 method 중 GetLedgerRootDir method를 구현해야한다.
+func (l indexerLedgerConnector) GetLedgerRootDir() string {
+	return ""
+}
