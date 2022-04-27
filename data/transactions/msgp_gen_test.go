@@ -22,8 +22,8 @@ func TestMarshalUnmarshalApplicationCallTxnFields(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log("left: ",left)
-	
+	t.Log("left: ", left)
+
 	if len(left) > 0 {
 		t.Errorf("%d bytes left over after UnmarshalMsg(): %q", len(left), left)
 	}

@@ -18,7 +18,6 @@ package verify
 
 import (
 	"errors"
-
 	"github.com/algorand/go-deadlock"
 
 	"github.com/Orca18/novarand/data/transactions"
