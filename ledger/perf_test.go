@@ -65,8 +65,8 @@ func BenchmarkManyAccounts(b *testing.B) {
 			crypto.RandBytes(st.Sig[:])
 			st.Txn.Type = protocol.PaymentTx
 			st.Txn.Sender = addr
-			st.Txn.Fee = basics.MicroAlgos{Raw: 1}
-			st.Txn.Amount = basics.MicroAlgos{Raw: 1}
+			st.Txn.Fee = basics.MicroNovas{Raw: 1}
+			st.Txn.Amount = basics.MicroNovas{Raw: 1}
 			crypto.RandBytes(st.Txn.Receiver[:])
 
 			txib, err := blk.EncodeSignedTxn(st, transactions.ApplyData{})
@@ -118,12 +118,12 @@ func BenchmarkValidate(b *testing.B) {
 				Type: protocol.PaymentTx,
 				Header: transactions.Header{
 					Sender:     addrs[i],
-					Fee:        basics.MicroAlgos{Raw: 1},
+					Fee:        basics.MicroNovas{Raw: 1},
 					FirstValid: newblk.Round(),
 					LastValid:  newblk.Round(),
 				},
 				PaymentTxnFields: transactions.PaymentTxnFields{
-					Amount: basics.MicroAlgos{Raw: 1},
+					Amount: basics.MicroNovas{Raw: 1},
 				},
 			}
 			crypto.RandBytes(t.Receiver[:])

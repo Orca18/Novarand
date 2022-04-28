@@ -63,14 +63,14 @@ func BenchmarkTxHandlerProcessDecoded(b *testing.B) {
 		// 블록체인의 초기 생성 시 존재하는 계정 만들어 줌
 		genesis[addr] = basics.AccountData{
 			Status:     basics.Online,
-			MicroAlgos: basics.MicroAlgos{Raw: 10000000000000},
+			MicroNovas: basics.MicroNovas{Raw: 10000000000000},
 		}
 	}
 
 	// 사용자외에 pool주소 추가(아 rewardpool)
 	genesis[poolAddr] = basics.AccountData{
 		Status:     basics.NotParticipating,
-		MicroAlgos: basics.MicroAlgos{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinBalance},
+		MicroNovas: basics.MicroNovas{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinBalance},
 	}
 
 	// 계정이 사용자수 + 1(pool)만큼 잘 생성됐는지 확인
@@ -107,14 +107,14 @@ func BenchmarkTxHandlerProcessDecoded(b *testing.B) {
 				// 해더정보 입력
 				Header: transactions.Header{
 					Sender:     addresses[u],
-					Fee:        basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+					Fee:        basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 					FirstValid: 0,
 					LastValid:  basics.Round(proto.MaxTxnLife),
 					Note:       make([]byte, 2),
 				},
 				PaymentTxnFields: transactions.PaymentTxnFields{
 					Receiver: addresses[(u+1)%numUsers],
-					Amount:   basics.MicroAlgos{Raw: mockBalancesMinBalance + (rand.Uint64() % 10000)},
+					Amount:   basics.MicroNovas{Raw: mockBalancesMinBalance + (rand.Uint64() % 10000)},
 				},
 			}
 			// 트랜잭션에 서명

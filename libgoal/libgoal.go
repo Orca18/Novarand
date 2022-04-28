@@ -591,7 +591,7 @@ func (c *Client) ConstructPayment(from, to string, fee, amount uint64, note []by
 		Type: protocol.PaymentTx,
 		Header: transactions.Header{
 			Sender:     fromAddr,
-			Fee:        basics.MicroAlgos{Raw: fee},
+			Fee:        basics.MicroNovas{Raw: fee},
 			FirstValid: basics.Round(fv),
 			LastValid:  basics.Round(lv),
 			Lease:      lease,
@@ -599,7 +599,7 @@ func (c *Client) ConstructPayment(from, to string, fee, amount uint64, note []by
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: toAddr,
-			Amount:   basics.MicroAlgos{Raw: amount},
+			Amount:   basics.MicroNovas{Raw: amount},
 		},
 	}
 
@@ -626,7 +626,7 @@ func (c *Client) ConstructPayment(from, to string, fee, amount uint64, note []by
 	// Fee is tricky, should taken care last. We encode the final transaction to get the size post signing and encoding
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		tx.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, tx.EstimateEncodedSize())
+		tx.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, tx.EstimateEncodedSize())
 	}
 	if tx.Fee.Raw < cp.MinTxnFee {
 		tx.Fee.Raw = cp.MinTxnFee

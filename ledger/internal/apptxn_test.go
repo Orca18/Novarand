@@ -103,9 +103,9 @@ func TestPayAction(t *testing.T) {
 
 	genAccounts := genesisInitState.Accounts
 	// create(1000) and fund(1000 + 200000)
-	require.Equal(t, uint64(202000), genAccounts[addrs[0]].MicroAlgos.Raw-ad0)
+	require.Equal(t, uint64(202000), genAccounts[addrs[0]].MicroNovas.Raw-ad0)
 	// paid 5000, but 1000 fee
-	require.Equal(t, uint64(4000), ad1-genAccounts[addrs[1]].MicroAlgos.Raw)
+	require.Equal(t, uint64(4000), ad1-genAccounts[addrs[1]].MicroNovas.Raw)
 	// app still has 194000 (paid out 5000, and paid fee to do it)
 	require.Equal(t, uint64(194000), app)
 
@@ -147,13 +147,13 @@ func TestPayAction(t *testing.T) {
 	app = micros(t, l, ai.Address())
 
 	// paid 5000, in first payout (only), but paid 1000 fee in each payout txn
-	require.Equal(t, rewards+3000, ad1-genAccounts[addrs[1]].MicroAlgos.Raw)
+	require.Equal(t, rewards+3000, ad1-genAccounts[addrs[1]].MicroNovas.Raw)
 	// app still has 188000 (paid out 10000, and paid 2k fees to do it)
 	// no rewards because owns less than an algo
 	require.Equal(t, uint64(200000)-10000-2000, app)
 
 	// paid 5000 by payout2, never paid any fees, got same rewards
-	require.Equal(t, rewards+uint64(5000), ad2-genAccounts[addrs[2]].MicroAlgos.Raw)
+	require.Equal(t, rewards+uint64(5000), ad2-genAccounts[addrs[2]].MicroNovas.Raw)
 
 	// Now fund the app account much more, so we can confirm it gets rewards.
 	tenkalgos := txntest.Txn{
@@ -730,9 +730,9 @@ func TestDuplicatePayAction(t *testing.T) {
 	app := micros(t, l, appIndex.Address())
 
 	// create(1000) and fund(1000 + 200000), extra create (1000)
-	require.Equal(t, 203000, int(genBalances.Balances[addrs[0]].MicroAlgos.Raw-ad0))
+	require.Equal(t, 203000, int(genBalances.Balances[addrs[0]].MicroNovas.Raw-ad0))
 	// paid 10000, but 1000 fee on tx
-	require.Equal(t, 9000, int(ad1-genBalances.Balances[addrs[1]].MicroAlgos.Raw))
+	require.Equal(t, 9000, int(ad1-genBalances.Balances[addrs[1]].MicroNovas.Raw))
 	// app still has 188000 (paid out 10000, and paid 2 x fee to do it)
 	require.Equal(t, 188000, int(app))
 
@@ -2997,7 +2997,7 @@ itxn_submit
 			ad1 := micros(t, l, addrs[1])
 
 			// paid 3000, but 1000 fee, 2000 bump
-			require.Equal(t, uint64(2000), ad1-genBalances.Balances[addrs[1]].MicroAlgos.Raw)
+			require.Equal(t, uint64(2000), ad1-genBalances.Balances[addrs[1]].MicroNovas.Raw)
 			// InnerTxn in block ([1] position, because followed fund0)
 			require.Len(t, vb.Block().Payset[1].EvalDelta.InnerTxns, 1)
 			require.Equal(t, vb.Block().Payset[1].EvalDelta.InnerTxns[0].Txn.Amount.Raw, uint64(3000))
@@ -3019,7 +3019,7 @@ itxn_submit
 			// The pay only happens if the clear state approves (and it was legal back in V30)
 			if test.approval == "int 1" && test.consensus == protocol.ConsensusV30 {
 				// had 2000 bump, now paid 2k, charge 1k, left with 3k total bump
-				require.Equal(t, uint64(3000), ad1-genBalances.Balances[addrs[1]].MicroAlgos.Raw)
+				require.Equal(t, uint64(3000), ad1-genBalances.Balances[addrs[1]].MicroNovas.Raw)
 				// InnerTxn in block
 				require.Equal(t, vb.Block().Payset[0].Txn.ApplicationID, index0)
 				require.Equal(t, vb.Block().Payset[0].Txn.OnCompletion, transactions.ClearStateOC)
@@ -3027,7 +3027,7 @@ itxn_submit
 				require.Equal(t, vb.Block().Payset[0].EvalDelta.InnerTxns[0].Txn.Amount.Raw, uint64(2000))
 			} else {
 				// Only the fee is paid because pay is "erased", so goes from 2k down to 1k
-				require.Equal(t, uint64(1000), ad1-genBalances.Balances[addrs[1]].MicroAlgos.Raw)
+				require.Equal(t, uint64(1000), ad1-genBalances.Balances[addrs[1]].MicroNovas.Raw)
 				// no InnerTxn in block
 				require.Equal(t, vb.Block().Payset[0].Txn.ApplicationID, index0)
 				require.Equal(t, vb.Block().Payset[0].Txn.OnCompletion, transactions.ClearStateOC)

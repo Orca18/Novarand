@@ -109,7 +109,7 @@ daemons, as well as other tools and commands:
     locally by the node as well as parameters that must be agreed upon by the
     protocol.
   - `data` defines various types used throughout the codebase.
-     - `basics` hold basic types such as MicroAlgos, account data, and
+     - `basics` hold basic types such as MicroNovas, account data, and
        addresses.
      - `account` defines accounts, including "root" accounts (which can
        spend money) and "participation" accounts (which can participate in

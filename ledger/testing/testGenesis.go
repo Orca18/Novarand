@@ -45,7 +45,7 @@ func NewTestGenesis() (bookkeeping.GenesisBalances, []basics.Address, []*crypto.
 	secrets := make([]*crypto.SignatureSecrets, count)
 	accts := make(map[basics.Address]basics.AccountData)
 
-	// 10 billion microalgos, across N accounts and pool and sink
+	// 10 billion micronovas, across N accounts and pool and sink
 	amount := 10 * 1000000000 * 1000000 / uint64(count+2)
 
 	for i := 0; i < count; i++ {
@@ -56,18 +56,18 @@ func NewTestGenesis() (bookkeeping.GenesisBalances, []basics.Address, []*crypto.
 		addrs[i] = basics.Address(secrets[i].SignatureVerifier)
 
 		adata := basics.AccountData{
-			MicroAlgos: basics.MicroAlgos{Raw: amount},
+			MicroNovas: basics.MicroNovas{Raw: amount},
 		}
 		accts[addrs[i]] = adata
 	}
 
 	accts[sink] = basics.AccountData{
-		MicroAlgos: basics.MicroAlgos{Raw: amount},
+		MicroNovas: basics.MicroNovas{Raw: amount},
 		Status:     basics.NotParticipating,
 	}
 
 	accts[rewards] = basics.AccountData{
-		MicroAlgos: basics.MicroAlgos{Raw: amount},
+		MicroNovas: basics.MicroNovas{Raw: amount},
 	}
 
 	genBalances := bookkeeping.MakeGenesisBalances(accts, sink, rewards)
@@ -93,7 +93,7 @@ func GenesisWithProto(naccts int, proto protocol.ConsensusVersion) (ledgercore.I
 	keys := []*crypto.SignatureSecrets{}
 	accts := make(map[basics.Address]basics.AccountData)
 
-	// 10 billion microalgos, across N accounts and pool and sink
+	// 10 billion micronovas, across N accounts and pool and sink
 	amount := 10 * 1000000000 * 1000000 / uint64(naccts+2)
 
 	for i := 0; i < naccts; i++ {
@@ -106,23 +106,23 @@ func GenesisWithProto(naccts int, proto protocol.ConsensusVersion) (ledgercore.I
 		addrs = append(addrs, addr)
 
 		adata := basics.AccountData{}
-		adata.MicroAlgos.Raw = amount //1000 * 1000 * 1000 * 1000 / uint64(naccts)
+		adata.MicroNovas.Raw = amount //1000 * 1000 * 1000 * 1000 / uint64(naccts)
 		accts[addr] = adata
 	}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = amount //1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = amount //1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = amount //1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = amount //1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[testSinkAddr] = sinkdata
 
 	genesisHash := blk.BlockHeader.GenesisHash
 
-	incentivePoolBalanceAtGenesis := pooldata.MicroAlgos
+	incentivePoolBalanceAtGenesis := pooldata.MicroNovas
 	var initialRewardsPerRound uint64
 	params := config.Consensus[proto]
 	if params.InitialRewardsRateCalculation {

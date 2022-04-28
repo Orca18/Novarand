@@ -136,7 +136,7 @@ func setupFullNodes(t *testing.T, proto protocol.ConsensusVersion, verificationP
 
 		data := basics.AccountData{
 			Status:      basics.Online,
-			MicroAlgos:  basics.MicroAlgos{Raw: uint64(minMoneyAtStart + (gen.Int() % (maxMoneyAtStart - minMoneyAtStart)))},
+			MicroNovas:  basics.MicroNovas{Raw: uint64(minMoneyAtStart + (gen.Int() % (maxMoneyAtStart - minMoneyAtStart)))},
 			SelectionID: part.VRFSecrets().PK,
 			VoteID:      part.VotingSecrets().OneTimeSignatureVerifier,
 		}

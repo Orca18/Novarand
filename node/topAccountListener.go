@@ -34,9 +34,9 @@ type topAccountListener struct {
 
 	round basics.Round
 
-	onlineCirculation basics.MicroAlgos
+	onlineCirculation basics.MicroNovas
 
-	totalCirculation basics.MicroAlgos
+	totalCirculation basics.MicroNovas
 
 	// Cached between rounds to optimize ledger lookups.
 	accounts []basics.AccountDetail
@@ -123,7 +123,7 @@ func (t *topAccountListener) update(b bookkeeping.Block, balances basics.Balance
 	t.accounts = removeSome(t.accounts, func(addr basics.AccountDetail) bool { return accountSet[addr.Address] })
 
 	// Grab the smallest record after removing modified accounts
-	smallestAccountSize := basics.MicroAlgos{Raw: 0}
+	smallestAccountSize := basics.MicroNovas{Raw: 0}
 	if len(t.accounts) != 0 {
 		smallestAccountSize = t.accounts[len(t.accounts)-1].Algos
 	}

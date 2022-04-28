@@ -249,7 +249,7 @@ func (c *Client) MakeUnsignedGoOnlineTx(address string, part *account.Participat
 
 	parsedFrstValid := basics.Round(firstValid)
 	parsedLastValid := basics.Round(lastValid)
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	goOnlineTransaction := part.GenerateRegistrationTransaction(parsedFee, parsedFrstValid, parsedLastValid, leaseBytes, cparams.EnableStateProofKeyregCheck)
 	if cparams.SupportGenesisHash {
@@ -263,7 +263,7 @@ func (c *Client) MakeUnsignedGoOnlineTx(address string, part *account.Participat
 	// transaction to get the size post signing and encoding.
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		goOnlineTransaction.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, goOnlineTransaction.EstimateEncodedSize())
+		goOnlineTransaction.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, goOnlineTransaction.EstimateEncodedSize())
 		if goOnlineTransaction.Fee.Raw < cparams.MinTxnFee {
 			goOnlineTransaction.Fee.Raw = cparams.MinTxnFee
 		}
@@ -296,7 +296,7 @@ func (c *Client) MakeUnsignedGoOfflineTx(address string, firstValid, lastValid, 
 
 	parsedFirstRound := basics.Round(firstValid)
 	parsedLastRound := basics.Round(lastValid)
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	goOfflineTransaction := transactions.Transaction{
 		Type: protocol.KeyRegistrationTx,
@@ -318,7 +318,7 @@ func (c *Client) MakeUnsignedGoOfflineTx(address string, firstValid, lastValid, 
 	// Fee is tricky, should taken care last. We encode the final transaction to get the size post signing and encoding
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		goOfflineTransaction.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, goOfflineTransaction.EstimateEncodedSize())
+		goOfflineTransaction.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, goOfflineTransaction.EstimateEncodedSize())
 		if goOfflineTransaction.Fee.Raw < cparams.MinTxnFee {
 			goOfflineTransaction.Fee.Raw = cparams.MinTxnFee
 		}
@@ -351,7 +351,7 @@ func (c *Client) MakeUnsignedBecomeNonparticipatingTx(address string, firstValid
 
 	parsedFirstRound := basics.Round(firstValid)
 	parsedLastRound := basics.Round(lastValid)
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	becomeNonparticipatingTransaction := transactions.Transaction{
 		Type: protocol.KeyRegistrationTx,
@@ -373,7 +373,7 @@ func (c *Client) MakeUnsignedBecomeNonparticipatingTx(address string, firstValid
 	// Fee is tricky, should taken care last. We encode the final transaction to get the size post signing and encoding
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		becomeNonparticipatingTransaction.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, becomeNonparticipatingTransaction.EstimateEncodedSize())
+		becomeNonparticipatingTransaction.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, becomeNonparticipatingTransaction.EstimateEncodedSize())
 		if becomeNonparticipatingTransaction.Fee.Raw < cparams.MinTxnFee {
 			becomeNonparticipatingTransaction.Fee.Raw = cparams.MinTxnFee
 		}
@@ -404,7 +404,7 @@ func (c *Client) FillUnsignedTxTemplate(sender string, firstValid, lastValid, fe
 		return transactions.Transaction{}, err
 	}
 
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	tx.Header.Sender = parsedAddr
 	tx.Header.Fee = parsedFee
@@ -422,7 +422,7 @@ func (c *Client) FillUnsignedTxTemplate(sender string, firstValid, lastValid, fe
 	// transaction to get the size post signing and encoding.
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		tx.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, tx.EstimateEncodedSize())
+		tx.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, tx.EstimateEncodedSize())
 		if tx.Fee.Raw < cparams.MinTxnFee {
 			tx.Fee.Raw = cparams.MinTxnFee
 		}

@@ -14,10 +14,10 @@ type Account struct {
 	// the account public key
 	Address string `json:"address"`
 
-	// \[algo\] total number of MicroAlgos in the account
+	// \[algo\] total number of MicroNovas in the account
 	Amount uint64 `json:"amount"`
 
-	// specifies the amount of MicroAlgos in the account, without the pending rewards.
+	// specifies the amount of MicroNovas in the account, without the pending rewards.
 	AmountWithoutPendingRewards uint64 `json:"amount-without-pending-rewards"`
 
 	// \[appl\] applications local data stored in this account.
@@ -49,7 +49,7 @@ type Account struct {
 	// Note: the raw account uses `map[int] -> Asset` for this type.
 	CreatedAssets *[]Asset `json:"created-assets,omitempty"`
 
-	// MicroAlgo balance required by the account.
+	// MicroNova balance required by the account.
 	//
 	// The requirement grows based on asset and application usage.
 	MinBalance uint64 `json:"min-balance"`
@@ -57,13 +57,13 @@ type Account struct {
 	// AccountParticipation describes the parameters used by this account in consensus protocol.
 	Participation *AccountParticipation `json:"participation,omitempty"`
 
-	// amount of MicroAlgos of pending rewards in this account.
+	// amount of MicroNovas of pending rewards in this account.
 	PendingRewards uint64 `json:"pending-rewards"`
 
 	// \[ebase\] used as part of the rewards computation. Only applicable to accounts which are participating.
 	RewardBase *uint64 `json:"reward-base,omitempty"`
 
-	// \[ern\] total rewards of MicroAlgos the account has received, including pending rewards.
+	// \[ern\] total rewards of MicroNovas the account has received, including pending rewards.
 	Rewards uint64 `json:"rewards"`
 
 	// The round for which this information is relevant.
@@ -75,7 +75,7 @@ type Account struct {
 	// * lsig
 	SigType *string `json:"sig-type,omitempty"`
 
-	// \[onl\] delegation status of the account's MicroAlgos
+	// \[onl\] delegation status of the account's MicroNovas
 	// * Offline - indicates that the associated account is delegated.
 	// *  Online  - indicates that the associated account used as part of the delegation pool.
 	// *   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.
@@ -391,7 +391,7 @@ type PendingTransactionResponse struct {
 	// The asset index if the transaction was found and it created an asset.
 	AssetIndex *uint64 `json:"asset-index,omitempty"`
 
-	// Rewards in microalgos applied to the close remainder to account.
+	// Rewards in micronovas applied to the close remainder to account.
 	CloseRewards *uint64 `json:"close-rewards,omitempty"`
 
 	// Closing amount for the transaction.
@@ -415,10 +415,10 @@ type PendingTransactionResponse struct {
 	// Indicates that the transaction was kicked out of this node's transaction pool (and specifies why that happened).  An empty string indicates the transaction wasn't kicked out of this node's txpool due to an error.
 	PoolError string `json:"pool-error"`
 
-	// Rewards in microalgos applied to the receiver account.
+	// Rewards in micronovas applied to the receiver account.
 	ReceiverRewards *uint64 `json:"receiver-rewards,omitempty"`
 
-	// Rewards in microalgos applied to the sender account.
+	// Rewards in micronovas applied to the sender account.
 	SenderRewards *uint64 `json:"sender-rewards,omitempty"`
 
 	// The raw signed transaction.

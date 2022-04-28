@@ -102,7 +102,7 @@ type netState struct {
 	round          basics.Round
 	accounts       []basics.Address
 	txnCount       uint64
-	fundPerAccount basics.MicroAlgos
+	fundPerAccount basics.MicroNovas
 }
 
 const program = `#pragma version 2
@@ -419,9 +419,9 @@ func (cfg DeployedNetwork) GenerateDatabaseFiles(fileCfgs BootstrappedNetwork, g
 	min := fileCfgs.BalanceRange[0]
 	max := fileCfgs.BalanceRange[1]
 	bal := rand.Int63n(max-min) + min
-	bootstrappedNet.fundPerAccount = basics.MicroAlgos{Raw: uint64(bal)}
-	totalFunds := accounts[src].MicroAlgos.Raw + bootstrappedNet.fundPerAccount.Raw*bootstrappedNet.nAccounts + bootstrappedNet.roundTxnCnt*fileCfgs.NumRounds
-	accounts[src] = basics.MakeAccountData(basics.Online, basics.MicroAlgos{Raw: totalFunds})
+	bootstrappedNet.fundPerAccount = basics.MicroNovas{Raw: uint64(bal)}
+	totalFunds := accounts[src].MicroNovas.Raw + bootstrappedNet.fundPerAccount.Raw*bootstrappedNet.nAccounts + bootstrappedNet.roundTxnCnt*fileCfgs.NumRounds
+	accounts[src] = basics.MakeAccountData(basics.Online, basics.MicroNovas{Raw: totalFunds})
 
 	//init block
 	initState, err := generateInitState(accounts, &bootstrappedNet)
@@ -620,7 +620,7 @@ func createSignedTx(src basics.Address, round basics.Round, params config.Consen
 	var sgtxns []transactions.SignedTxn
 
 	header := transactions.Header{
-		Fee:         basics.MicroAlgos{Raw: 1},
+		Fee:         basics.MicroNovas{Raw: 1},
 		FirstValid:  round,
 		LastValid:   round,
 		GenesisID:   bootstrappedNet.genesisID,
@@ -672,7 +672,7 @@ func createSignedTx(src basics.Address, round basics.Round, params config.Consen
 					Header: header,
 					PaymentTxnFields: transactions.PaymentTxnFields{
 						Receiver: bootstrappedNet.accounts[accti],
-						Amount:   basics.MicroAlgos{Raw: 0},
+						Amount:   basics.MicroNovas{Raw: 0},
 					},
 				}
 				t := transactions.SignedTxn{Txn: tx}

@@ -45,11 +45,11 @@ import (
 	"github.com/Orca18/novarand/util/execpool"
 )
 
-var minFee basics.MicroAlgos
+var minFee basics.MicroNovas
 
 func init() {
 	params := config.Consensus[protocol.ConsensusCurrentVersion]
-	minFee = basics.MicroAlgos{Raw: params.MinTxnFee}
+	minFee = basics.MicroNovas{Raw: params.MinTxnFee}
 }
 
 // BenchTxnGenerator generates transactions as long as asked for
@@ -89,7 +89,7 @@ func (g *BenchPaymentTxnGenerator) Txn(tb testing.TB, addrs []basics.Address, ke
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: addrs[receiver],
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 	stxn := txn.Sign(keys[sender])
@@ -211,7 +211,7 @@ func (g *BenchAppOptInsTxnGenerator) Txn(tb testing.TB, addrs []basics.Address, 
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: addrs[receiverIdx],
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 	stxn := txn.Sign(keys[senderIdx])

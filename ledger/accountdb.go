@@ -705,7 +705,7 @@ func removeEmptyAccountData(tx *sql.Tx, queryAddresses bool) (num int64, address
 func accountDataToOnline(address basics.Address, ad *basics.AccountData, proto config.ConsensusParams) *ledgercore.OnlineAccount {
 	return &ledgercore.OnlineAccount{
 		Address:                 address,
-		MicroAlgos:              ad.MicroAlgos,
+		MicroNovas:              ad.MicroNovas,
 		RewardsBase:             ad.RewardsBase,
 		NormalizedOnlineBalance: ad.NormalizedOnlineBalance(proto),
 		VoteFirstValid:          ad.VoteFirstValid,

@@ -59,7 +59,7 @@ const ConsensusV7 = ConsensusVersion("v7")
 // ConsensusV8은 계약 프로토콜의 보안 분석에서 새로운 매개변수와 시드 파생 정책을 사용합니다.
 const ConsensusV8 = ConsensusVersion("v8")
 
-// ConsensusV9 increases min balance to 100,000 microAlgos.
+// ConsensusV9 increases min balance to 100,000 microNovas.
 // Consensus V9는 최소 잔고를 100,000 마이크로 알고리즘으로 늘립니다.
 const ConsensusV9 = ConsensusVersion("v9")
 

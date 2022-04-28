@@ -675,6 +675,8 @@ func (wp *wsPeer) writeLoopSendMsg(msg sendMessage) disconnectReason {
 
 	atomic.StoreInt64(&wp.intermittentOutgoingMessageEnqueueTime, msg.enqueued.UnixNano())
 	defer atomic.StoreInt64(&wp.intermittentOutgoingMessageEnqueueTime, 0)
+	// 메시지를 전송하는 부분!!!!!!(근데 인터페이스만 있고 구현체가 없다... 흠 ,, 뭐지?)
+	// 아 라이브러리를 사용해서 그렇구나!!
 	err := wp.conn.WriteMessage(websocket.BinaryMessage, msg.data)
 	if err != nil {
 		if atomic.LoadInt32(&wp.didInnerClose) == 0 {

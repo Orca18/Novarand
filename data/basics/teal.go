@@ -177,7 +177,7 @@ func (sm StateSchema) NumEntries() (tot uint64) {
 
 // MinBalance computes the MinBalance requirements for a StateSchema based on
 // the consensus parameters
-func (sm StateSchema) MinBalance(proto *config.ConsensusParams) (res MicroAlgos) {
+func (sm StateSchema) MinBalance(proto *config.ConsensusParams) (res MicroNovas) {
 	// Flat cost for each key/value pair
 	flatCost := MulSaturate(proto.SchemaMinBalancePerEntry, sm.NumEntries())
 

@@ -337,11 +337,11 @@ func makeLedger(t *testing.T, namePostfix string) *data.Ledger {
 	genesis := make(map[basics.Address]basics.AccountData)
 	genesis[sinkAddr] = basics.AccountData{
 		Status:     basics.Online,
-		MicroAlgos: basics.MicroAlgos{Raw: proto.MinBalance * 2000000},
+		MicroNovas: basics.MicroNovas{Raw: proto.MinBalance * 2000000},
 	}
 	genesis[poolAddr] = basics.AccountData{
 		Status:     basics.Online,
-		MicroAlgos: basics.MicroAlgos{Raw: proto.MinBalance * 2000000},
+		MicroNovas: basics.MicroNovas{Raw: proto.MinBalance * 2000000},
 	}
 
 	log := logging.TestingLog(t)

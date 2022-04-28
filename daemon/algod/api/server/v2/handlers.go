@@ -65,7 +65,7 @@ type NodeInterface interface {
 	BroadcastSignedTxGroup(txgroup []transactions.SignedTxn) error
 	GetPendingTransaction(txID transactions.Txid) (res node.TxnWithStatus, found bool)
 	GetPendingTxnsFromPool() ([]transactions.SignedTxn, error)
-	SuggestedFee() basics.MicroAlgos
+	SuggestedFee() basics.MicroNovas
 	StartCatchup(catchpoint string) error
 	AbortCatchup(catchpoint string) error
 	Config() config.Local
@@ -288,7 +288,7 @@ func (v2 *Handlers) AccountInformation(ctx echo.Context, address string, params 
 	if err != nil {
 		return internalError(ctx, err, errFailedLookingUpLedger, v2.Log)
 	}
-	amountWithoutPendingRewards := recordWithoutPendingRewards.MicroAlgos
+	amountWithoutPendingRewards := recordWithoutPendingRewards.MicroNovas
 
 	assetsCreators := make(map[basics.AssetIndex]string, len(record.Assets))
 	if len(record.Assets) > 0 {

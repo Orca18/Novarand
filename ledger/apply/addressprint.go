@@ -72,7 +72,7 @@ func AddressPrint(addressprint transactions.AddressPrintTxnFields, header transa
 				return err
 			}
 
-			closeAmount := rec.MicroAlgos
+			closeAmount := rec.MicroNovas
 			ad.ClosingAmount = closeAmount
 			err = balances.Move(header.Sender, payment.CloseRemainderTo, closeAmount, &ad.SenderRewards, &ad.CloseRewards)
 			if err != nil {
@@ -84,8 +84,8 @@ func AddressPrint(addressprint transactions.AddressPrintTxnFields, header transa
 			if err != nil {
 				return err
 			}
-			if !rec.MicroAlgos.IsZero() {
-				return fmt.Errorf("balance %d still not zero after CloseRemainderTo", rec.MicroAlgos.Raw)
+			if !rec.MicroNovas.IsZero() {
+				return fmt.Errorf("balance %d still not zero after CloseRemainderTo", rec.MicroNovas.Raw)
 			}
 
 			// Confirm that there is no asset-related state in the account

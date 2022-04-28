@@ -65,11 +65,11 @@ func checkAccounts(t *testing.T, tx *sql.Tx, rnd basics.Round, accts map[basics.
 
 		switch d.Status {
 		case basics.Online:
-			totalOnline += d.MicroAlgos.Raw
+			totalOnline += d.MicroNovas.Raw
 		case basics.Offline:
-			totalOffline += d.MicroAlgos.Raw
+			totalOffline += d.MicroNovas.Raw
 		case basics.NotParticipating:
-			totalNotPart += d.MicroAlgos.Raw
+			totalNotPart += d.MicroNovas.Raw
 		default:
 			t.Errorf("unknown status %v", d.Status)
 		}
@@ -449,10 +449,10 @@ func generateRandomTestingAccountBalances(numAccounts int) (updates map[basics.A
 	for i := 0; i < numAccounts; i++ {
 		addr := ledgertesting.RandomAddress()
 		updates[addr] = basics.AccountData{
-			MicroAlgos:         basics.MicroAlgos{Raw: 0x000ffffffffffffff / uint64(numAccounts)},
+			MicroNovas:         basics.MicroNovas{Raw: 0x000ffffffffffffff / uint64(numAccounts)},
 			Status:             basics.NotParticipating,
 			RewardsBase:        uint64(i),
-			RewardedMicroAlgos: basics.MicroAlgos{Raw: 0x000ffffffffffffff / uint64(numAccounts)},
+			RewardedMicroNovas: basics.MicroNovas{Raw: 0x000ffffffffffffff / uint64(numAccounts)},
 			VoteID:             secrets.OneTimeSignatureVerifier,
 			SelectionID:        pubVrfKey,
 			VoteFirstValid:     basics.Round(0x000ffffffffffffff),
@@ -728,10 +728,10 @@ func TestAccountsReencoding(t *testing.T) {
 		for i := 0; i < 100; i++ {
 			addr := ledgertesting.RandomAddress()
 			accData := basics.AccountData{
-				MicroAlgos:         basics.MicroAlgos{Raw: 0x000ffffffffffffff},
+				MicroNovas:         basics.MicroNovas{Raw: 0x000ffffffffffffff},
 				Status:             basics.NotParticipating,
 				RewardsBase:        uint64(i),
-				RewardedMicroAlgos: basics.MicroAlgos{Raw: 0x000ffffffffffffff},
+				RewardedMicroNovas: basics.MicroNovas{Raw: 0x000ffffffffffffff},
 				VoteID:             secrets.OneTimeSignatureVerifier,
 				SelectionID:        pubVrfKey,
 				VoteFirstValid:     basics.Round(0x000ffffffffffffff),
@@ -854,7 +854,7 @@ func benchmarkWriteCatchpointStagingBalancesSub(b *testing.B, ascendingOrder boo
 		for i := uint64(0); i < chunkSize; i++ {
 			var randomAccount encodedBalanceRecord
 			accountData := basics.AccountData{RewardsBase: accountsLoaded + i}
-			accountData.MicroAlgos.Raw = crypto.RandUint63()
+			accountData.MicroNovas.Raw = crypto.RandUint63()
 			randomAccount.AccountData = protocol.Encode(&accountData)
 			crypto.RandBytes(randomAccount.Address[:])
 			if ascendingOrder {
@@ -920,7 +920,7 @@ func TestCompactAccountDeltas(t *testing.T) {
 	a.Equal(0, ad.len())
 	a.Panics(func() { ad.getByIdx(0) })
 
-	sample1 := accountDelta{new: basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 123}}}
+	sample1 := accountDelta{new: basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 123}}}
 	ad.upsert(addr, sample1)
 	data, idx = ad.get(addr)
 	a.NotEqual(-1, idx)
@@ -931,7 +931,7 @@ func TestCompactAccountDeltas(t *testing.T) {
 	a.Equal(addr, address)
 	a.Equal(sample1, data)
 
-	sample2 := accountDelta{new: basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 456}}}
+	sample2 := accountDelta{new: basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 456}}}
 	ad.upsert(addr, sample2)
 	data, idx = ad.get(addr)
 	a.NotEqual(-1, idx)
@@ -952,7 +952,7 @@ func TestCompactAccountDeltas(t *testing.T) {
 	a.Equal(addr, address)
 	a.Equal(sample2, data)
 
-	old1 := persistedAccountData{addr: addr, accountData: basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 789}}}
+	old1 := persistedAccountData{addr: addr, accountData: basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 789}}}
 	ad.upsertOld(old1)
 	a.Equal(1, ad.len())
 	address, data = ad.getByIdx(0)
@@ -960,7 +960,7 @@ func TestCompactAccountDeltas(t *testing.T) {
 	a.Equal(accountDelta{new: sample2.new, old: old1}, data)
 
 	addr1 := ledgertesting.RandomAddress()
-	old2 := persistedAccountData{addr: addr1, accountData: basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 789}}}
+	old2 := persistedAccountData{addr: addr1, accountData: basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 789}}}
 	ad.upsertOld(old2)
 	a.Equal(2, ad.len())
 	address, data = ad.getByIdx(0)

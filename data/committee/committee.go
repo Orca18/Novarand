@@ -67,7 +67,7 @@ type Membership struct {
 	Selector Selector
 
 	// 라운드가 끝날 때 보유하고 있는 총 알고양
-	TotalMoney basics.MicroAlgos
+	TotalMoney basics.MicroNovas
 }
 
 // A Seed contains cryptographic entropy which can be used to determine a

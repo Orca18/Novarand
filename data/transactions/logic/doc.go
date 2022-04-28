@@ -139,8 +139,8 @@ var opDocByName = map[string]string{
 	"extract_uint64": "A uint64 formed from a range of big-endian bytes from A starting at B up to but not including B+8. If B+8 is larger than the array length, the program fails",
 	"base64_decode":  "decode A which was base64-encoded using _encoding_ E. Fail if A is not base64 encoded with encoding E",
 
-	"balance":           "get balance for account A, in microalgos. The balance is observed after the effects of previous transactions in the group, and after the fee for the current transaction is deducted.",
-	"min_balance":       "get minimum required balance for account A, in microalgos. Required balance is affected by [ASA](https://developer.algorand.org/docs/features/asa/#assets-overview) and [App](https://developer.algorand.org/docs/features/asc1/stateful/#minimum-balance-requirement-for-a-smart-contract) usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes.",
+	"balance":           "get balance for account A, in micronovas. The balance is observed after the effects of previous transactions in the group, and after the fee for the current transaction is deducted.",
+	"min_balance":       "get minimum required balance for account A, in micronovas. Required balance is affected by [ASA](https://developer.algorand.org/docs/features/asa/#assets-overview) and [App](https://developer.algorand.org/docs/features/asc1/stateful/#minimum-balance-requirement-for-a-smart-contract) usage. When creating or opting into an app, the minimum balance grows before the app code runs, therefore the increase is visible there. When deleting or closing out, the minimum balance decreases after the app executes.",
 	"app_opted_in":      "1 if account A is opted in to application B, else 0",
 	"app_local_get":     "local state of the key B in the current application in account A",
 	"app_local_get_ex":  "X is the local state of application B, key C in account A. Y is 1 if key existed, else 0",

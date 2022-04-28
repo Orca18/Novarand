@@ -75,8 +75,8 @@ func TestAccount(t *testing.T) {
 	copy(assetParams2.MetadataHash[:], []byte("test2"))
 	a := basics.AccountData{
 		Status:             basics.Online,
-		MicroAlgos:         basics.MicroAlgos{Raw: 80000000},
-		RewardedMicroAlgos: basics.MicroAlgos{Raw: ^uint64(0)},
+		MicroNovas:         basics.MicroNovas{Raw: 80000000},
+		RewardedMicroNovas: basics.MicroNovas{Raw: ^uint64(0)},
 		RewardsBase:        0,
 		AppParams:          map[basics.AppIndex]basics.AppParams{appIdx1: appParams1, appIdx2: appParams2},
 		TotalAppSchema:     totalAppSchema,
@@ -102,11 +102,11 @@ func TestAccount(t *testing.T) {
 	b := a.WithUpdatedRewards(proto, 100)
 
 	addr := basics.Address{}.String()
-	conv, err := AccountDataToAccount(addr, &b, map[basics.AssetIndex]string{}, round, &proto, a.MicroAlgos)
+	conv, err := AccountDataToAccount(addr, &b, map[basics.AssetIndex]string{}, round, &proto, a.MicroNovas)
 	require.NoError(t, err)
 	require.Equal(t, addr, conv.Address)
-	require.Equal(t, b.MicroAlgos.Raw, conv.Amount)
-	require.Equal(t, a.MicroAlgos.Raw, conv.AmountWithoutPendingRewards)
+	require.Equal(t, b.MicroNovas.Raw, conv.Amount)
+	require.Equal(t, a.MicroNovas.Raw, conv.AmountWithoutPendingRewards)
 	require.NotNil(t, conv.AppsTotalSchema)
 	require.Equal(t, totalAppSchema.NumUint, conv.AppsTotalSchema.NumUint)
 	require.Equal(t, totalAppSchema.NumByteSlice, conv.AppsTotalSchema.NumByteSlice)
@@ -196,7 +196,7 @@ func TestAccount(t *testing.T) {
 		// convert the same account a few more times to make sure we always
 		// produce the same generated.Account
 		for i := 0; i < 10; i++ {
-			anotherConv, err := AccountDataToAccount(addr, &b, map[basics.AssetIndex]string{}, round, &proto, a.MicroAlgos)
+			anotherConv, err := AccountDataToAccount(addr, &b, map[basics.AssetIndex]string{}, round, &proto, a.MicroNovas)
 			require.NoError(t, err)
 
 			require.Equal(t, protocol.EncodeJSON(conv), protocol.EncodeJSON(anotherConv))

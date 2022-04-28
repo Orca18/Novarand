@@ -45,10 +45,10 @@ var schemaID = "v1"
 var defaultSinkAddr = basics.Address{0x7, 0xda, 0xcb, 0x4b, 0x6d, 0x9e, 0xd1, 0x41, 0xb1, 0x75, 0x76, 0xbd, 0x45, 0x9a, 0xe6, 0x42, 0x1d, 0x48, 0x6d, 0xa3, 0xd4, 0xef, 0x22, 0x47, 0xc4, 0x9, 0xa3, 0x96, 0xb8, 0x2e, 0xa2, 0x21}
 var defaultPoolAddr = basics.Address{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
 
-// The number of MicroAlgos in the incentive pool at genesis.
+// The number of MicroNovas in the incentive pool at genesis.
 var defaultIncentivePoolBalanceAtInception uint64 = 125e6 * 1e6
 
-// TotalMoney represents the total amount of MicroAlgos in the system
+// TotalMoney represents the total amount of MicroNovas in the system
 const TotalMoney uint64 = 10 * 1e9 * 1e6
 
 type genesisAllocation struct {
@@ -263,7 +263,7 @@ func generateGenesisFiles(outDir string, protoVersion protocol.ConsensusVersion,
 
 			var data basics.AccountData
 			data.Status = wallet.Online
-			data.MicroAlgos.Raw = wallet.Stake
+			data.MicroNovas.Raw = wallet.Stake
 			if wallet.Online == basics.Online {
 				data.VoteID = part.VotingSecrets().OneTimeSignatureVerifier
 				data.SelectionID = part.VRFSecrets().PK
@@ -327,11 +327,11 @@ func generateGenesisFiles(outDir string, protoVersion protocol.ConsensusVersion,
 
 	records["FeeSink"] = basics.AccountData{
 		Status:     basics.NotParticipating,
-		MicroAlgos: basics.MicroAlgos{Raw: protoParams.MinBalance},
+		MicroNovas: basics.MicroNovas{Raw: protoParams.MinBalance},
 	}
 	records["RewardsPool"] = basics.AccountData{
 		Status:     basics.NotParticipating,
-		MicroAlgos: basics.MicroAlgos{Raw: defaultIncentivePoolBalanceAtInception},
+		MicroNovas: basics.MicroNovas{Raw: defaultIncentivePoolBalanceAtInception},
 	}
 
 	sinkAcct := genesisAllocation{

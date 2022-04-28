@@ -98,7 +98,7 @@ func generateEnvironment(numAccounts int) (map[basics.Address]basics.AccountData
 	addrs := make([]basics.Address, numAccounts)
 	vrfSecrets := make([]*crypto.VRFSecrets, numAccounts)
 	otSecrets := make([]crypto.OneTimeSigner, numAccounts)
-	var total basics.MicroAlgos
+	var total basics.MicroNovas
 	for i := 0; i < numAccounts; i++ {
 		addr, vrfSec, otSec := generateKeys(0, keyBatchesForward)
 		addrs[i] = addr
@@ -108,7 +108,7 @@ func generateEnvironment(numAccounts int) (map[basics.Address]basics.AccountData
 		startamt := uint64(minMoneyAtStart + (gen.Int() % (maxMoneyAtStart - minMoneyAtStart)))
 		genesis[addr] = basics.AccountData{
 			Status:      basics.Online,
-			MicroAlgos:  basics.MicroAlgos{Raw: startamt},
+			MicroNovas:  basics.MicroNovas{Raw: startamt},
 			SelectionID: vrfSec.PK,
 			VoteID:      otSec.OneTimeSignatureVerifier,
 		}
@@ -335,7 +335,7 @@ func (l *testLedger) LookupAgreement(r basics.Round, a basics.Address) (basics.O
 	return l.state[a].OnlineAccountData(), nil
 }
 
-func (l *testLedger) Circulation(r basics.Round) (basics.MicroAlgos, error) {
+func (l *testLedger) Circulation(r basics.Round) (basics.MicroNovas, error) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
@@ -344,7 +344,7 @@ func (l *testLedger) Circulation(r basics.Round) (basics.MicroAlgos, error) {
 		panic(err)
 	}
 
-	var sum basics.MicroAlgos
+	var sum basics.MicroNovas
 	var overflowed bool
 	for _, rec := range l.state {
 		sum, overflowed = basics.OAddA(sum, rec.OnlineAccountData().VotingStake())

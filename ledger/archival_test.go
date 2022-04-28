@@ -108,8 +108,8 @@ func getInitState() (genesisInitState ledgercore.InitState) {
 	blk.FeeSink = testSinkAddr
 
 	accts := make(map[basics.Address]basics.AccountData)
-	accts[testPoolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 1234567890})
-	accts[testSinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 1234567890})
+	accts[testPoolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 1234567890})
+	accts[testSinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 1234567890})
 
 	genesisInitState.Accounts = accts
 	genesisInitState.Block = blk
@@ -379,7 +379,7 @@ func TestArchivalCreatables(t *testing.T) {
 		_, err = rand.Read(creator[:])
 		require.NoError(t, err)
 		creators = append(creators, creator)
-		genesisInitState.Accounts[creator] = basics.MakeAccountData(basics.Offline, basics.MicroAlgos{Raw: 1234567890})
+		genesisInitState.Accounts[creator] = basics.MakeAccountData(basics.Offline, basics.MicroNovas{Raw: 1234567890})
 	}
 
 	// open ledger
@@ -716,7 +716,7 @@ func TestArchivalFromNonArchival(t *testing.T) {
 		addr := basics.Address{}
 		_, err = rand.Read(addr[:])
 		require.NoError(t, err)
-		br := basics.BalanceRecord{AccountData: basics.MakeAccountData(basics.Offline, basics.MicroAlgos{Raw: 1234567890}), Addr: addr}
+		br := basics.BalanceRecord{AccountData: basics.MakeAccountData(basics.Offline, basics.MicroNovas{Raw: 1234567890}), Addr: addr}
 		genesisInitState.Accounts[addr] = br.AccountData
 		balanceRecords = append(balanceRecords, br)
 	}

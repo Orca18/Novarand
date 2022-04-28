@@ -314,13 +314,13 @@ func checkAcctUpdates(t *testing.T, au *accountUpdates, base basics.Round, lates
 				rewardsDelta := rewards[rnd] - d.RewardsBase
 				switch d.Status {
 				case basics.Online:
-					totalOnline += d.MicroAlgos.Raw
-					totalOnline += (d.MicroAlgos.Raw / proto.RewardUnit) * rewardsDelta
+					totalOnline += d.MicroNovas.Raw
+					totalOnline += (d.MicroNovas.Raw / proto.RewardUnit) * rewardsDelta
 				case basics.Offline:
-					totalOffline += d.MicroAlgos.Raw
-					totalOffline += (d.MicroAlgos.Raw / proto.RewardUnit) * rewardsDelta
+					totalOffline += d.MicroNovas.Raw
+					totalOffline += (d.MicroNovas.Raw / proto.RewardUnit) * rewardsDelta
 				case basics.NotParticipating:
-					totalNotPart += d.MicroAlgos.Raw
+					totalNotPart += d.MicroNovas.Raw
 				default:
 					t.Errorf("unknown status %v", d.Status)
 				}
@@ -375,12 +375,12 @@ func TestAcctUpdates(t *testing.T) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -415,7 +415,7 @@ func TestAcctUpdates(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -483,12 +483,12 @@ func TestAcctUpdatesFastUpdates(t *testing.T) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -520,7 +520,7 @@ func TestAcctUpdatesFastUpdates(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -574,12 +574,12 @@ func BenchmarkBalancesChanges(b *testing.B) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -610,7 +610,7 @@ func BenchmarkBalancesChanges(b *testing.B) {
 		require.NoError(b, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(b, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -711,12 +711,12 @@ func TestLargeAccountCountCatchpointGeneration(t *testing.T) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -745,7 +745,7 @@ func TestLargeAccountCountCatchpointGeneration(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -805,12 +805,12 @@ func TestAcctUpdatesUpdatesCorrectness(t *testing.T) {
 		accts := []map[basics.Address]basics.AccountData{ledgertesting.RandomAccounts(9, true)}
 
 		pooldata := basics.AccountData{}
-		pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+		pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 		pooldata.Status = basics.NotParticipating
 		accts[0][testPoolAddr] = pooldata
 
 		sinkdata := basics.AccountData{}
-		sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+		sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 		sinkdata.Status = basics.NotParticipating
 		accts[0][testSinkAddr] = sinkdata
 
@@ -830,7 +830,7 @@ func TestAcctUpdatesUpdatesCorrectness(t *testing.T) {
 		// set all the accounts with 100 algos.
 		for _, addr := range moneyAccounts {
 			accountData := accts[0][addr]
-			accountData.MicroAlgos.Raw = 100 * 1000000
+			accountData.MicroNovas.Raw = 100 * 1000000
 			accts[0][addr] = accountData
 		}
 
@@ -868,15 +868,15 @@ func TestAcctUpdatesUpdatesCorrectness(t *testing.T) {
 				fromAccountDataOld, validThrough, err := au.LookupWithoutRewards(i-1, fromAccount)
 				require.NoError(t, err)
 				require.Equal(t, i-1, validThrough)
-				require.Equalf(t, moneyAccountsExpectedAmounts[i-1][j], fromAccountDataOld.MicroAlgos.Raw, "Account index : %d\nRound number : %d", j, i)
+				require.Equalf(t, moneyAccountsExpectedAmounts[i-1][j], fromAccountDataOld.MicroNovas.Raw, "Account index : %d\nRound number : %d", j, i)
 
 				fromAccountDataNew := fromAccountDataOld
 
-				fromAccountDataNew.MicroAlgos.Raw -= uint64(i - 10)
-				toAccountDataNew.MicroAlgos.Raw += uint64(i - 10)
+				fromAccountDataNew.MicroNovas.Raw -= uint64(i - 10)
+				toAccountDataNew.MicroNovas.Raw += uint64(i - 10)
 				updates[fromAccount] = fromAccountDataNew
 
-				moneyAccountsExpectedAmounts[i][j] = fromAccountDataNew.MicroAlgos.Raw
+				moneyAccountsExpectedAmounts[i][j] = fromAccountDataNew.MicroNovas.Raw
 			}
 
 			moneyAccountsExpectedAmounts[i][0] = moneyAccountsExpectedAmounts[i-1][0] + uint64(len(moneyAccounts)-1)*uint64(i-10)
@@ -907,7 +907,7 @@ func TestAcctUpdatesUpdatesCorrectness(t *testing.T) {
 					require.NoError(t, err)
 					require.GreaterOrEqual(t, int64(validThrough), int64(basics.Round(checkRound-uint64(testback))))
 					// if we received no error, we want to make sure the reported amount is correct.
-					require.Equalf(t, moneyAccountsExpectedAmounts[checkRound-uint64(testback)][j], acct.MicroAlgos.Raw, "Account index : %d\nRound number : %d", j, checkRound)
+					require.Equalf(t, moneyAccountsExpectedAmounts[checkRound-uint64(testback)][j], acct.MicroNovas.Raw, "Account index : %d\nRound number : %d", j, checkRound)
 					testback++
 					j--
 				}
@@ -938,9 +938,9 @@ func TestAcctUpdatesUpdatesCorrectness(t *testing.T) {
 			require.NoErrorf(t, err, "unable to retrieve balance for account idx %d %v", idx, addr)
 			require.Equal(t, lastRound, validThrough)
 			if idx != 0 {
-				require.Equalf(t, 100*1000000-roundCount*(roundCount-1)/2, int(balance.MicroAlgos.Raw), "account idx %d %v has the wrong balance", idx, addr)
+				require.Equalf(t, 100*1000000-roundCount*(roundCount-1)/2, int(balance.MicroNovas.Raw), "account idx %d %v has the wrong balance", idx, addr)
 			} else {
-				require.Equalf(t, 100*1000000+(len(moneyAccounts)-1)*roundCount*(roundCount-1)/2, int(balance.MicroAlgos.Raw), "account idx %d %v has the wrong balance", idx, addr)
+				require.Equalf(t, 100*1000000+(len(moneyAccounts)-1)*roundCount*(roundCount-1)/2, int(balance.MicroNovas.Raw), "account idx %d %v has the wrong balance", idx, addr)
 			}
 
 		}
@@ -1172,12 +1172,12 @@ func BenchmarkLargeMerkleTrieRebuild(b *testing.B) {
 	accts := []map[basics.Address]basics.AccountData{ledgertesting.RandomAccounts(5, true)}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -1196,7 +1196,7 @@ func BenchmarkLargeMerkleTrieRebuild(b *testing.B) {
 		for k := 0; i < accountsNumber-5-2 && k < 1024; k++ {
 			addr := ledgertesting.RandomAddress()
 			acctData := basics.AccountData{}
-			acctData.MicroAlgos.Raw = 1
+			acctData.MicroNovas.Raw = 1
 			updates.upsert(addr, accountDelta{new: acctData})
 			i++
 		}
@@ -1263,7 +1263,7 @@ func TestCompactDeltas(t *testing.T) {
 	accountDeltas := make([]ledgercore.AccountDeltas, 1, 1)
 	creatableDeltas := make([]map[basics.CreatableIndex]ledgercore.ModifiedCreatable, 1, 1)
 	creatableDeltas[0] = make(map[basics.CreatableIndex]ledgercore.ModifiedCreatable)
-	accountDeltas[0].Upsert(addrs[0], basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 2}})
+	accountDeltas[0].Upsert(addrs[0], basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 2}})
 	creatableDeltas[0][100] = ledgercore.ModifiedCreatable{Creator: addrs[2], Created: true}
 	var baseAccounts lruAccounts
 	baseAccounts.init(nil, 100, 80)
@@ -1276,19 +1276,19 @@ func TestCompactDeltas(t *testing.T) {
 
 	delta, _ := outAccountDeltas.get(addrs[0])
 	require.Equal(t, persistedAccountData{}, delta.old)
-	require.Equal(t, basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 2}}, delta.new)
+	require.Equal(t, basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 2}}, delta.new)
 	require.Equal(t, ledgercore.ModifiedCreatable{Creator: addrs[2], Created: true, Ndeltas: 1}, outCreatableDeltas[100])
 
 	// add another round
 	accountDeltas = append(accountDeltas, ledgercore.AccountDeltas{})
 	creatableDeltas = append(creatableDeltas, make(map[basics.CreatableIndex]ledgercore.ModifiedCreatable))
-	accountDeltas[1].Upsert(addrs[0], basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 3}})
-	accountDeltas[1].Upsert(addrs[3], basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 8}})
+	accountDeltas[1].Upsert(addrs[0], basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 3}})
+	accountDeltas[1].Upsert(addrs[3], basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 8}})
 
 	creatableDeltas[1][100] = ledgercore.ModifiedCreatable{Creator: addrs[2], Created: false}
 	creatableDeltas[1][101] = ledgercore.ModifiedCreatable{Creator: addrs[4], Created: true}
 
-	baseAccounts.write(persistedAccountData{addr: addrs[0], accountData: basics.AccountData{MicroAlgos: basics.MicroAlgos{Raw: 1}}})
+	baseAccounts.write(persistedAccountData{addr: addrs[0], accountData: basics.AccountData{MicroNovas: basics.MicroNovas{Raw: 1}}})
 	outAccountDeltas = makeCompactAccountDeltas(accountDeltas, baseAccounts)
 	outCreatableDeltas = compactCreatableDeltas(creatableDeltas)
 
@@ -1296,12 +1296,12 @@ func TestCompactDeltas(t *testing.T) {
 	require.Equal(t, 2, len(outCreatableDeltas))
 
 	delta, _ = outAccountDeltas.get(addrs[0])
-	require.Equal(t, uint64(1), delta.old.accountData.MicroAlgos.Raw)
-	require.Equal(t, uint64(3), delta.new.MicroAlgos.Raw)
+	require.Equal(t, uint64(1), delta.old.accountData.MicroNovas.Raw)
+	require.Equal(t, uint64(3), delta.new.MicroNovas.Raw)
 	require.Equal(t, int(2), delta.ndeltas)
 	delta, _ = outAccountDeltas.get(addrs[3])
-	require.Equal(t, uint64(0), delta.old.accountData.MicroAlgos.Raw)
-	require.Equal(t, uint64(8), delta.new.MicroAlgos.Raw)
+	require.Equal(t, uint64(0), delta.old.accountData.MicroNovas.Raw)
+	require.Equal(t, uint64(8), delta.new.MicroNovas.Raw)
 	require.Equal(t, int(1), delta.ndeltas)
 
 	require.Equal(t, addrs[2], outCreatableDeltas[100].Creator)
@@ -1331,12 +1331,12 @@ func TestAcctUpdatesCachesInitialization(t *testing.T) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -1366,7 +1366,7 @@ func TestAcctUpdatesCachesInitialization(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -1430,12 +1430,12 @@ func TestAcctUpdatesSplittingConsensusVersionCommits(t *testing.T) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -1470,7 +1470,7 @@ func TestAcctUpdatesSplittingConsensusVersionCommits(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -1507,7 +1507,7 @@ func TestAcctUpdatesSplittingConsensusVersionCommits(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -1551,12 +1551,12 @@ func TestAcctUpdatesSplittingConsensusVersionCommitsBoundry(t *testing.T) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -1591,7 +1591,7 @@ func TestAcctUpdatesSplittingConsensusVersionCommitsBoundry(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -1627,7 +1627,7 @@ func TestAcctUpdatesSplittingConsensusVersionCommitsBoundry(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -1665,7 +1665,7 @@ func TestAcctUpdatesSplittingConsensusVersionCommitsBoundry(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 		curTotals := accumulateTotals(t, protocol.ConsensusCurrentVersion, []map[basics.Address]basics.AccountData{totals}, rewardLevel)
@@ -1746,12 +1746,12 @@ func TestAcctUpdatesLookupRetry(t *testing.T) {
 	rewardsLevels := []uint64{0}
 
 	pooldata := basics.AccountData{}
-	pooldata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	pooldata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	pooldata.Status = basics.NotParticipating
 	accts[0][testPoolAddr] = pooldata
 
 	sinkdata := basics.AccountData{}
-	sinkdata.MicroAlgos.Raw = 1000 * 1000 * 1000 * 1000
+	sinkdata.MicroNovas.Raw = 1000 * 1000 * 1000 * 1000
 	sinkdata.Status = basics.NotParticipating
 	accts[0][testSinkAddr] = sinkdata
 
@@ -1786,7 +1786,7 @@ func TestAcctUpdatesLookupRetry(t *testing.T) {
 		require.NoError(t, err)
 
 		newPool := totals[testPoolAddr]
-		newPool.MicroAlgos.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
+		newPool.MicroNovas.Raw -= prevTotals.RewardUnits() * rewardLevelDelta
 		updates.Upsert(testPoolAddr, newPool)
 		totals[testPoolAddr] = newPool
 

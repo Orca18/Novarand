@@ -145,7 +145,7 @@ func TestAppPay(t *testing.T) {
 	ledger.NewAccount(appAddr(888), 1000000)
 
 	// You might NewExpect this to fail because of min balance issue
-	// (receiving account only gets 100 microalgos).  It does not fail at
+	// (receiving account only gets 100 micronovas).  It does not fail at
 	// this level, instead, we must be certain that the existing min
 	// balance check in eval.transaction() properly notices and fails
 	// the transaction later.  This fits with the model that we check

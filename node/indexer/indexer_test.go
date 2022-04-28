@@ -239,7 +239,7 @@ func generateTestObjects(numTxs, numAccs int) ([]transactions.Transaction, []tra
 		txs[i] = transactions.Transaction{
 			Header: transactions.Header{
 				Sender:      addresses[s],
-				Fee:         basics.MicroAlgos{Raw: f},
+				Fee:         basics.MicroNovas{Raw: f},
 				FirstValid:  basics.Round(iss),
 				LastValid:   basics.Round(exp),
 				GenesisID:   testGenesisID,
@@ -252,7 +252,7 @@ func generateTestObjects(numTxs, numAccs int) ([]transactions.Transaction, []tra
 			txs[i].Type = protocol.PaymentTx
 			txs[i].PaymentTxnFields = transactions.PaymentTxnFields{
 				Receiver: addresses[r],
-				Amount:   basics.MicroAlgos{Raw: uint64(a)},
+				Amount:   basics.MicroNovas{Raw: uint64(a)},
 			}
 		} else {
 			txs[i].Type = protocol.AssetTransferTx

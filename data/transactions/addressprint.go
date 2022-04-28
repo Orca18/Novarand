@@ -28,7 +28,7 @@ type AddressPrintTxnFields struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
 	Receiver basics.Address    `codec:"rcv"`
-	Amount   basics.MicroAlgos `codec:"amt"`
+	Amount   basics.MicroNovas `codec:"amt"`
 
 	// When CloseRemainderTo is set, it indicates that the
 	// transaction is requesting that the account should be

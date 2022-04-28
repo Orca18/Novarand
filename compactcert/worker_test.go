@@ -79,7 +79,7 @@ func (s *testWorkerStubs) addBlock(ccNextRound basics.Round) {
 
 	var ccBasic = bookkeeping.CompactCertState{
 		CompactCertVoters:      make([]byte, compactcert.HashSize),
-		CompactCertVotersTotal: basics.MicroAlgos{},
+		CompactCertVotersTotal: basics.MicroNovas{},
 		CompactCertNextRound:   0,
 	}
 	ccBasic.CompactCertVotersTotal.Raw = uint64(s.totalWeight)
@@ -148,7 +148,7 @@ func (s *testWorkerStubs) CompactCertVoters(r basics.Round) (*ledgercore.VotersF
 	voters := &ledgercore.VotersForRound{
 		Proto:       config.Consensus[protocol.ConsensusFuture],
 		AddrToPos:   make(map[basics.Address]uint64),
-		TotalWeight: basics.MicroAlgos{Raw: uint64(s.totalWeight)},
+		TotalWeight: basics.MicroNovas{Raw: uint64(s.totalWeight)},
 	}
 
 	for i, k := range s.keysForVoters {

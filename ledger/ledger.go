@@ -558,12 +558,12 @@ func (l *Ledger) LatestTotals() (basics.Round, ledgercore.AccountTotals, error) 
 }
 
 // OnlineTotals returns the online totals of all accounts at the end of round rnd.
-func (l *Ledger) OnlineTotals(rnd basics.Round) (basics.MicroAlgos, error) {
+func (l *Ledger) OnlineTotals(rnd basics.Round) (basics.MicroNovas, error) {
 	l.trackerMu.RLock()
 	defer l.trackerMu.RUnlock()
 	totals, err := l.accts.Totals(rnd)
 	if err != nil {
-		return basics.MicroAlgos{}, err
+		return basics.MicroNovas{}, err
 	}
 	return totals.Online.Money, nil
 }
@@ -665,6 +665,7 @@ func (l *Ledger) AddValidatedBlock(vb ledgercore.ValidatedBlock, cert agreement.
 		return err
 	}
 	l.headerCache.Put(blk.Round(), blk.BlockHeader)
+	// 원장에 저장된 트래커들의 newBlock()메소드를 실행한다.
 	l.trackers.newBlock(blk, vb.Delta())
 	l.log.Debugf("ledger.AddValidatedBlock: added blk %d", blk.Round())
 	return nil

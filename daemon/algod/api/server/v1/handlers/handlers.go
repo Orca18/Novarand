@@ -819,8 +819,8 @@ func AccountInformation(ctx lib.ReqContext, context echo.Context) {
 		return
 	}
 
-	amount := record.MicroAlgos
-	amountWithoutPendingRewards := recordWithoutPendingRewards.MicroAlgos
+	amount := record.MicroNovas
+	amountWithoutPendingRewards := recordWithoutPendingRewards.MicroNovas
 	pendingRewards, overflowed := basics.OSubA(amount, amountWithoutPendingRewards)
 	if overflowed {
 		err = fmt.Errorf("overflowed pending rewards: %v - %v", amount, amountWithoutPendingRewards)
@@ -884,7 +884,7 @@ func AccountInformation(ctx lib.ReqContext, context echo.Context) {
 		Amount:                      amount.Raw,
 		PendingRewards:              pendingRewards.Raw,
 		AmountWithoutPendingRewards: amountWithoutPendingRewards.Raw,
-		Rewards:                     record.RewardedMicroAlgos.Raw,
+		Rewards:                     record.RewardedMicroNovas.Raw,
 		Status:                      record.Status.String(),
 		Participation:               apiParticipation,
 		AssetParams:                 assetParams,

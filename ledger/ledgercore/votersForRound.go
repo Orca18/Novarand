@@ -84,7 +84,7 @@ type VotersForRound struct {
 	/*
 		참가자들 배열의 총 알고양
 	*/
-	TotalWeight basics.MicroAlgos
+	TotalWeight basics.MicroNovas
 }
 
 // TopOnlineAccounts is the function signature for a method that would return the top online accounts.
@@ -115,14 +115,14 @@ func (tr *VotersForRound) LoadTree(onlineTop TopOnlineAccounts, hdr bookkeeping.
 
 	participants := make(basics.ParticipantsArray, len(top))
 	addrToPos := make(map[basics.Address]uint64)
-	var totalWeight basics.MicroAlgos
+	var totalWeight basics.MicroNovas
 
 	for i, acct := range top {
 		var ot basics.OverflowTracker
-		rewards := basics.PendingRewards(&ot, tr.Proto, acct.MicroAlgos, acct.RewardsBase, hdr.RewardsLevel)
-		money := ot.AddA(acct.MicroAlgos, rewards)
+		rewards := basics.PendingRewards(&ot, tr.Proto, acct.MicroNovas, acct.RewardsBase, hdr.RewardsLevel)
+		money := ot.AddA(acct.MicroNovas, rewards)
 		if ot.Overflowed {
-			return fmt.Errorf("votersTracker.LoadTree: overflow adding rewards %d + %d", acct.MicroAlgos, rewards)
+			return fmt.Errorf("votersTracker.LoadTree: overflow adding rewards %d + %d", acct.MicroNovas, rewards)
 		}
 
 		totalWeight = ot.AddA(totalWeight, money)

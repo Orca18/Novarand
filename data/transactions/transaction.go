@@ -64,7 +64,7 @@ type Header struct {
 	// 트랜잭션을 전송한 계정주소
 	Sender basics.Address `codec:"snd"`
 	// 트랜잭션을 전송하기 위해 필요한 수수료
-	Fee basics.MicroAlgos `codec:"fee"`
+	Fee basics.MicroNovas `codec:"fee"`
 	// 트랜잭션이 처리될 수 있는 최초의 라운드
 	FirstValid basics.Round `codec:"fv"`
 	// 트랜잭션이 처리될 수 있는 마지막 라운드
@@ -140,7 +140,7 @@ type ApplyData struct {
 
 	// Closing amount for transaction.
 	// 트랜잭션을 닫기 위해 필요한 알고양(?)
-	ClosingAmount basics.MicroAlgos `codec:"ca"`
+	ClosingAmount basics.MicroNovas `codec:"ca"`
 
 	// Closing amount for asset transaction.
 	// 애셋 트랜잭션을 닫기위해 필요한 양
@@ -148,9 +148,9 @@ type ApplyData struct {
 
 	// Rewards applied to the Sender, Receiver, and CloseRemainderTo accounts.
 	// 보낸계정, 받는계정, CloseRemainderTo계정이 받는 알고양
-	SenderRewards   basics.MicroAlgos `codec:"rs"`
-	ReceiverRewards basics.MicroAlgos `codec:"rr"`
-	CloseRewards    basics.MicroAlgos `codec:"rc"`
+	SenderRewards   basics.MicroNovas `codec:"rs"`
+	ReceiverRewards basics.MicroNovas `codec:"rr"`
+	CloseRewards    basics.MicroNovas `codec:"rc"`
 	// GlobalState와 LocalState의 StateDelta를 저장하고 있는 구조체
 	EvalDelta EvalDelta `codec:"dt"`
 
@@ -260,7 +260,7 @@ func (tx Header) Src() basics.Address {
 }
 
 // TxFee returns the fee associated with this transaction.
-func (tx Header) TxFee() basics.MicroAlgos {
+func (tx Header) TxFee() basics.MicroNovas {
 	return tx.Fee
 }
 
@@ -579,7 +579,7 @@ func (tx Transaction) WellFormed(spec SpecialAddresses, proto config.ConsensusPa
 		}
 	}
 
-	if !proto.EnableFeePooling && tx.Fee.LessThan(basics.MicroAlgos{Raw: proto.MinTxnFee}) {
+	if !proto.EnableFeePooling && tx.Fee.LessThan(basics.MicroNovas{Raw: proto.MinTxnFee}) {
 		if tx.Type == protocol.CompactCertTx {
 			// Zero fee allowed for compact cert txn.
 		} else {
@@ -706,13 +706,13 @@ func (tx Transaction) RelevantAddrs(spec SpecialAddresses) []basics.Address {
 }
 
 // TxAmount returns the amount paid to the recipient in this payment
-func (tx Transaction) TxAmount() basics.MicroAlgos {
+func (tx Transaction) TxAmount() basics.MicroNovas {
 	switch tx.Type {
 	case protocol.PaymentTx:
 		return tx.PaymentTxnFields.Amount
 
 	default:
-		return basics.MicroAlgos{Raw: 0}
+		return basics.MicroNovas{Raw: 0}
 	}
 }
 

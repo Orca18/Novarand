@@ -249,10 +249,10 @@ func TestKeyRegCreation(t *testing.T) {
 
 	ppart := setupkeyWithNoDBS(t, a)
 
-	txn := ppart.Participation.GenerateRegistrationTransaction(basics.MicroAlgos{Raw: 1000}, 0, 100, [32]byte{}, false)
+	txn := ppart.Participation.GenerateRegistrationTransaction(basics.MicroNovas{Raw: 1000}, 0, 100, [32]byte{}, false)
 	a.Equal(txn.StateProofPK.IsEmpty(), true)
 
-	txn = ppart.Participation.GenerateRegistrationTransaction(basics.MicroAlgos{Raw: 1000}, 0, 100, [32]byte{}, true)
+	txn = ppart.Participation.GenerateRegistrationTransaction(basics.MicroNovas{Raw: 1000}, 0, 100, [32]byte{}, true)
 	a.Equal(txn.StateProofPK.IsEmpty(), false)
 }
 

@@ -212,6 +212,7 @@ func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAdd
 	node.cryptoPool = execpool.MakePool(node)
 	node.lowPriorityCryptoVerificationPool = execpool.MakeBacklog(node.cryptoPool, 2*node.cryptoPool.GetParallelism(), execpool.LowPriority, node)
 	node.highPriorityCryptoVerificationPool = execpool.MakeBacklog(node.cryptoPool, 2*node.cryptoPool.GetParallelism(), execpool.HighPriority, node)
+	// 원장 생성
 	node.ledger, err = data.LoadLedger(node.log, ledgerPathnamePrefix, false, genesis.Proto, genalloc, node.genesisID, node.genesisHash, []ledger.BlockListener{}, cfg)
 	if err != nil {
 		log.Errorf("Cannot initialize ledger (%s): %v", ledgerPathnamePrefix, err)
@@ -780,8 +781,8 @@ func (node *AlgorandFullNode) PoolStats() PoolStats {
 // Caller should set fee to max(MinTxnFee, SuggestedFee() * len(encoded SignedTxn))
 // SuggestedFee는 새 트랜잭션이 적시에 처리되도록 권장되는 바이트당 제안된 요금을 반환합니다.
 // 호출자는 수수료를 max(MinTxnFee, SuggestedFee() * len(encoded SignedTxn))로 설정해야 합니다.
-func (node *AlgorandFullNode) SuggestedFee() basics.MicroAlgos {
-	return basics.MicroAlgos{Raw: node.transactionPool.FeePerByte()}
+func (node *AlgorandFullNode) SuggestedFee() basics.MicroNovas {
+	return basics.MicroNovas{Raw: node.transactionPool.FeePerByte()}
 }
 
 // GetPendingTxnsFromPool returns a snapshot of every pending transactions from the node's transaction pool in a slice.

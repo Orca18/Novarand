@@ -47,8 +47,8 @@ func keypair() *crypto.SignatureSecrets {
 func TestAlgosEncoding(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
-	var a basics.MicroAlgos
-	var b basics.MicroAlgos
+	var a basics.MicroNovas
+	var b basics.MicroNovas
 	var i uint64
 
 	a.Raw = 222233333
@@ -75,7 +75,7 @@ func TestAlgosEncoding(t *testing.T) {
 	x := true
 	err = protocol.Decode(protocol.EncodeReflect(x), &a)
 	if err == nil {
-		panic("decode of bool into MicroAlgos succeeded")
+		panic("decode of bool into MicroNovas succeeded")
 	}
 }
 
@@ -94,13 +94,13 @@ func TestPaymentApply(t *testing.T) {
 		Type: protocol.PaymentTx,
 		Header: transactions.Header{
 			Sender:     src,
-			Fee:        basics.MicroAlgos{Raw: 1},
+			Fee:        basics.MicroNovas{Raw: 1},
 			FirstValid: basics.Round(100),
 			LastValid:  basics.Round(1000),
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: dst,
-			Amount:   basics.MicroAlgos{Raw: uint64(50)},
+			Amount:   basics.MicroNovas{Raw: uint64(50)},
 		},
 	}
 	var ad transactions.ApplyData
@@ -124,13 +124,13 @@ func TestCheckSpender(t *testing.T) {
 		Type: protocol.PaymentTx,
 		Header: transactions.Header{
 			Sender:     src,
-			Fee:        basics.MicroAlgos{Raw: 1},
+			Fee:        basics.MicroNovas{Raw: 1},
 			FirstValid: basics.Round(100),
 			LastValid:  basics.Round(1000),
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: dst,
-			Amount:   basics.MicroAlgos{Raw: uint64(50)},
+			Amount:   basics.MicroNovas{Raw: uint64(50)},
 		},
 	}
 
@@ -230,7 +230,7 @@ func TestPaymentValidation(t *testing.T) {
 		}
 
 		badFee := txn
-		badFee.Fee = basics.MicroAlgos{}
+		badFee.Fee = basics.MicroNovas{}
 		if badFee.WellFormed(spec, tcpast.Proto) == nil {
 			t.Errorf("transaction with no fee %#v verified incorrectly", badFee)
 		}
@@ -257,13 +257,13 @@ func TestPaymentSelfClose(t *testing.T) {
 		Type: protocol.PaymentTx,
 		Header: transactions.Header{
 			Sender:     src,
-			Fee:        basics.MicroAlgos{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
+			Fee:        basics.MicroNovas{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
 			FirstValid: basics.Round(100),
 			LastValid:  basics.Round(1000),
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver:         dst,
-			Amount:           basics.MicroAlgos{Raw: uint64(50)},
+			Amount:           basics.MicroNovas{Raw: uint64(50)},
 			CloseRemainderTo: src,
 		},
 	}
@@ -295,13 +295,13 @@ func generateTestObjects(numTxs, numAccs int) ([]transactions.Transaction, []tra
 			Type: protocol.PaymentTx,
 			Header: transactions.Header{
 				Sender:     addresses[s],
-				Fee:        basics.MicroAlgos{Raw: f},
+				Fee:        basics.MicroNovas{Raw: f},
 				FirstValid: basics.Round(iss),
 				LastValid:  basics.Round(exp),
 			},
 			PaymentTxnFields: transactions.PaymentTxnFields{
 				Receiver: addresses[r],
-				Amount:   basics.MicroAlgos{Raw: uint64(a)},
+				Amount:   basics.MicroNovas{Raw: uint64(a)},
 			},
 		}
 		signed[i] = txs[i].Sign(secrets[s])

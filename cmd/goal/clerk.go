@@ -399,9 +399,10 @@ var sendCmd = &cobra.Command{
 		// combination with other txns that cover the groups's fee.
 		explicitFee := cmd.Flags().Changed("fee")
 		if explicitFee {
-			payment.Fee = basics.MicroAlgos{Raw: fee}
+			payment.Fee = basics.MicroNovas{Raw: fee}
 		}
 
+		// 서명된 트랜잭션 생성
 		var stx transactions.SignedTxn
 		if lsig.Logic != nil {
 

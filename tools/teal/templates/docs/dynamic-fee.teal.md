@@ -9,7 +9,7 @@ The contract works by approving a group of two transactions (meaning the two tra
 ## Parameters:
 
   - `TMPL_TO`: the recipient of the payment from account A
-  - `TMPL_AMT`: the amount to send from account A to `TMPL_TO` in microAlgos
+  - `TMPL_AMT`: the amount to send from account A to `TMPL_TO` in microNovas
   - `TMPL_CLS`: the account to close out the remainder of account A's funds to after paying `TMPL_AMT` to `TMPL_TO`
   - `TMPL_FV`: the required first valid round of the payment from account A
   - `TMPL_LV`: the required last valid round of the payment from account A

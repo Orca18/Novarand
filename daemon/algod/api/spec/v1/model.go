@@ -228,29 +228,29 @@ type Account struct {
 	// required: true
 	Address string `json:"address"`
 
-	// Amount indicates the total number of MicroAlgos in the account
+	// Amount indicates the total number of MicroNovas in the account
 	//
 	// required: true
 	Amount uint64 `json:"amount"`
 
-	// PendingRewards specifies the amount of MicroAlgos of pending
+	// PendingRewards specifies the amount of MicroNovas of pending
 	// rewards in this account.
 	//
 	// required: true
 	PendingRewards uint64 `json:"pendingrewards"`
 
-	// AmountWithoutPendingRewards specifies the amount of MicroAlgos in
+	// AmountWithoutPendingRewards specifies the amount of MicroNovas in
 	// the account, without the pending rewards.
 	//
 	// required: true
 	AmountWithoutPendingRewards uint64 `json:"amountwithoutpendingrewards"`
 
-	// Rewards indicates the total rewards of MicroAlgos the account has received, including pending rewards.
+	// Rewards indicates the total rewards of MicroNovas the account has received, including pending rewards.
 	//
 	// required: true
 	Rewards uint64 `json:"rewards"`
 
-	// Status indicates the delegation status of the account's MicroAlgos
+	// Status indicates the delegation status of the account's MicroNovas
 	// Offline - indicates that the associated account is delegated.
 	// Online  - indicates that the associated account used as part of the delegation pool.
 	// NotParticipating - indicates that the associated account is neither a delegator nor a delegate.
@@ -576,7 +576,7 @@ type PaymentTransactionType struct {
 	// required: false
 	CloseAmount uint64 `json:"closeamount,omitempty"`
 
-	// Amount is the amount of MicroAlgos intended to be transferred
+	// Amount is the amount of MicroNovas intended to be transferred
 	//
 	// required: true
 	Amount uint64 `json:"amount"`
@@ -929,16 +929,16 @@ type Block struct {
 	// required: true
 	TransactionsRoot string `json:"txnRoot"`
 
-	// RewardsLevel specifies how many rewards, in MicroAlgos,
+	// RewardsLevel specifies how many rewards, in MicroNovas,
 	// have been distributed to each config.Protocol.RewardUnit
-	// of MicroAlgos since genesis.
+	// of MicroNovas since genesis.
 	RewardsLevel uint64 `json:"reward"`
 
-	// The number of new MicroAlgos added to the participation stake from rewards at the next round.
+	// The number of new MicroNovas added to the participation stake from rewards at the next round.
 	RewardsRate uint64 `json:"rate"`
 
-	// The number of leftover MicroAlgos after the distribution of RewardsRate/rewardUnits
-	// MicroAlgos for every reward unit in the next round.
+	// The number of leftover MicroNovas after the distribution of RewardsRate/rewardUnits
+	// MicroNovas for every reward unit in the next round.
 	RewardsResidue uint64 `json:"frac"`
 
 	// Transactions is the list of transactions in this block
@@ -958,7 +958,7 @@ type Block struct {
 	// swagger:strfmt byte
 	CompactCertVoters []byte `json:"compactCertVoters"`
 
-	// CompactCertVotersTotal is the total amount of microalgos held by the voters in
+	// CompactCertVotersTotal is the total amount of micronovas held by the voters in
 	// the CompactCertVoters merkle tree.
 	//
 	// required: true
@@ -1014,7 +1014,7 @@ type UpgradeVote struct {
 	UpgradeApprove bool `json:"upgradeApprove"`
 }
 
-// Supply represents the current supply of MicroAlgos in the system
+// Supply represents the current supply of MicroNovas in the system
 // swagger:model Supply
 type Supply struct {
 	// Round

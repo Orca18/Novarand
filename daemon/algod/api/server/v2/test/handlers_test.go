@@ -139,7 +139,7 @@ func TestGetBlockJsonEncoding(t *testing.T) {
 			Type: protocol.ApplicationCallTx,
 			Header: transactions.Header{
 				Sender:      sender,
-				Fee:         basics.MicroAlgos{Raw: 1000},
+				Fee:         basics.MicroNovas{Raw: 1000},
 				GenesisID:   genBlk.GenesisID(),
 				GenesisHash: genBlk.GenesisHash(),
 				FirstValid:  1,
@@ -178,7 +178,7 @@ func TestGetBlockJsonEncoding(t *testing.T) {
 		Round:        l.Latest() + 1,
 		Branch:       genBlk.Hash(),
 		TimeStamp:    0,
-		RewardsState: genBlk.NextRewardsState(l.Latest()+1, proto, poolBal.MicroAlgos, totalRewardUnits, logging.Base()),
+		RewardsState: genBlk.NextRewardsState(l.Latest()+1, proto, poolBal.MicroNovas, totalRewardUnits, logging.Base()),
 		UpgradeState: genBlk.UpgradeState,
 	}
 

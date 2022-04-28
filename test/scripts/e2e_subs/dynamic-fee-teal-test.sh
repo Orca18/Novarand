@@ -27,7 +27,7 @@ algotmpl -d tools/teal/templates/ dynamic-fee --amt=1000000 --cls=${ACCOUNTC} --
 #
 # Fee will come from ACCOUNT in the first transaction
 # We will close out to ACCOUNTC in second transaction
-# We will pay ACCOUNTD with 1000000 microAlgos in second transaction
+# We will pay ACCOUNTD with 1000000 microNovas in second transaction
 #
 
 # Compile the template

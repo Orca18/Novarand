@@ -99,8 +99,8 @@ func TestRichAccountSelected(t *testing.T) {
 		t.Errorf("can't read selection params")
 	}
 
-	TotalMoney := basics.MicroAlgos{Raw: 1 << 50}
-	record.MicroAlgosWithRewards.Raw = TotalMoney.Raw / 2
+	TotalMoney := basics.MicroNovas{Raw: 1 << 50}
+	record.MicroNovasWithRewards.Raw = TotalMoney.Raw / 2
 	sel := AgreementSelector{
 		Seed:   selectionSeed,
 		Round:  round,
@@ -163,11 +163,11 @@ func TestPoorAccountSelectedLeaders(t *testing.T) {
 				Step:   Propose,
 			}
 
-			record.MicroAlgosWithRewards.Raw = uint64(1000 / len(addresses))
+			record.MicroNovasWithRewards.Raw = uint64(1000 / len(addresses))
 			m := Membership{
 				Record:     record,
 				Selector:   sel,
-				TotalMoney: basics.MicroAlgos{Raw: 1000},
+				TotalMoney: basics.MicroNovas{Raw: 1000},
 			}
 
 			u := MakeCredential(vrfSecrets[j], sel)
@@ -209,11 +209,11 @@ func TestPoorAccountSelectedCommittee(t *testing.T) {
 				Step:   step,
 			}
 
-			record.MicroAlgosWithRewards.Raw = uint64(2000 / len(addresses))
+			record.MicroNovasWithRewards.Raw = uint64(2000 / len(addresses))
 			m := Membership{
 				Record:     record,
 				Selector:   sel,
-				TotalMoney: basics.MicroAlgos{Raw: 2000},
+				TotalMoney: basics.MicroNovas{Raw: 2000},
 			}
 			u := MakeCredential(vrfSecrets[j], sel)
 			credential, _ := u.Verify(proto, m)
@@ -247,11 +247,11 @@ func TestNoMoneyAccountNotSelected(t *testing.T) {
 			Step:   Propose,
 		}
 
-		record.MicroAlgosWithRewards.Raw = 0
+		record.MicroNovasWithRewards.Raw = 0
 		m := Membership{
 			Record:     record,
 			Selector:   sel,
-			TotalMoney: basics.MicroAlgos{Raw: 1000},
+			TotalMoney: basics.MicroNovas{Raw: 1000},
 		}
 		u := MakeCredential(zeroVRFSecret, sel)
 		_, err := u.Verify(proto, m)
@@ -272,8 +272,8 @@ func TestLeadersSelected(t *testing.T) {
 		t.Errorf("can't read selection params")
 	}
 
-	record.MicroAlgosWithRewards.Raw = 50000
-	totalMoney := basics.MicroAlgos{Raw: 100000}
+	record.MicroNovasWithRewards.Raw = 50000
+	totalMoney := basics.MicroNovas{Raw: 100000}
 
 	sel := AgreementSelector{
 		Seed:   selectionSeed,
@@ -304,8 +304,8 @@ func TestCommitteeSelected(t *testing.T) {
 		t.Errorf("can't read selection params")
 	}
 
-	record.MicroAlgosWithRewards.Raw = 50000
-	totalMoney := basics.MicroAlgos{Raw: 100000}
+	record.MicroNovasWithRewards.Raw = 50000
+	totalMoney := basics.MicroNovas{Raw: 100000}
 
 	sel := AgreementSelector{
 		Seed:   selectionSeed,
@@ -341,7 +341,7 @@ func TestAccountNotSelected(t *testing.T) {
 			Period: period,
 			Step:   Propose,
 		}
-		record.MicroAlgosWithRewards.Raw = 0
+		record.MicroNovasWithRewards.Raw = 0
 		m := Membership{
 			Record:     record,
 			Selector:   sel,
@@ -384,11 +384,11 @@ func BenchmarkSortition(b *testing.B) {
 			Step:   step,
 		}
 
-		record.MicroAlgosWithRewards.Raw = uint64(money[i])
+		record.MicroNovasWithRewards.Raw = uint64(money[i])
 		m := Membership{
 			Record:     record,
 			Selector:   sel,
-			TotalMoney: basics.MicroAlgos{Raw: uint64(totalMoney)},
+			TotalMoney: basics.MicroNovas{Raw: uint64(totalMoney)},
 		}
 		credentials[i], _ = MakeCredential(vrfSecrets[0], sel).Verify(proto, m)
 	}

@@ -89,14 +89,14 @@ func generateTestObjects(numTxs, numAccs int, blockRound basics.Round) ([]transa
 			Type: protocol.PaymentTx,
 			Header: transactions.Header{
 				Sender:      addresses[s],
-				Fee:         basics.MicroAlgos{Raw: f},
+				Fee:         basics.MicroNovas{Raw: f},
 				FirstValid:  basics.Round(iss),
 				LastValid:   basics.Round(exp),
 				GenesisHash: crypto.Hash([]byte{1, 2, 3, 4, 5}),
 			},
 			PaymentTxnFields: transactions.PaymentTxnFields{
 				Receiver: addresses[r],
-				Amount:   basics.MicroAlgos{Raw: uint64(a)},
+				Amount:   basics.MicroNovas{Raw: uint64(a)},
 			},
 		}
 		signed[i] = txs[i].Sign(secrets[s])
@@ -210,21 +210,21 @@ func TestTxnValidationCompactCert(t *testing.T) {
 
 	stxn2 := stxn
 	stxn2.Txn.Type = protocol.PaymentTx
-	stxn2.Txn.Header.Fee = basics.MicroAlgos{Raw: proto.MinTxnFee}
+	stxn2.Txn.Header.Fee = basics.MicroNovas{Raw: proto.MinTxnFee}
 	err = Txn(&stxn2, 0, groupCtx)
 	require.Error(t, err, "payment txn %#v verified from CompactCertSender", stxn2)
 
 	secret := keypair()
 	stxn2 = stxn
 	stxn2.Txn.Header.Sender = basics.Address(secret.SignatureVerifier)
-	stxn2.Txn.Header.Fee = basics.MicroAlgos{Raw: proto.MinTxnFee}
+	stxn2.Txn.Header.Fee = basics.MicroNovas{Raw: proto.MinTxnFee}
 	stxn2 = stxn2.Txn.Sign(secret)
 	err = Txn(&stxn2, 0, groupCtx)
 	require.Error(t, err, "compact cert txn %#v verified from non-CompactCertSender", stxn2)
 
 	// Compact cert txns are not allowed to have non-zero values for many fields
 	stxn2 = stxn
-	stxn2.Txn.Header.Fee = basics.MicroAlgos{Raw: proto.MinTxnFee}
+	stxn2.Txn.Header.Fee = basics.MicroNovas{Raw: proto.MinTxnFee}
 	err = Txn(&stxn2, 0, groupCtx)
 	require.Error(t, err, "compact cert txn %#v verified", stxn2)
 

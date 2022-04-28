@@ -54,7 +54,7 @@ type Participant struct {
 	// PK는 특정 참여자의 서명을 증명하기 위한 식별자이다.
 	PK merklesignature.Verifier `codec:"p"`
 
-	// Weight is AccountData.MicroAlgos.
+	// Weight is AccountData.MicroNovas.
 	// Weight는 보유한 알고양이다.
 	Weight uint64 `codec:"w"`
 }

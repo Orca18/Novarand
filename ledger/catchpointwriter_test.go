@@ -57,9 +57,9 @@ func makeTestEncodedBalanceRecord(t *testing.T) encodedBalanceRecord {
 	vrfSecrets := crypto.GenerateVRFSecrets()
 	ad := basics.AccountData{
 		Status:             basics.NotParticipating,
-		MicroAlgos:         basics.MicroAlgos{},
+		MicroNovas:         basics.MicroNovas{},
 		RewardsBase:        0x1234123412341234,
-		RewardedMicroAlgos: basics.MicroAlgos{},
+		RewardedMicroNovas: basics.MicroNovas{},
 		VoteID:             oneTimeSecrets.OneTimeSignatureVerifier,
 		SelectionID:        vrfSecrets.PK,
 		VoteFirstValid:     basics.Round(0x1234123412341234),

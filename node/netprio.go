@@ -85,7 +85,7 @@ func (node *AlgorandFullNode) MakePrioResponse(challenge string) []byte {
 			continue
 		}
 
-		weight := data.MicroAlgosWithRewards.ToUint64()
+		weight := data.MicroNovasWithRewards.ToUint64()
 		if weight > maxWeight {
 			maxPart = part
 			maxWeight = weight
@@ -148,5 +148,5 @@ func (node *AlgorandFullNode) GetPrioWeight(addr basics.Address) uint64 {
 		return 0
 	}
 
-	return data.MicroAlgosWithRewards.ToUint64()
+	return data.MicroNovasWithRewards.ToUint64()
 }

@@ -298,47 +298,53 @@ func (cs *roundCowState) Put(addr basics.Address, acct basics.AccountData) error
 	return nil
 }
 
-func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics.MicroAlgos, fromRewards *basics.MicroAlgos, toRewards *basics.MicroAlgos) error {
+func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics.MicroNovas, fromRewards *basics.MicroNovas, toRewards *basics.MicroNovas) error {
 	rewardlvl := cs.rewardsLevel()
 
+	// 트랜잭션을 보낸 계정의 AccountData를 반환한다.
 	fromBal, err := cs.lookup(from)
 	if err != nil {
 		return err
 	}
+	// reward레벨이 반영된 트랜잭션을 보낸 계정의 AccountData를 반환한다.
 	fromBalNew := fromBal.WithUpdatedRewards(cs.proto, rewardlvl)
 
 	if fromRewards != nil {
 		var ot basics.OverflowTracker
-		newFromRewards := ot.AddA(*fromRewards, ot.SubA(fromBalNew.MicroAlgos, fromBal.MicroAlgos))
+		newFromRewards := ot.AddA(*fromRewards, ot.SubA(fromBalNew.MicroNovas, fromBal.MicroNovas))
 		if ot.Overflowed {
-			return fmt.Errorf("overflowed tracking of fromRewards for account %v: %d + (%d - %d)", from, *fromRewards, fromBalNew.MicroAlgos, fromBal.MicroAlgos)
+			return fmt.Errorf("overflowed tracking of fromRewards for account %v: %d + (%d - %d)", from, *fromRewards, fromBalNew.MicroNovas, fromBal.MicroNovas)
 		}
 		*fromRewards = newFromRewards
 	}
 
 	var overflowed bool
-	fromBalNew.MicroAlgos, overflowed = basics.OSubA(fromBalNew.MicroAlgos, amt)
+	// 트랜잭션을 보내는 계정의 알고수를 줄인다..
+	fromBalNew.MicroNovas, overflowed = basics.OSubA(fromBalNew.MicroNovas, amt)
 	if overflowed {
 		return fmt.Errorf("overspend (account %v, data %+v, tried to spend %v)", from, fromBal, amt)
 	}
 	cs.Put(from, fromBalNew)
 
+	// 수수료를 받는 계정의 AccountData를 반환한다.
 	toBal, err := cs.lookup(to)
 	if err != nil {
 		return err
 	}
+	// reward레벨이 반영된 수수료를 받는 계정의 AccountData를 반환한다.
 	toBalNew := toBal.WithUpdatedRewards(cs.proto, rewardlvl)
 
 	if toRewards != nil {
 		var ot basics.OverflowTracker
-		newToRewards := ot.AddA(*toRewards, ot.SubA(toBalNew.MicroAlgos, toBal.MicroAlgos))
+		newToRewards := ot.AddA(*toRewards, ot.SubA(toBalNew.MicroNovas, toBal.MicroNovas))
 		if ot.Overflowed {
-			return fmt.Errorf("overflowed tracking of toRewards for account %v: %d + (%d - %d)", to, *toRewards, toBalNew.MicroAlgos, toBal.MicroAlgos)
+			return fmt.Errorf("overflowed tracking of toRewards for account %v: %d + (%d - %d)", to, *toRewards, toBalNew.MicroNovas, toBal.MicroNovas)
 		}
 		*toRewards = newToRewards
 	}
 
-	toBalNew.MicroAlgos, overflowed = basics.OAddA(toBalNew.MicroAlgos, amt)
+	// 수수료를 받는 계정의 알고수를 늘린다.
+	toBalNew.MicroNovas, overflowed = basics.OAddA(toBalNew.MicroNovas, amt)
 	if overflowed {
 		return fmt.Errorf("balance overflow (account %v, data %+v, was going to receive %v)", to, toBal, amt)
 	}
@@ -540,7 +546,7 @@ func StartEvaluator(l LedgerForEvaluator, hdr bookkeeping.BlockHeader, evalOpts 
 		if eval.proto.SupportGenesisHash {
 			eval.block.BlockHeader.GenesisHash = eval.genesisHash
 		}
-		eval.block.BlockHeader.RewardsState = eval.prevHeader.NextRewardsState(hdr.Round, proto, incentivePoolData.MicroAlgos, prevTotals.RewardUnits(), logging.Base())
+		eval.block.BlockHeader.RewardsState = eval.prevHeader.NextRewardsState(hdr.Round, proto, incentivePoolData.MicroNovas, prevTotals.RewardUnits(), logging.Base())
 	}
 	// set the eval state with the current header
 	eval.state = makeRoundCowState(base, eval.block.BlockHeader, proto, eval.prevHeader.TimeStamp, prevTotals, evalOpts.PaysetHint)
@@ -552,7 +558,7 @@ func StartEvaluator(l LedgerForEvaluator, hdr bookkeeping.BlockHeader, evalOpts 
 		}
 
 		// Check that the rewards rate, level and residue match expected values
-		expectedRewardsState := eval.prevHeader.NextRewardsState(hdr.Round, proto, incentivePoolData.MicroAlgos, prevTotals.RewardUnits(), logging.Base())
+		expectedRewardsState := eval.prevHeader.NextRewardsState(hdr.Round, proto, incentivePoolData.MicroNovas, prevTotals.RewardUnits(), logging.Base())
 		if eval.block.RewardsState != expectedRewardsState {
 			return nil, fmt.Errorf("bad rewards state: %+v != %+v", eval.block.RewardsState, expectedRewardsState)
 		}
@@ -583,7 +589,7 @@ func StartEvaluator(l LedgerForEvaluator, hdr bookkeeping.BlockHeader, evalOpts 
 	}
 
 	poolNew := poolOld
-	poolNew.MicroAlgos = ot.SubA(poolOld.MicroAlgos, basics.MicroAlgos{Raw: ot.Mul(prevTotals.RewardUnits(), rewardsPerUnit)})
+	poolNew.MicroNovas = ot.SubA(poolOld.MicroNovas, basics.MicroNovas{Raw: ot.Mul(prevTotals.RewardUnits(), rewardsPerUnit)})
 	if ot.Overflowed {
 		return nil, fmt.Errorf("overflowed subtracting reward unit for block %v", hdr.Round)
 	}
@@ -594,7 +600,7 @@ func StartEvaluator(l LedgerForEvaluator, hdr bookkeeping.BlockHeader, evalOpts 
 	}
 
 	// ensure that we have at least MinBalance after withdrawing rewards
-	ot.SubA(poolNew.MicroAlgos, basics.MicroAlgos{Raw: proto.MinBalance})
+	ot.SubA(poolNew.MicroNovas, basics.MicroNovas{Raw: proto.MinBalance})
 	if ot.Overflowed {
 		// TODO this should never happen; should we panic here?
 		return nil, fmt.Errorf("overflowed subtracting rewards for block %v", hdr.Round)
@@ -618,7 +624,7 @@ func (eval *BlockEvaluator) workaroundOverspentRewards(rewardPoolBalance basics.
 
 	// get the testnet bank ( dispenser ) account address.
 	bankAddr, _ := basics.UnmarshalChecksumAddress("GD64YIY3TWGDMCNPP553DZPPR6LDUSFQOIJVFDPPXWEG3FVOJCCDBBHU5A")
-	amount := basics.MicroAlgos{Raw: 20000000000}
+	amount := basics.MicroNovas{Raw: 20000000000}
 	err = eval.state.Move(bankAddr, eval.prevHeader.RewardsPool, amount, nil, nil)
 	if err != nil {
 		err = fmt.Errorf("unable to move funds from testnet bank to incentive pool: %v", err)
@@ -838,9 +844,9 @@ func (eval *BlockEvaluator) checkMinBalance(cow *roundCowState) error {
 
 		dataNew := data.WithUpdatedRewards(eval.proto, rewardlvl)
 		effectiveMinBalance := dataNew.MinBalance(&eval.proto)
-		if dataNew.MicroAlgos.Raw < effectiveMinBalance.Raw {
+		if dataNew.MicroNovas.Raw < effectiveMinBalance.Raw {
 			return fmt.Errorf("account %v balance %d below min %d (%d assets)",
-				addr, dataNew.MicroAlgos.Raw, effectiveMinBalance.Raw, len(dataNew.Assets))
+				addr, dataNew.MicroNovas.Raw, effectiveMinBalance.Raw, len(dataNew.Assets))
 		}
 
 		// Check if we have exceeded the maximum minimum balance
@@ -980,6 +986,53 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 
 	//case protocol.AddressPrint:
 	//err = apply.AddressPrint(tx.PaymentTxnFields, tx.Header, balances, eval.specials, &ad)
+
+	/* 로그 만드는 코드
+		trackinglog := logging.Base()
+
+		dir := os.Getenv("ALGORAND_DATA")
+		fmt.Println(dir)
+		absolutePath, absPathErr := filepath.Abs(dir)
+
+		trackerLog := filepath.Join(absolutePath, "tracker.log")
+		archive := filepath.Join(absolutePath, "tracker.archival.log")
+		fmt.Println("Logging to: ", trackerLog)
+		fmt.Println("Logging absPathErr: ", absPathErr)
+		var maxLogAge time.Duration
+
+		maxLogAge, err = time.ParseDuration("24h")
+
+		logWriter := logging.MakeCyclicFileWriter(trackerLog, archive, 1073741824, maxLogAge)
+		trackinglog.SetOutput(logWriter)
+		trackinglog.SetJSONFormatter()
+		trackinglog.SetLevel(logging.Level(4))
+		//setupDeadlockLogger()
+
+		func transactionLog(dataDir string, sender basics.Address, receiver basics.Address, amount basics.MicroNovas) {
+		// Use logging package instead of stdin/stdout
+		//fmt.Println("log.SetLevel(logging.Info)")
+		// We have a dataDir now, so use log files
+		txnLogFilePath := filepath.Join(dataDir, "transaction.log")
+		//fmt.Println("filepath.Join")
+		txnLogFileMode := os.O_CREATE | os.O_WRONLY | os.O_APPEND
+		logFile, err := os.OpenFile(txnLogFilePath, txnLogFileMode, 666)
+		//fmt.Println("os.OpenFile")
+		if err != nil {
+			//fmt.Println("만약 에러가 없지 않으면=에러가 있으면")
+			log.Fatalf("error opening file: %v", err)
+		}
+		defer logFile.Close()
+		log.SetOutput(logFile)
+		//fmt.Println("에러가 없으면 = 정상동작")
+		//loc, err := time.LoadLocation("Asia/Seoul")
+		//if err != nil {
+		//	panic(err)
+		//}
+		//now := time.Now() // Go Playground 에서는 항상 시각은 2009-11-10 23:00:00 +0000 UTC 에서 시작한다.
+		//t := now.In(loc)
+		log.Println(" [Sender] ", sender, "[Receiver] ", receiver, "[Amount] ", amount.Raw)
+	}
+	*/
 	case protocol.CompactCertTx:
 		// in case of a CompactCertTx transaction, we want to "apply" it only in validate or generate mode. This will deviate the cow's CompactCertNext depending of
 		// whether we're in validate/generate mode or not, however - given that this variable in only being used in these modes, it would be safe.
@@ -1002,9 +1055,9 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	// If the protocol does not support rewards in ApplyData,
 	// clear them out.
 	if !params.RewardsInApplyData {
-		ad.SenderRewards = basics.MicroAlgos{}
-		ad.ReceiverRewards = basics.MicroAlgos{}
-		ad.CloseRewards = basics.MicroAlgos{}
+		ad.SenderRewards = basics.MicroNovas{}
+		ad.ReceiverRewards = basics.MicroNovas{}
+		ad.CloseRewards = basics.MicroNovas{}
 	}
 
 	// No separate config for activating these AD fields because inner
@@ -1020,7 +1073,7 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 
 // compactCertVotersAndTotal returns the expected values of CompactCertVoters
 // and CompactCertVotersTotal for a block.
-func (eval *BlockEvaluator) compactCertVotersAndTotal() (root crypto.GenericDigest, total basics.MicroAlgos, err error) {
+func (eval *BlockEvaluator) compactCertVotersAndTotal() (root crypto.GenericDigest, total basics.MicroNovas, err error) {
 	if eval.proto.CompactCertRounds == 0 {
 		return
 	}

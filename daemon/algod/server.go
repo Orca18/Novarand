@@ -194,10 +194,10 @@ func makeListener(addr string) (net.Listener, error) {
 // Start starts a Node instance and its network services
 // Start는 Node 인스턴스와 네트워크 서비스를 시작합니다.
 func (s *Server) Start() {
-	s.log.Info("Trying to start an Algorand node")
-	fmt.Print("Initializing the Algorand node... ")
+	s.log.Info("Trying to start an Novarand node")
+	fmt.Print("Initializing the Novarand node... ")
 	s.node.Start()
-	s.log.Info("Successfully started an Algorand node.")
+	s.log.Info("Successfully started an Novarand node.")
 	fmt.Println("Success!")
 
 	cfg := s.node.Config()
