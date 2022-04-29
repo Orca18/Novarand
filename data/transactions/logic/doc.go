@@ -380,7 +380,7 @@ var TypeNameDescriptions = map[string]string{
 	string(protocol.AssetFreezeTx):     "AssetFreeze",
 	string(protocol.ApplicationCallTx): "ApplicationCall",
 	// (추가)
-	//string(protocol.AddressPrint): "AddressPrint",
+	string(protocol.AddressPrintTx): "AddressPrint",
 }
 
 var onCompletionDescriptions = map[OnCompletionConstType]string{

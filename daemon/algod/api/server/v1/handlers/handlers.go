@@ -95,8 +95,8 @@ func txEncode(tx transactions.Transaction, ad transactions.ApplyData) (v1.Transa
 		res = applicationCallTxEncode(tx, ad)
 	case protocol.CompactCertTx:
 		res = compactCertTxEncode(tx, ad)
-	//case protocol.AddressPrint:
-	//res = addressPrintTxEncode(tx, ad)
+	case protocol.AddressPrintTx:
+		res = addressPrintTxEncode(tx, ad)
 	default:
 		return res, errors.New(errUnknownTransactionType)
 	}
@@ -121,6 +121,18 @@ func txEncode(tx transactions.Transaction, ad transactions.ApplyData) (v1.Transa
 	}
 
 	return res, nil
+}
+
+//(추가)
+func addressPrintTxEncode(tx transactions.Transaction, ad transactions.ApplyData) v1.Transaction {
+	addressprint := v1.AddressPrintTransactionType{
+		To2:        tx.Receiver2.String(),
+		ToRewards2: ad.ReceiverRewards.Raw,
+	}
+
+	return v1.Transaction{
+		AddressPrint: &addressprint,
+	}
 }
 
 func paymentTxEncode(tx transactions.Transaction, ad transactions.ApplyData) v1.Transaction {

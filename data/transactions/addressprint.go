@@ -27,28 +27,16 @@ import (
 type AddressPrintTxnFields struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
-	Receiver basics.Address    `codec:"rcv"`
-	Amount   basics.MicroNovas `codec:"amt"`
-
-	// When CloseRemainderTo is set, it indicates that the
-	// transaction is requesting that the account should be
-	// closed, and all remaining funds be transferred to this
-	// address.
-	CloseRemainderTo basics.Address `codec:"close"`
+	// 아 이 Receiver는 이미 PaymentTxnFields에서 구현되어 있기 때문에 중복으로 사용하면 안되는구나!!
+	// 마샬링, 언마샬링 코드도 추가해줘야 할 듯하다!!
+	Receiver2 basics.Address `codec:"rcv2"`
 }
 
-func (payment PaymentTxnFields) checkSpender2(header Header, spec SpecialAddresses, proto config.ConsensusParams) error {
-	if header.Sender == payment.CloseRemainderTo {
-		return fmt.Errorf("transaction cannot close account to its sender %v", header.Sender)
-	}
-
+func (addressprint AddressPrintTxnFields) checkSpender2(header Header, spec SpecialAddresses, proto config.ConsensusParams) error {
 	// the FeeSink account may only spend to the IncentivePool
 	if header.Sender == spec.FeeSink {
-		if payment.Receiver != spec.RewardsPool {
-			return fmt.Errorf("cannot spend from fee sink's address %v to non incentive pool address %v", header.Sender, payment.Receiver)
-		}
-		if payment.CloseRemainderTo != (basics.Address{}) {
-			return fmt.Errorf("cannot close fee sink %v to %v", header.Sender, payment.CloseRemainderTo)
+		if addressprint.Receiver2 != spec.RewardsPool {
+			return fmt.Errorf("cannot spend from fee sink's address %v to non incentive pool address %v", header.Sender, addressprint.Receiver2)
 		}
 	}
 	return nil

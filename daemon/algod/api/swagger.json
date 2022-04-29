@@ -1634,6 +1634,27 @@
       },
       "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
+    "AddressPrintTransactionType": {
+      "description": "AddressPrintTransactionType contains the additional fields for a addressPrint Transaction",
+      "type": "object",
+      "required": [
+        "to2"
+      ],
+      "properties": {
+        "to2": {
+          "description": "To is the receiver's address",
+          "type": "string",
+          "x-go-name": "To2"
+        },
+        "torewards2": {
+          "description": "ToRewards is the amount of pending rewards applied to the To account\nas part of this transaction.",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "ToRewards2"
+        }
+      },
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+    },
     "PendingTransactions": {
       "description": "PendingTransactions represents a potentially truncated list of transactions currently in the\nnode's transaction pool.",
       "type": "object",
@@ -1802,6 +1823,9 @@
         },
         "payment": {
           "$ref": "#/definitions/PaymentTransactionType"
+        },
+        "addressprint": {
+          "$ref": "#/definitions/AddressPrintTransactionType"
         },
         "poolerror": {
           "description": "PoolError indicates the transaction was evicted from this node's transaction\npool (if non-empty).  A non-empty PoolError does not guarantee that the\ntransaction will never be committed; other nodes may not have evicted the\ntransaction and may attempt to commit it in the future.",

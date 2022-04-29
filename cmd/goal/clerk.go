@@ -75,7 +75,10 @@ func init() {
 	clerkCmd.AddCommand(compileCmd)
 	clerkCmd.AddCommand(dryrunCmd)
 	clerkCmd.AddCommand(dryrunRemoteCmd)
+	// 예제 cmd
 	clerkCmd.AddCommand(inspectCmd2)
+	// addrPrintCmd 추가
+	clerkCmd.AddCommand(addrPrintCmd)
 
 	// Wallet to be used for the clerk operation
 	clerkCmd.PersistentFlags().StringVarP(&walletName, "wallet", "w", "", "Set the wallet to be used for the selected operation")
@@ -144,6 +147,14 @@ func init() {
 
 	inspectCmd2.Flags().StringVarP(&ex, "example", "e", "", "example")
 	inspectCmd2.MarkFlagRequired("example")
+
+	// addrprint flags
+	addrPrintCmd.Flags().StringVarP(&account, "from", "f", "", "Account address to send the money from (If not specified, uses default account)")
+	addrPrintCmd.Flags().StringVarP(&toAddress, "to", "t", "", "Address to send to money to (required)")
+	addrPrintCmd.MarkFlagRequired("to")
+
+	// Add common transaction flags
+	addTxnFlags(addrPrintCmd)
 
 }
 
@@ -933,6 +944,89 @@ var splitCmd = &cobra.Command{
 				reportErrorf(fileWriteError, outFilename, err)
 			}
 			fmt.Printf("Wrote transaction %d to %s\n", idx, fn)
+		}
+	},
+}
+
+/*
+	센더와 리시버의 주소를 출력하기위한 커맨드
+	firstValid와 lastValid를 입력해야 함
+	braodcasting이 완료되면 txID를 반환한다.
+*/
+var addrPrintCmd = &cobra.Command{
+	Use:   "addrprint",
+	Short: "print sender and receiver's address to addrprint.log",
+	Long:  `print sender and receiver's address to addrprint.log.Note: the transaction will only be valid from round firstValid to round lastValid. If broadcast of the transaction is successful, the transaction ID will be returned.`,
+	Args:  validateNoPosArgsFn,
+	Run: func(cmd *cobra.Command, args []string) {
+		// "ALGORAND_DATA"에 저장되어있는 경로의 데이터 폴더를 가져온다.
+		dataDir := ensureSingleDataDir()
+		// accountlist.json에 있는 계정정보를 가져온다(흠.. 이러면 내 계정정보 밖에 안가져오는거 아닌가?)
+		accountList := makeAccountsList(dataDir)
+
+		var fromAddressResolved string
+		var err error
+
+		// Check if from was specified, else use default
+		if account == "" {
+			account = accountList.getDefaultAccount()
+		}
+
+		// Resolving friendly names
+		fromAddressResolved = accountList.getAddressByName(account)
+		toAddressResolved := accountList.getAddressByName(toAddress)
+
+		// fullClient생성
+		client := ensureFullClient(dataDir)
+		firstValid, lastValid, err = client.ComputeValidityRounds(firstValid, lastValid, numValidRounds)
+		if err != nil {
+			reportErrorf(err.Error())
+		}
+
+		addressPrint, err := client.ConstructAddressPrint(
+			fromAddressResolved, toAddressResolved, fee, basics.Round(firstValid), basics.Round(lastValid),
+		)
+		if err != nil {
+			reportErrorf(errorConstructingTX, err)
+		}
+
+		// 서명된 트랜잭션 생성
+		var stx transactions.SignedTxn
+		signTx := sign || (outFilename == "")
+		stx, err = createSignedTransaction(client, signTx, dataDir, walletName, addressPrint, basics.Address{})
+		if err != nil {
+			reportErrorf(errorSigningTX, err)
+		}
+
+		if outFilename == "" {
+			// Broadcast the tx
+			txid, err := client.BroadcastTransaction(stx)
+
+			if err != nil {
+				reportErrorf(errorBroadcastingTX, err)
+			}
+
+			// update information from Transaction
+			fee = stx.Txn.Fee.Raw
+
+			// Report tx details to user
+			reportInfof(infoTxIssued, amount, fromAddressResolved, toAddressResolved, txid, fee)
+
+			if !noWaitAfterSend {
+				_, err = waitForCommit(client, txid, lastValid)
+				if err != nil {
+					reportErrorf(err.Error())
+				}
+			}
+		} else {
+			if dumpForDryrun {
+				err = writeDryrunReqToFile(client, stx, outFilename)
+			} else {
+				err = writeFile(outFilename, protocol.Encode(&stx), 0600)
+			}
+			if err != nil {
+				reportErrorf(err.Error())
+			}
 		}
 	},
 }

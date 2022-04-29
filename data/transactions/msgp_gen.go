@@ -5778,3 +5778,113 @@ func (z *Txid) Msgsize() int {
 func (z *Txid) MsgIsZero() bool {
 	return ((*(crypto.Digest))(z)).MsgIsZero()
 }
+
+// (추가)
+// MarshalMsg implements msgp.Marshaler
+func (z *AddressPrintTxnFields) MarshalMsg(b []byte) (o []byte) {
+	o = msgp.Require(b, z.Msgsize())
+	// omitempty: check for empty values
+	zb0001Len := uint32(1)
+	var zb0001Mask uint8 /* 4 bits */
+	
+	if (*z).Receiver2.MsgIsZero() {
+		zb0001Len--
+		zb0001Mask |= 0x2
+	}
+
+	// variable map header, size zb0001Len
+	o = append(o, 0x80|uint8(zb0001Len))
+	if zb0001Len != 0 {
+		if (zb0001Mask & 0x2) == 0 { // if not empty
+			// string "rcv"
+			o = append(o, 0xa3, 0x72, 0x63, 0x76)
+			o = (*z).Receiver2.MarshalMsg(o)
+		}
+	}
+
+	return
+}
+
+func (_ *AddressPrintTxnFields) CanMarshalMsg(z interface{}) bool {
+	_, ok := (z).(*AddressPrintTxnFields)
+	return ok
+}
+
+// UnmarshalMsg implements msgp.Unmarshaler
+func (z *AddressPrintTxnFields) UnmarshalMsg(bts []byte) (o []byte, err error) {
+	var field []byte
+	_ = field
+	var zb0001 int
+	var zb0002 bool
+	zb0001, zb0002, bts, err = msgp.ReadMapHeaderBytes(bts)
+	if _, ok := err.(msgp.TypeError); ok {
+		zb0001, zb0002, bts, err = msgp.ReadArrayHeaderBytes(bts)
+		if err != nil {
+			err = msgp.WrapError(err)
+			return
+		}
+		if zb0001 > 0 {
+			zb0001--
+			bts, err = (*z).Receiver2.UnmarshalMsg(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "struct-from-array", "Receiver")
+				return
+			}
+		}
+		if zb0001 > 0 {
+			err = msgp.ErrTooManyArrayFields(zb0001)
+			if err != nil {
+				err = msgp.WrapError(err, "struct-from-array")
+				return
+			}
+		}
+	} else {
+		if err != nil {
+			err = msgp.WrapError(err)
+			return
+		}
+		if zb0002 {
+			(*z) = AddressPrintTxnFields{}
+		}
+		for zb0001 > 0 {
+			zb0001--
+			field, bts, err = msgp.ReadMapKeyZC(bts)
+			if err != nil {
+				err = msgp.WrapError(err)
+				return
+			}
+			switch string(field) {
+			case "rcv2":
+				bts, err = (*z).Receiver2.UnmarshalMsg(bts)
+				if err != nil {
+					err = msgp.WrapError(err, "Receiver2")
+					return
+				}
+			default:
+				err = msgp.ErrNoField(string(field))
+				if err != nil {
+					err = msgp.WrapError(err)
+					return
+				}
+			}
+		}
+	}
+	o = bts
+	return
+}
+
+func (_ *AddressPrintTxnFields) CanUnmarshalMsg(z interface{}) bool {
+	_, ok := (z).(*AddressPrintTxnFields)
+	return ok
+}
+
+// Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+func (z *AddressPrintTxnFields) Msgsize() (s int) {
+	s = 1 + 4 + (*z).Receiver2.Msgsize()
+	return
+}
+
+// MsgIsZero returns whether this is a zero value
+func (z *AddressPrintTxnFields) MsgIsZero() bool {
+	return ((*z).Receiver2.MsgIsZero())
+}

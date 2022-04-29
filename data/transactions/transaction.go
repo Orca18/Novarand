@@ -128,7 +128,7 @@ type Transaction struct {
 	AssetFreezeTxnFields
 	ApplicationCallTxnFields
 	CompactCertTxnFields
-	//AddressPrintTxnFields
+	AddressPrintTxnFields
 }
 
 // ApplyData contains information about the transaction's execution.
@@ -538,7 +538,13 @@ func (tx Transaction) WellFormed(spec SpecialAddresses, proto config.ConsensusPa
 		if tx.Lease != [32]byte{} {
 			return fmt.Errorf("lease must be zero")
 		}
-	//case protocol.AddressPrint:
+	// (추가)
+	case protocol.AddressPrintTx:
+		// in case that the fee sink is spending, check that this spend is to a valid address
+		err := tx.checkSpender2(tx.Header, spec, proto)
+		if err != nil {
+			return err
+		}
 
 	default:
 		return fmt.Errorf("unknown tx type %v", tx.Type)
@@ -571,6 +577,11 @@ func (tx Transaction) WellFormed(spec SpecialAddresses, proto config.ConsensusPa
 
 	if !tx.CompactCertTxnFields.Empty() {
 		nonZeroFields[protocol.CompactCertTx] = true
+	}
+
+	// (추가)
+	if tx.AddressPrintTxnFields != (AddressPrintTxnFields{}) {
+		nonZeroFields[protocol.AddressPrintTx] = true
 	}
 
 	for t, nonZero := range nonZeroFields {
@@ -698,8 +709,8 @@ func (tx Transaction) RelevantAddrs(spec SpecialAddresses) []basics.Address {
 		if !tx.AssetTransferTxnFields.AssetSender.IsZero() {
 			addrs = append(addrs, tx.AssetTransferTxnFields.AssetSender)
 		}
-		//case protocol.AddressPrint:
-
+	case protocol.AddressPrintTx:
+		addrs = append(addrs, tx.AddressPrintTxnFields.Receiver2)
 	}
 
 	return addrs
@@ -723,7 +734,8 @@ func (tx Transaction) GetReceiverAddress() basics.Address {
 		return tx.PaymentTxnFields.Receiver
 	case protocol.AssetTransferTx:
 		return tx.AssetTransferTxnFields.AssetReceiver
-	//case protocol.AddressPrint:
+	case protocol.AddressPrintTx:
+		return tx.AddressPrintTxnFields.Receiver2
 	default:
 		return basics.Address{}
 	}

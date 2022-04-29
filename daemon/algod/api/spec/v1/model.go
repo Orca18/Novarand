@@ -529,10 +529,10 @@ type Transaction struct {
 	// required: true
 	CompactCert *CompactCertTransactionType `json:"compactcert,omitempty"`
 
-	// AddressPrint
+	// (추가)AddressPrint
 	//
 	// required: true
-	//AddressPrint *AddressPrintType `json:"addreddprint,omitempty"`
+	AddressPrint *AddressPrintTransactionType `json:"addressprint,omitempty"`
 
 	// FromRewards is the amount of pending rewards applied to the From
 	// account as part of this transaction.
@@ -797,8 +797,18 @@ type CompactCertTransactionType struct {
 }
 
 // AddressPrintType
-// swagger:model AddressPrintType
-type AddressPrintType struct {
+// swagger:model AddressPrintTransactionType
+type AddressPrintTransactionType struct {
+	// To is the receiver's address
+	//
+	// required: true
+	To2 string `json:"to2"`
+
+	// ToRewards is the amount of pending rewards applied to the To account
+	// as part of this transaction.
+	//
+	// required: false
+	ToRewards2 uint64 `json:"torewards2"`
 }
 
 // TransactionList contains a list of transactions
