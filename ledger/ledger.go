@@ -630,7 +630,13 @@ func (l *Ledger) BlockCert(rnd basics.Round) (blk bookkeeping.Block, cert agreem
 */
 func (l *Ledger) AddBlock(blk bookkeeping.Block, cert agreement.Certificate) error {
 	// passing nil as the executionPool is ok since we've asking the evaluator to skip verification.
-
+	//certVote한 Sender목록을 슬라이스에 담아서 Eval로 넘긴다.
+	var rwAddresses []basics.Address
+	for _, address := range cert.Votes {
+		rwAddress := address.Sender
+		rwAddresses = append(rwAddresses, rwAddress)
+	}
+	fmt.Println(" rwAddresses", rwAddresses)
 	// 블록을 검증하고 stateDelta를 반환한다.
 	updates, err := internal.Eval(context.Background(), l, blk, false, l.verifiedTxnCache, nil)
 	if err != nil {

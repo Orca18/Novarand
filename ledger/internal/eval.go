@@ -415,6 +415,9 @@ type BlockEvaluator struct {
 	l LedgerForEvaluator
 
 	maxTxnBytesPerBlock int
+
+	//보상받는 주소들 = []베이직.어드레스들 = transaction안에 certvote 주소
+	rewardAddresses []basics.Address
 }
 
 // LedgerForEvaluator defines the ledger interface needed by the evaluator.
@@ -952,14 +955,38 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	/*
 		수수료를 FeeSink계정에게 전달한다.
 	*/
-	err = balances.Move(tx.Sender, eval.specials.FeeSink, tx.Fee, &ad.SenderRewards, nil)
-	if err != nil {
-		return
-	}
+	//err = balances.Move(tx.Sender, eval.specials.FeeSink, tx.Fee, &ad.SenderRewards, nil)
+	//if err != nil {
+	//	return
+	//}
+	//수수료 부분 수정
+	/*
+		tx.Sender=동일
+		eval.specials.FeeSink=eval.rewardAddresses
+		tx.Fee=동일
+		&ad.SenderRewards=동일
+		nil=&ad.ReceiverRewards
+		1.인당 보상금 계산 (수수료 / 검증자수)
+		2. 각 검증자에게 인당 보상금 전송
+	*/
+	certVoters := uint64(len(eval.rewardAddresses))
+	fmt.Println(certVoters, "ddd", eval.rewardAddresses, "ttt", len(eval.rewardAddresses))
+	if certVoters != 0 {
+		rw := tx.Fee.Raw / certVoters
+		reward := basics.MicroAlgos{Raw: rw}
+		for _, rewardAdd := range eval.rewardAddresses {
+			err = balances.Move(tx.Sender, rewardAdd, reward, &ad.SenderRewards, &ad.ReceiverRewards)
+		}
+		if err != nil {
+			return
+		}
 
-	err = apply.Rekey(balances, &tx)
-	if err != nil {
-		return
+		err = apply.Rekey(balances, &tx)
+		if err != nil {
+			return
+		}
+	} else {
+		fmt.Println("certVoters are 0")
 	}
 
 	switch tx.Type {
@@ -1686,4 +1713,15 @@ func transactionLog(dataDir string, sender basics.Address, receiver basics.Addre
 	//now := time.Now() // Go Playground 에서는 항상 시각은 2009-11-10 23:00:00 +0000 UTC 에서 시작한다.
 	//t := now.In(loc)
 	log.Println(" [Sender] ", sender, "[Receiver] ", receiver, "[Amount] ", amount.Raw)
+}
+
+func (eval *BlockEvaluator) SetRewardAddresses(certVoteSenders []basics.Address) {
+	fmt.Println(eval)
+	fmt.Println("===")
+	if eval != nil {
+		//invalid memory address or nil pointer dereference
+		eval.rewardAddresses = certVoteSenders //해당 메모리주소에 certVoteSenders 값 대입
+		fmt.Println(eval.rewardAddresses)
+		fmt.Println(certVoteSenders)
+	}
 }

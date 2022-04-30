@@ -440,6 +440,11 @@ type evalTestLedger struct {
 	latestTotals  ledgercore.AccountTotals
 }
 
+func (ledger *evalTestLedger) GetLedgerRootDir() string {
+	//TODO implement me
+	panic("implement me")
+}
+
 // newTestLedger creates a in memory Ledger that is as realistic as
 // possible.  It has Rewards and FeeSink properly configured.
 func newTestLedger(t testing.TB, balances bookkeeping.GenesisBalances) *evalTestLedger {
