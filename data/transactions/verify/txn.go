@@ -134,7 +134,6 @@ Block-assembly time은 LogicSig를 검사하고 accounting rules은 트랜잭션
 func Txn(s *transactions.SignedTxn, txnIdx int, groupCtx *GroupContext) error {
 	useBatchVerification := groupCtx.consensusParams.EnableBatchVerification
 	batchVerifier := crypto.MakeBatchVerifierDefaultSize(useBatchVerification)
-	fmt.Println("test")
 	if err := TxnBatchVerify(s, txnIdx, groupCtx, batchVerifier); err != nil {
 		return err
 	}

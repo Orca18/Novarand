@@ -191,7 +191,7 @@ func (bq *blockQueue) latestCommitted() (basics.Round, basics.Round) {
 func (bq *blockQueue) putBlock(blk bookkeeping.Block, cert agreement.Certificate) error {
 	bq.mu.Lock()
 	defer bq.mu.Unlock()
-
+	fmt.Println("블록큐_라운드_txroot_payset_votes", blk.Round(), blk.TxnRoot, len(blk.Payset), len(cert.Votes))
 	nextRound := bq.lastCommitted + basics.Round(len(bq.q)) + 1
 
 	// As an optimization to reduce warnings in logs, return a special

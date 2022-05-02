@@ -17,6 +17,7 @@
 package data
 
 import (
+	"fmt"
 	"sync/atomic"
 	"time"
 
@@ -357,7 +358,7 @@ func (l *Ledger) EnsureValidatedBlock(vb *ledgercore.ValidatedBlock, c agreement
 func (l *Ledger) EnsureBlock(block *bookkeeping.Block, c agreement.Certificate) {
 	round := block.Round()
 	protocolErrorLogged := false
-
+	fmt.Println("ensureBlock")
 	// 원장의 마지막 라운드가 이 블록의 라운드보다 작을 때까지 반복한다
 	// (음? 동일한 블록을 계속 등록하는거야? l.LastRound()가 5고 round가 10이면 5라운드동안 동일한 블록을 등록하는건가??
 	// => 아아 아래에서 한번 등록하면 for문을 빠져나간다. 왜 이렇게 코딩한거지??)

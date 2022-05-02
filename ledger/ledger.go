@@ -109,6 +109,8 @@ type Ledger struct {
 	cfg config.Local
 	//현재 노드 루트 디렉토리
 	rootDir string
+	//보상받는 주소들 = []베이직.어드레스들 = transaction안에 certvote 주소
+	certVoteAddresses []basics.Address
 }
 
 // OpenLedger creates a Ledger object, using SQLite database filenames
@@ -635,21 +637,24 @@ func (l *Ledger) AddBlock(blk bookkeeping.Block, cert agreement.Certificate) err
 	for _, address := range cert.Votes {
 		rwAddress := address.Sender
 		rwAddresses = append(rwAddresses, rwAddress)
+		fmt.Println("장부.go", cert.Round, address.Sender)
 	}
-	fmt.Println(" rwAddresses", rwAddresses)
+	l.certVoteAddresses = rwAddresses
 	// 블록을 검증하고 stateDelta를 반환한다.
-	updates, err := internal.Eval(context.Background(), l, blk, false, l.verifiedTxnCache, nil)
+	updates, err := internal.Eval(context.Background(), l, blk, false, l.verifiedTxnCache, nil, l.certVoteAddresses)
+	fmt.Println("updates, err := internal.Eval1111", err)
 	if err != nil {
 		if errNSBE, ok := err.(ledgercore.ErrNonSequentialBlockEval); ok && errNSBE.EvaluatorRound <= errNSBE.LatestRound {
 			return ledgercore.BlockInLedgerError{
 				LastRound: errNSBE.EvaluatorRound,
 				NextRound: errNSBE.LatestRound + 1}
 		}
+		fmt.Println("updates, err := internal.Eval222", err)
 		return err
 	}
 	// 검증된 블록을 생성한다.
 	vb := ledgercore.MakeValidatedBlock(blk, updates)
-
+	fmt.Println("ledgercore.MakeValidatedBlock", err)
 	return l.AddValidatedBlock(vb, cert)
 }
 
@@ -666,8 +671,11 @@ func (l *Ledger) AddValidatedBlock(vb ledgercore.ValidatedBlock, cert agreement.
 	// Grab the tracker lock first, to ensure newBlock() is notified before committedUpTo().
 	l.trackerMu.Lock()
 	defer l.trackerMu.Unlock()
+	fmt.Println("AddValidatedBlock")
+	//move
 
 	blk := vb.Block()
+
 	err := l.blockQ.putBlock(blk, cert)
 	if err != nil {
 		return err
@@ -749,7 +757,7 @@ trackerEvalVerified는 accountUpdates가 loadFromDisk이 실행되는 동안 주
 */
 func (l *Ledger) trackerEvalVerified(blk bookkeeping.Block, accUpdatesLedger internal.LedgerForEvaluator) (ledgercore.StateDelta, error) {
 	// passing nil as the executionPool is ok since we've asking the evaluator to skip verification.
-	return internal.Eval(context.Background(), accUpdatesLedger, blk, false, l.verifiedTxnCache, nil)
+	return internal.Eval(context.Background(), accUpdatesLedger, blk, false, l.verifiedTxnCache, nil, l.certVoteAddresses)
 }
 
 // IsWritingCatchpointFile returns true when a catchpoint file is being generated. The function is used by the catchup service
@@ -787,11 +795,11 @@ func (l *Ledger) StartEvaluator(hdr bookkeeping.BlockHeader, paysetHint, maxTxnB
 // not a valid block (e.g., it has duplicate transactions, overspends some
 // account, etc).
 func (l *Ledger) Validate(ctx context.Context, blk bookkeeping.Block, executionPool execpool.BacklogPool) (*ledgercore.ValidatedBlock, error) {
-	delta, err := internal.Eval(ctx, l, blk, true, l.verifiedTxnCache, executionPool)
+	delta, err := internal.Eval(ctx, l, blk, true, l.verifiedTxnCache, executionPool, l.certVoteAddresses)
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println("validate in Ledger")
 	vb := ledgercore.MakeValidatedBlock(blk, delta)
 	return &vb, nil
 }
