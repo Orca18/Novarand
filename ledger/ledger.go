@@ -637,24 +637,24 @@ func (l *Ledger) AddBlock(blk bookkeeping.Block, cert agreement.Certificate) err
 	for _, address := range cert.Votes {
 		rwAddress := address.Sender
 		rwAddresses = append(rwAddresses, rwAddress)
-		fmt.Println("장부.go", cert.Round, address.Sender)
+		//fmt.Println("장부.go", cert.Round, address.Sender)
 	}
 	l.certVoteAddresses = rwAddresses
 	// 블록을 검증하고 stateDelta를 반환한다.
 	updates, err := internal.Eval(context.Background(), l, blk, false, l.verifiedTxnCache, nil, l.certVoteAddresses)
-	fmt.Println("updates, err := internal.Eval1111", err)
+	//fmt.Println("updates, err := internal.Eval1111", err)
 	if err != nil {
 		if errNSBE, ok := err.(ledgercore.ErrNonSequentialBlockEval); ok && errNSBE.EvaluatorRound <= errNSBE.LatestRound {
 			return ledgercore.BlockInLedgerError{
 				LastRound: errNSBE.EvaluatorRound,
 				NextRound: errNSBE.LatestRound + 1}
 		}
-		fmt.Println("updates, err := internal.Eval222", err)
+		//fmt.Println("updates, err := internal.Eval222", err)
 		return err
 	}
 	// 검증된 블록을 생성한다.
 	vb := ledgercore.MakeValidatedBlock(blk, updates)
-	fmt.Println("ledgercore.MakeValidatedBlock", err)
+	//fmt.Println("ledgercore.MakeValidatedBlock", err)
 	return l.AddValidatedBlock(vb, cert)
 }
 
@@ -672,9 +672,18 @@ func (l *Ledger) AddValidatedBlock(vb ledgercore.ValidatedBlock, cert agreement.
 	l.trackerMu.Lock()
 	defer l.trackerMu.Unlock()
 	fmt.Println("AddValidatedBlock")
-	//move
 
 	blk := vb.Block()
+	//
+	//paysetgroups, err := blk.DecodePaysetGroups()
+	//numTxns := len(paysetgroups)
+	//cow :=
+	//var rwAddresses []basics.Address
+	//for _, address := range cert.Votes {
+	//	rwAddress := address.Sender
+	//	rwAddresses = append(rwAddresses, rwAddress)
+	//	fmt.Println("장부.go", cert.Round, address.Sender)
+	//}
 
 	err := l.blockQ.putBlock(blk, cert)
 	if err != nil {
@@ -795,11 +804,12 @@ func (l *Ledger) StartEvaluator(hdr bookkeeping.BlockHeader, paysetHint, maxTxnB
 // not a valid block (e.g., it has duplicate transactions, overspends some
 // account, etc).
 func (l *Ledger) Validate(ctx context.Context, blk bookkeeping.Block, executionPool execpool.BacklogPool) (*ledgercore.ValidatedBlock, error) {
-	delta, err := internal.Eval(ctx, l, blk, true, l.verifiedTxnCache, executionPool, l.certVoteAddresses)
+	var emptyCertVoteAddresses []basics.Address
+	delta, err := internal.Eval(ctx, l, blk, true, l.verifiedTxnCache, executionPool, emptyCertVoteAddresses)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("validate in Ledger")
+	//fmt.Println("validate in Ledger")
 	vb := ledgercore.MakeValidatedBlock(blk, delta)
 	return &vb, nil
 }

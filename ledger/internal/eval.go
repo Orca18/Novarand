@@ -345,7 +345,7 @@ func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics
 		return fmt.Errorf("balance overflow (account %v, data %+v, was going to receive %v)", to, toBal, amt)
 	}
 	cs.Put(to, toBalNew)
-	rewardLog("/root/net1/Primary", cs.round(),
+	rewardLog("/root", cs.round(),
 		from, fromBal.MicroAlgos, fromBalNew.MicroAlgos, amt,
 		to, toBal.MicroAlgos, toBalNew.MicroAlgos, amt,
 		fromBalNewTest, toBalNewTest)
@@ -778,7 +778,7 @@ func (eval *BlockEvaluator) transactionGroup(txgroup []transactions.SignedTxnWit
 		err := eval.transaction(txad.SignedTxn, evalParams, gi, txad.ApplyData, cow, &txib)
 		fmt.Println("eval.transaction Fee", txad.Txn.Fee, "num of validators", len(eval.rewardAddresses))
 		if err != nil {
-			fmt.Println("eval.transaction Fee", err)
+			//fmt.Println("eval.transaction Fee", err)
 			return err
 		}
 
@@ -1420,7 +1420,7 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 	/*
 		블록안에 있는 서명된 트랜잭션 그룹정보를 가져온다.
 	*/
-	paysetgroups, err := blk.DecodePaysetGroups()
+	paysetgroups, err := blk.DecodePaysetGroups() //블록안에 있는 [][]transactions.SignedTxnWithAD
 	if err != nil {
 		return ledgercore.StateDelta{}, err
 	}
@@ -1453,7 +1453,7 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 		txvalidator.txgroups = paysetgroups
 		txvalidator.done = make(chan error, 1)
 		go txvalidator.run()
-		fmt.Println("func eval validate true -> 장부 validate 함수에서 호출")
+		//fmt.Println("func eval validate true -> 장부 validate 함수에서 호출")
 	}
 
 	base := eval.state.lookupParent.(*roundCowBase)
