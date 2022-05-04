@@ -93,7 +93,7 @@ type Ledger struct {
 	notifier   blockNotifier
 	metrics    metricsTracker
 	//(추가)
-	//statedelta stateDeltaTracker
+	statedelta stateDeltaTracker
 
 	// 트래커 정보 및 설정 정보 등을 가지고 있는 레지스트리
 	// []ledgerTracker을 가지고 있다.
@@ -188,6 +188,10 @@ func OpenLedger(
 
 	// 블록큐, 트래커등을 초기화 한다.
 	err = l.reloadLedger()
+
+	// (로그)
+	fmt.Println("l.reloadLedger()")
+
 	if err != nil {
 		return nil, err
 	}
@@ -224,6 +228,10 @@ func (l *Ledger) reloadLedger() error {
 
 	// init tracker db
 	trackerDBInitParams, err := trackerDBInitialize(l, l.catchpoint.catchpointEnabled(), l.catchpoint.dbDirectory)
+
+	// (로그)
+	fmt.Println("trackerDBInitParams, err := trackerDBInitialize()")
+
 	if err != nil {
 		return err
 	}
@@ -236,7 +244,7 @@ func (l *Ledger) reloadLedger() error {
 		&l.bulletin,   // provide closed channel signaling support for completed rounds
 		&l.notifier,   // send OnNewBlocks to subscribers
 		&l.metrics,    // provides metrics reporting support
-		//&l.statedelta,    // stateDelta Tracker 추가
+		&l.statedelta, // stateDelta Tracker 추가
 	}
 
 	err = l.trackers.initialize(l, trackers, l.cfg)
@@ -430,6 +438,10 @@ func (l *Ledger) Close() {
 // RegisterBlockListeners 는 새 블록이 원장에 추가될 때 호출될 수신기를 등록합니다.
 func (l *Ledger) RegisterBlockListeners(listeners []BlockListener) {
 	l.notifier.register(listeners)
+}
+
+func (l *Ledger) RegisterBlockTrackingListener(listener ValidateBlockListener) {
+	l.statedelta.register(listener)
 }
 
 // notifyCommit informs the trackers that all blocks up to r have been
@@ -819,3 +831,8 @@ var ledgerInitblocksdbCount = metrics.NewCounter("ledger_initblocksdb_count", "c
 var ledgerInitblocksdbMicros = metrics.NewCounter("ledger_initblocksdb_micros", "µs spent")
 var ledgerVerifygenhashCount = metrics.NewCounter("ledger_verifygenhash_count", "calls")
 var ledgerVerifygenhashMicros = metrics.NewCounter("ledger_verifygenhash_micros", "µs spent")
+
+// Ledger가 가지고 있는 트래커 db 반환
+func (ledger *Ledger) GetTrackerDbs() db.Pair {
+	return ledger.trackerDBs
+}

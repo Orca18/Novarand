@@ -135,11 +135,13 @@ type StateDelta struct {
 	AccountDeltas는 정렬된 계정들을 저장하고 주소로 빠르게 조회할 수 있게 해준다.
 */
 type AccountDeltas struct {
+	_struct struct{} `codec:",omitempty,omitemptyarray"`
+
 	// Actual data. If an account is deleted, `accts` contains a balance record
 	// with empty `AccountData`.
-	accts []basics.BalanceRecord
+	accts []basics.BalanceRecord `codec:"accts"`
 	// cache for addr to deltas index resolution
-	acctsCache map[basics.Address]int
+	acctsCache map[basics.Address]int `codec:"cache"`
 }
 
 // MakeStateDelta creates a new instance of StateDelta.

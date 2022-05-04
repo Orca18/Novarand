@@ -86,7 +86,7 @@ func BenchmarkTxHandlerProcessDecoded(b *testing.B) {
 	cfg.Archival = true
 
 	// 원장 생성
-	ledger, err := LoadLedger(log, ledgerName, inMem, protocol.ConsensusCurrentVersion, genBal, genesisID, genesisHash, nil, cfg)
+	ledger, err := LoadLedger(log, ledgerName, inMem, protocol.ConsensusCurrentVersion, genBal, genesisID, genesisHash, nil, nil, cfg)
 	require.NoError(b, err)
 
 	l := ledger

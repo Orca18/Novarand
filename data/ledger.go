@@ -17,6 +17,7 @@
 package data
 
 import (
+	"fmt"
 	"sync/atomic"
 	"time"
 
@@ -88,7 +89,7 @@ type roundSeed struct {
 func LoadLedger(
 	log logging.Logger, dbFilenamePrefix string, memory bool,
 	genesisProto protocol.ConsensusVersion, genesisBal bookkeeping.GenesisBalances, genesisID string, genesisHash crypto.Digest,
-	blockListeners []ledger.BlockListener, cfg config.Local,
+	blockListeners []ledger.BlockListener, listener ledger.ValidateBlockListener, cfg config.Local,
 ) (*Ledger, error) {
 	if genesisBal.Balances == nil {
 		genesisBal.Balances = make(map[basics.Address]basics.AccountData)
@@ -117,12 +118,16 @@ func LoadLedger(
 	l.log.Debugf("Initializing Ledger(%s)", dbFilenamePrefix)
 
 	ll, err := ledger.OpenLedger(log, dbFilenamePrefix, memory, genesisInitState, cfg)
+	// (로그)
+	fmt.Println("ll, err := ledger.OpenLedger()")
+
 	if err != nil {
 		return nil, err
 	}
 
 	l.Ledger = ll
 	l.RegisterBlockListeners(blockListeners)
+	l.RegisterBlockTrackingListener(listener)
 	return l, nil
 }
 

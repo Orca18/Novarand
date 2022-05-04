@@ -635,12 +635,15 @@ func (c *Client) ConstructPayment(from, to string, fee, amount uint64, note []by
 	return tx, nil
 }
 
+// 새로운 AddressPrint트랜잭션 생성
 func (c *Client) ConstructAddressPrint(from, to string, fee uint64, firstValid, lastValid basics.Round) (transactions.Transaction, error) {
+	// 보내는 계정의 주소
 	fromAddr, err := basics.UnmarshalChecksumAddress(from)
 	if err != nil {
 		return transactions.Transaction{}, err
 	}
 
+	// 받는 계정의 주소
 	var toAddr basics.Address
 	if to != "" {
 		toAddr, err = basics.UnmarshalChecksumAddress(to)

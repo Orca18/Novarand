@@ -17,10 +17,14 @@
 package ledger
 
 import (
+	"context"
+	"database/sql"
+	"fmt"
 	"sync"
 
 	"github.com/algorand/go-deadlock"
 
+	"github.com/Orca18/novarand/data/basics"
 	"github.com/Orca18/novarand/data/bookkeeping"
 	"github.com/Orca18/novarand/ledger/ledgercore"
 )
@@ -32,7 +36,7 @@ import (
 */
 
 type ValidateBlockListener interface {
-	OnNewBlock(block bookkeeping.Block, delta ledgercore.StateDelta)
+	OnNewBlock2(block bookkeeping.Block, delta ledgercore.StateDelta)
 }
 
 type blockDeltaPair2 struct {
@@ -43,8 +47,8 @@ type blockDeltaPair2 struct {
 type stateDeltaTracker struct {
 	mu            deadlock.Mutex
 	cond          *sync.Cond
-	listeners     []BlockListener
-	pendingBlocks []blockDeltaPair
+	listener      ValidateBlockListener
+	pendingBlocks []blockDeltaPair2
 	running       bool
 	// closing is the waitgroup used to synchronize closing the worker goroutine.
 	// It's being increased during loadFromDisk, and the worker is responsible to call Done on it once it's aborting it's goroutine.
@@ -56,98 +60,106 @@ type stateDeltaTracker struct {
 		닫기 기능은 이 작업이 완료될 때까지 기다립니다.
 		=>  결국 모든 고루틴이 종료될 때까지 기다리는 것 같다.
 	*/
-
 	closing sync.WaitGroup
 }
 
 /*
-func (bn *blockNotifier) worker() {
-	defer bn.closing.Done()
-	bn.mu.Lock()
+	트래커가 시작할 때 동일하게 시작하는 고루틴으로써 블록이 원장에 저장됐을 때 해당 블록과 스테이트델타 정보를
+	blockTrackingTracker에게 전달하는 역할을 한다.
+*/
+func (sdt *stateDeltaTracker) stateDeltaWorker() {
+	defer sdt.closing.Done()
+	sdt.mu.Lock()
 
 	for {
-		for bn.running && len(bn.pendingBlocks) == 0 {
-			bn.cond.Wait()
+		for sdt.running && len(sdt.pendingBlocks) == 0 {
+			sdt.cond.Wait()
 		}
-
-		if !bn.running {
-			bn.mu.Unlock()
+		if !sdt.running {
+			sdt.mu.Unlock()
 			return
 		}
-
-		blocks := bn.pendingBlocks
-		listeners := bn.listeners
-		bn.pendingBlocks = nil
-		bn.mu.Unlock()
-
+		blocks := sdt.pendingBlocks
+		listener := sdt.listener
+		sdt.pendingBlocks = nil
+		sdt.mu.Unlock()
+		// 블록의 갯수만큼 BlockTrackingListener위 OnNewBlock()를 호출한다.
 		for _, blk := range blocks {
-			for _, listener := range listeners {
-				listener.OnNewBlock(blk.block, blk.delta)
+			// 얘가 nil이구나!!
+			// 얘가 nil이려면 MakeFull()에서 이 객체가 안만들어져야되는구나.
+			if listener != nil {
+				listener.OnNewBlock2(blk.block, blk.delta)
 			}
 		}
-
-		bn.mu.Lock()
+		sdt.mu.Lock()
 	}
 }
 
-func (bn *blockNotifier) close() {
-	bn.mu.Lock()
-	if bn.running {
-		bn.running = false
-		bn.cond.Broadcast()
+/*
+	해당 트래커를 종료한다
+	stateDeltaWorker또한 종료한다.
+*/
+func (sdt *stateDeltaTracker) close() {
+	sdt.mu.Lock()
+	if sdt.running {
+		sdt.running = false
+		sdt.cond.Broadcast()
 	}
-	bn.mu.Unlock()
-	bn.closing.Wait()
+	sdt.mu.Unlock()
+	sdt.closing.Wait()
 }
 
-func (bn *blockNotifier) loadFromDisk(l ledgerForTracker, _ basics.Round) error {
-	bn.cond = sync.NewCond(&bn.mu)
-	bn.running = true
-	bn.pendingBlocks = nil
-	bn.closing.Add(1)
-	go bn.worker()
+/*
+	트래커를 시작하고 초기화한다.
+*/
+func (sdt *stateDeltaTracker) loadFromDisk(l ledgerForTracker, _ basics.Round) error {
+	sdt.cond = sync.NewCond(&sdt.mu)
+	sdt.running = true
+	sdt.pendingBlocks = nil
+	sdt.closing.Add(1)
+	fmt.Println("시작!")
+	go sdt.stateDeltaWorker()
 	return nil
 }
 
 // 새로운 블록이 추가됐을 때 호출 될 리스너를 추가한다.
-func (bn *blockNotifier) register(listeners []BlockListener) {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
+func (sdt *stateDeltaTracker) register(listener ValidateBlockListener) {
+	sdt.mu.Lock()
+	defer sdt.mu.Unlock()
 
-	bn.listeners = append(bn.listeners, listeners...)
+	sdt.listener = listener
 }
 
 // 새로운 블록 생성 시 호출하는 메소드
 // pendingBlocks에 블록데이터를 추가한 후 브로드 캐스팅 한다.
-func (bn *blockNotifier) newBlock(blk bookkeeping.Block, delta ledgercore.StateDelta) {
-	bn.mu.Lock()
-	defer bn.mu.Unlock()
-	bn.pendingBlocks = append(bn.pendingBlocks, blockDeltaPair{block: blk, delta: delta})
-	bn.cond.Broadcast()
+func (sdt *stateDeltaTracker) newBlock(blk bookkeeping.Block, delta ledgercore.StateDelta) {
+	sdt.mu.Lock()
+	defer sdt.mu.Unlock()
+	sdt.pendingBlocks = append(sdt.pendingBlocks, blockDeltaPair2{block: blk, delta: delta})
+	sdt.cond.Broadcast()
 }
 
-func (bn *blockNotifier) committedUpTo(rnd basics.Round) (retRound, lookback basics.Round) {
+func (sdt *stateDeltaTracker) committedUpTo(rnd basics.Round) (retRound, lookback basics.Round) {
 	return rnd, basics.Round(0)
 }
 
-func (bn *blockNotifier) prepareCommit(dcc *deferredCommitContext) error {
+func (sdt *stateDeltaTracker) prepareCommit(dcc *deferredCommitContext) error {
 	return nil
 }
 
-func (bn *blockNotifier) commitRound(context.Context, *sql.Tx, *deferredCommitContext) error {
+func (sdt *stateDeltaTracker) commitRound(context.Context, *sql.Tx, *deferredCommitContext) error {
 	return nil
 }
 
-func (bn *blockNotifier) postCommit(ctx context.Context, dcc *deferredCommitContext) {
+func (sdt *stateDeltaTracker) postCommit(ctx context.Context, dcc *deferredCommitContext) {
 }
 
-func (bn *blockNotifier) postCommitUnlocked(ctx context.Context, dcc *deferredCommitContext) {
+func (sdt *stateDeltaTracker) postCommitUnlocked(ctx context.Context, dcc *deferredCommitContext) {
 }
 
-func (bn *blockNotifier) handleUnorderedCommit(uint64, basics.Round, basics.Round) {
+func (sdt *stateDeltaTracker) handleUnorderedCommit(uint64, basics.Round, basics.Round) {
 }
 
-func (bn *blockNotifier) produceCommittingTask(committedRound basics.Round, dbRound basics.Round, dcr *deferredCommitRange) *deferredCommitRange {
+func (sdt *stateDeltaTracker) produceCommittingTask(committedRound basics.Round, dbRound basics.Round, dcr *deferredCommitRange) *deferredCommitRange {
 	return dcr
 }
-*/

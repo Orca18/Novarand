@@ -137,7 +137,7 @@ type (
 
 		// CompactCert tracks the state of compact certs, potentially
 		// for multiple types of certs.
-		//msgp:sort protocol.CompactCertType protocol.SortCompactCertType
+		//msgp:sort protocol.CompactCertType protocol.SortCompactCertTy
 		/*
 			CompactCert는 잠재적으로 여러 유형의 인증서에 대한 컴팩트 인증서의 상태를 추적.
 		*/

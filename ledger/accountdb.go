@@ -84,6 +84,13 @@ var accountsSchema = []string{
 		id string primary key,
 		intval integer,
 		strval text)`,
+	`CREATE TABLE IF NOT EXISTS statedelta(
+			rnd integer primary key,
+			accts blob,
+			hbr blob,
+			compactCertNext integer,
+			prevTimestamp integer,
+			totals blob)`,
 }
 
 // TODO: Post applications, rename assetcreators -> creatables and rename
@@ -113,6 +120,7 @@ var accountsResetExprs = []string{
 	`DROP TABLE IF EXISTS storedcatchpoints`,
 	`DROP TABLE IF EXISTS catchpointstate`,
 	`DROP TABLE IF EXISTS accounthashes`,
+	`DROP TABLE IF EXISTS statedelta`,
 }
 
 // accountDBVersion is the database version that this binary would know how to support and how to upgrade to.
@@ -544,9 +552,13 @@ func getCatchpoint(tx *sql.Tx, round basics.Round) (fileName string, catchpoint 
 func accountsInit(tx *sql.Tx, initAccounts map[basics.Address]basics.AccountData, proto config.ConsensusParams) (newDatabase bool, err error) {
 	for _, tableCreate := range accountsSchema {
 		_, err = tx.Exec(tableCreate)
+
+		fmt.Println(tableCreate)
+
 		if err != nil {
 			return
 		}
+
 	}
 
 	// Run creatables migration if it hasn't run yet

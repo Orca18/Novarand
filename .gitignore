@@ -67,3 +67,5 @@ index.html
 
 # test summary
 testresults.json
+go.mod
+go.sum

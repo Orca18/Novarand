@@ -984,55 +984,9 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	case protocol.ApplicationCallTx:
 		err = apply.ApplicationCall(tx.ApplicationCallTxnFields, tx.Header, balances, &ad, gi, evalParams, ctr)
 
-	//case protocol.AddressPrint:
-	//err = apply.AddressPrint(tx.PaymentTxnFields, tx.Header, balances, eval.specials, &ad)
+	case protocol.AddressPrintTx:
+		err = apply.AddressPrint(tx.AddressPrintTxnFields, tx.Header, balances, eval.specials, &ad)
 
-	/* 로그 만드는 코드
-		trackinglog := logging.Base()
-
-		dir := os.Getenv("ALGORAND_DATA")
-		fmt.Println(dir)
-		absolutePath, absPathErr := filepath.Abs(dir)
-
-		trackerLog := filepath.Join(absolutePath, "tracker.log")
-		archive := filepath.Join(absolutePath, "tracker.archival.log")
-		fmt.Println("Logging to: ", trackerLog)
-		fmt.Println("Logging absPathErr: ", absPathErr)
-		var maxLogAge time.Duration
-
-		maxLogAge, err = time.ParseDuration("24h")
-
-		logWriter := logging.MakeCyclicFileWriter(trackerLog, archive, 1073741824, maxLogAge)
-		trackinglog.SetOutput(logWriter)
-		trackinglog.SetJSONFormatter()
-		trackinglog.SetLevel(logging.Level(4))
-		//setupDeadlockLogger()
-
-		func transactionLog(dataDir string, sender basics.Address, receiver basics.Address, amount basics.MicroNovas) {
-		// Use logging package instead of stdin/stdout
-		//fmt.Println("log.SetLevel(logging.Info)")
-		// We have a dataDir now, so use log files
-		txnLogFilePath := filepath.Join(dataDir, "transaction.log")
-		//fmt.Println("filepath.Join")
-		txnLogFileMode := os.O_CREATE | os.O_WRONLY | os.O_APPEND
-		logFile, err := os.OpenFile(txnLogFilePath, txnLogFileMode, 666)
-		//fmt.Println("os.OpenFile")
-		if err != nil {
-			//fmt.Println("만약 에러가 없지 않으면=에러가 있으면")
-			log.Fatalf("error opening file: %v", err)
-		}
-		defer logFile.Close()
-		log.SetOutput(logFile)
-		//fmt.Println("에러가 없으면 = 정상동작")
-		//loc, err := time.LoadLocation("Asia/Seoul")
-		//if err != nil {
-		//	panic(err)
-		//}
-		//now := time.Now() // Go Playground 에서는 항상 시각은 2009-11-10 23:00:00 +0000 UTC 에서 시작한다.
-		//t := now.In(loc)
-		log.Println(" [Sender] ", sender, "[Receiver] ", receiver, "[Amount] ", amount.Raw)
-	}
-	*/
 	case protocol.CompactCertTx:
 		// in case of a CompactCertTx transaction, we want to "apply" it only in validate or generate mode. This will deviate the cow's CompactCertNext depending of
 		// whether we're in validate/generate mode or not, however - given that this variable in only being used in these modes, it would be safe.

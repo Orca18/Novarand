@@ -376,22 +376,6 @@ func compactCertTxEncode(tx transactions.Transaction, ad transactions.ApplyData)
 	}
 }
 
-/*
-func addressPrint(tx transactions.Transaction, ad transactions.ApplyData) v1.Transaction {
-	addressprint := v1.AddressPrintType{
-		VotePK:          tx.KeyregTxnFields.VotePK[:],
-		SelectionPK:     tx.KeyregTxnFields.SelectionPK[:],
-		VoteFirst:       uint64(tx.KeyregTxnFields.VoteFirst),
-		VoteLast:        uint64(tx.KeyregTxnFields.VoteLast),
-		VoteKeyDilution: tx.KeyregTxnFields.VoteKeyDilution,
-	}
-
-	return v1.Transaction{
-		AddressPrint: &addressprint,
-	}
-}
-*/
-
 func txWithStatusEncode(tr node.TxnWithStatus) (v1.Transaction, error) {
 	s, err := txEncode(tr.Txn.Txn, tr.ApplyData)
 	if err != nil {

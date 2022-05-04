@@ -126,6 +126,7 @@ const (
 	noOutputFileError          = "--msig-params must be specified with an output file name (-o)"
 	infoAutoFeeSet             = "Automatically set fee to %d MicroNovas"
 	errorTransactionExpired    = "Transaction %s expired before it could be included in a block"
+	infoAddrTxIssued           = "[Transaction ID] %s [Sender] %s [Receiver] %s, Fee set to %d"
 
 	loggingNotConfigured = "Remote logging is not currently configured and won't be enabled"
 	loggingNotEnabled    = "Remote logging is current disabled"

@@ -152,6 +152,7 @@ func init() {
 	addrPrintCmd.Flags().StringVarP(&account, "from", "f", "", "Account address to send the money from (If not specified, uses default account)")
 	addrPrintCmd.Flags().StringVarP(&toAddress, "to", "t", "", "Address to send to money to (required)")
 	addrPrintCmd.MarkFlagRequired("to")
+	addrPrintCmd.MarkFlagRequired("wallet")
 
 	// Add common transaction flags
 	addTxnFlags(addrPrintCmd)
@@ -968,6 +969,7 @@ var addrPrintCmd = &cobra.Command{
 		var err error
 
 		// Check if from was specified, else use default
+		// accountlist.json에 있는 default계좌를 가져오는 것 같다.
 		if account == "" {
 			account = accountList.getDefaultAccount()
 		}
@@ -983,6 +985,7 @@ var addrPrintCmd = &cobra.Command{
 			reportErrorf(err.Error())
 		}
 
+		// 새로운 트랜잭션 생성
 		addressPrint, err := client.ConstructAddressPrint(
 			fromAddressResolved, toAddressResolved, fee, basics.Round(firstValid), basics.Round(lastValid),
 		)
@@ -990,9 +993,15 @@ var addrPrintCmd = &cobra.Command{
 			reportErrorf(errorConstructingTX, err)
 		}
 
+		fmt.Println("트랜잭션-Sender: ", addressPrint.Sender, " Receiver: ", addressPrint.Receiver2)
+
 		// 서명된 트랜잭션 생성
 		var stx transactions.SignedTxn
 		signTx := sign || (outFilename == "")
+
+		fmt.Println("walletName: ", walletName)
+
+		// 서명된 트랜잭션 생성
 		stx, err = createSignedTransaction(client, signTx, dataDir, walletName, addressPrint, basics.Address{})
 		if err != nil {
 			reportErrorf(errorSigningTX, err)
@@ -1010,7 +1019,7 @@ var addrPrintCmd = &cobra.Command{
 			fee = stx.Txn.Fee.Raw
 
 			// Report tx details to user
-			reportInfof(infoTxIssued, amount, fromAddressResolved, toAddressResolved, txid, fee)
+			reportInfof(infoAddrTxIssued, txid, fromAddressResolved, toAddressResolved, fee)
 
 			if !noWaitAfterSend {
 				_, err = waitForCommit(client, txid, lastValid)
