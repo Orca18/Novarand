@@ -20,10 +20,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/algorand/go-deadlock"
 	"os"
 	"time"
-
-	"github.com/algorand/go-deadlock"
 
 	"github.com/Orca18/novarand/agreement"
 	"github.com/Orca18/novarand/config"
@@ -637,24 +636,21 @@ func (l *Ledger) AddBlock(blk bookkeeping.Block, cert agreement.Certificate) err
 	for _, address := range cert.Votes {
 		rwAddress := address.Sender
 		rwAddresses = append(rwAddresses, rwAddress)
-		//fmt.Println("장부.go", cert.Round, address.Sender)
 	}
 	l.certVoteAddresses = rwAddresses
 	// 블록을 검증하고 stateDelta를 반환한다.
-	updates, err := internal.Eval(context.Background(), l, blk, false, l.verifiedTxnCache, nil, l.certVoteAddresses)
-	//fmt.Println("updates, err := internal.Eval1111", err)
+	updates, err := internal.Eval(context.Background(), l, blk, false,
+		l.verifiedTxnCache, nil, l.certVoteAddresses)
 	if err != nil {
 		if errNSBE, ok := err.(ledgercore.ErrNonSequentialBlockEval); ok && errNSBE.EvaluatorRound <= errNSBE.LatestRound {
 			return ledgercore.BlockInLedgerError{
 				LastRound: errNSBE.EvaluatorRound,
 				NextRound: errNSBE.LatestRound + 1}
 		}
-		//fmt.Println("updates, err := internal.Eval222", err)
 		return err
 	}
 	// 검증된 블록을 생성한다.
 	vb := ledgercore.MakeValidatedBlock(blk, updates)
-	//fmt.Println("ledgercore.MakeValidatedBlock", err)
 	return l.AddValidatedBlock(vb, cert)
 }
 
@@ -671,19 +667,8 @@ func (l *Ledger) AddValidatedBlock(vb ledgercore.ValidatedBlock, cert agreement.
 	// Grab the tracker lock first, to ensure newBlock() is notified before committedUpTo().
 	l.trackerMu.Lock()
 	defer l.trackerMu.Unlock()
-	fmt.Println("AddValidatedBlock")
 
 	blk := vb.Block()
-	//
-	//paysetgroups, err := blk.DecodePaysetGroups()
-	//numTxns := len(paysetgroups)
-	//cow :=
-	//var rwAddresses []basics.Address
-	//for _, address := range cert.Votes {
-	//	rwAddress := address.Sender
-	//	rwAddresses = append(rwAddresses, rwAddress)
-	//	fmt.Println("장부.go", cert.Round, address.Sender)
-	//}
 
 	err := l.blockQ.putBlock(blk, cert)
 	if err != nil {
@@ -809,7 +794,6 @@ func (l *Ledger) Validate(ctx context.Context, blk bookkeeping.Block, executionP
 	if err != nil {
 		return nil, err
 	}
-	//fmt.Println("validate in Ledger")
 	vb := ledgercore.MakeValidatedBlock(blk, delta)
 	return &vb, nil
 }

@@ -308,7 +308,6 @@ func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics
 		return err
 	}
 	fromBalNew := fromBal.WithUpdatedRewards(cs.proto, rewardlvl)
-	fromBalNewTest := fromBalNew.MicroAlgos
 	if fromRewards != nil {
 		var ot basics.OverflowTracker
 		newFromRewards := ot.AddA(*fromRewards, ot.SubA(fromBalNew.MicroAlgos, fromBal.MicroAlgos))
@@ -330,7 +329,6 @@ func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics
 		return err
 	}
 	toBalNew := toBal.WithUpdatedRewards(cs.proto, rewardlvl)
-	toBalNewTest := toBalNew.MicroAlgos
 	if toRewards != nil {
 		var ot basics.OverflowTracker
 		newToRewards := ot.AddA(*toRewards, ot.SubA(toBalNew.MicroAlgos, toBal.MicroAlgos))
@@ -345,10 +343,6 @@ func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics
 		return fmt.Errorf("balance overflow (account %v, data %+v, was going to receive %v)", to, toBal, amt)
 	}
 	cs.Put(to, toBalNew)
-	rewardLog("/root", cs.round(),
-		from, fromBal.MicroAlgos, fromBalNew.MicroAlgos, amt,
-		to, toBal.MicroAlgos, toBalNew.MicroAlgos, amt,
-		fromBalNewTest, toBalNewTest)
 	return nil
 }
 
@@ -776,9 +770,7 @@ func (eval *BlockEvaluator) transactionGroup(txgroup []transactions.SignedTxnWit
 		var txib transactions.SignedTxnInBlock
 
 		err := eval.transaction(txad.SignedTxn, evalParams, gi, txad.ApplyData, cow, &txib)
-		fmt.Println("eval.transaction Fee", txad.Txn.Fee, "num of validators", len(eval.rewardAddresses))
 		if err != nil {
-			//fmt.Println("eval.transaction Fee", err)
 			return err
 		}
 
@@ -979,15 +971,11 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	if certVoters != 0 {
 		rw := tx.Fee.Raw / certVoters
 		reward := basics.MicroAlgos{Raw: rw}
-		fmt.Println("Total Tx Fee", tx.Fee, "Number of Voters", certVoters, "Reward Per Person", reward)
 		for _, rewardAdd := range eval.rewardAddresses {
-			//fmt.Println("rewardFor", rewardAdd)
 			err = balances.Move(tx.Sender, rewardAdd, reward, &ad.SenderRewards, &ad.ReceiverRewards)
 			if err != nil {
-				fmt.Println("balances.Move가 없지 않다=bad")
+				fmt.Println("send reward to certVoter has problems")
 				return
-			} else {
-				fmt.Println("balances.Move 에러가 아니다=good", eval.block.Round(), tx.Sender, rewardAdd, reward, &ad.SenderRewards, &ad.ReceiverRewards)
 			}
 		}
 	} else {
@@ -1413,7 +1401,7 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 	var wg sync.WaitGroup                                      //싱커의 대기 그룹
 	defer func() {
 		validationCancel()
-		wg.Wait()
+		wg.Wait() //모든 고루틴이 종료될때까지 대기한다.
 	}() //맨 마지막에 이거 실행 즉, 대기한다.
 
 	// Next, transactions
@@ -1453,7 +1441,6 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 		txvalidator.txgroups = paysetgroups
 		txvalidator.done = make(chan error, 1)
 		go txvalidator.run()
-		//fmt.Println("func eval validate true -> 장부 validate 함수에서 호출")
 	}
 
 	base := eval.state.lookupParent.(*roundCowBase)

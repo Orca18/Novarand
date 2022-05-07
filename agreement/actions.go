@@ -237,9 +237,7 @@ func (a ensureAction) do(ctx context.Context, s *Service) {
 			Round:   uint64(a.Certificate.Round),
 		})
 		//s.Ledger.EnsureValidatedBlock(a.Payload.ve, a.Certificate)
-		//fmt.Println("actions.go-validatedBlock111", len(a.Certificate.Votes))
 		s.Ledger.EnsureBlock(a.Payload.Block, a.Certificate)
-		//fmt.Println("actions.go-validatedBlock222")
 	} else {
 		block := a.Payload.Block
 		logEvent.Type = logspec.RoundConcluded
@@ -249,7 +247,6 @@ func (a ensureAction) do(ctx context.Context, s *Service) {
 			Hash:    a.Certificate.Proposal.BlockDigest.String(),
 			Round:   uint64(a.Certificate.Round),
 		})
-		//fmt.Println("actions.go-NonValidatedBlock")
 		s.Ledger.EnsureBlock(block, a.Certificate)
 	}
 	logEventStart := logEvent

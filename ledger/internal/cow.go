@@ -37,6 +37,25 @@ import (
 //                  ||----w |
 //                  ||     ||
 
+/*
+transaction 수행시 영향을 받는 계정에 대해서만 balance 변경한다.
+맨 처음 생성될 때 부모 페이지의 개념에 해당하는 것은 기존 장부이며(base),
+(단, 이 경우 장부는 이미 하드디스크에 존재하므로 가상 메모리의 페이지를 copy하는 개념은 아니다.)
+이후 각 transaction group 안의 transaction 실행 시
+이미 카피된 영향받는 계정들의 잔고만 정리한 status 장부에서(cow)
+child로 하위 cow가 파생될 수 있다.
+(이때 child는 기존 cow가 이미 in-memory에서 계산되고 있으므로, 메모리에서 다른 메모리 영역으로
+카피하는 기존 cow과 유사 개념으로 볼 수 있다.)
+이후 각 그룹의 transaction이 완료되면 다시 부모 cow(tranaction group)에
+commit된다. 최종적으로 계정별 변경사항(delta)가 블록체인 장부에 등록될 경우 최상위 부모 데이터(base)가 변경되는 것과
+동일한 것이다.
+=> cow의 목적 : 1) 2개의 프로세스가 동시에 하나의 메모리 데이터에 접근할 때,
+기존 데이터가 프로세스에 중요 영향을 줄수 있으므로
+기존 데이터를 바로 바꾸지 않고, 카피한 후 바꾼다. (이는 mutex와 같은 목적이다.)
+2) 효율적이다. 2개의 프로세스가 동일 메모리에 접근하는 현상이 일어나기 전까지는 페이지를 복사하지 않는다. (메모리를 아깐다.)
+또한, 필요한 부분만 copy 후 수정(write) 하므로, 모든 데이터를 바꾸지 않고 필요한 부분만 바꾸어 적은 게산자원을 사용한다.
+*/
+
 type roundCowParent interface {
 	lookup(basics.Address) (basics.AccountData, error)
 	checkDup(basics.Round, basics.Round, transactions.Txid, ledgercore.Txlease) error
