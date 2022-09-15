@@ -271,7 +271,7 @@ func (dl *dryrunLedger) LookupWithoutRewards(rnd basics.Round, addr basics.Addre
 		if out, err = AccountToAccountData(&acct); err != nil {
 			return basics.AccountData{}, 0, err
 		}
-		out.MicroAlgos.Raw = acct.AmountWithoutPendingRewards
+		out.MicroNovas.Raw = acct.AmountWithoutPendingRewards
 		// Clear RewardsBase since dryrun has no idea about rewards level so the underlying calculation with reward will fail.
 		// The amount needed is known as acct.Amount but this method must return AmountWithoutPendingRewards
 		out.RewardsBase = 0

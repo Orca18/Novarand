@@ -99,7 +99,7 @@ func testingenv(t testing.TB, numAccounts, numTxs int, offlineAccounts bool) (*L
 		roots[i] = root
 		parts[i] = part
 
-		startamt := basics.MicroAlgos{Raw: uint64(minMoneyAtStart + (gen.Int() % (maxMoneyAtStart - minMoneyAtStart)))}
+		startamt := basics.MicroNovas{Raw: uint64(minMoneyAtStart + (gen.Int() % (maxMoneyAtStart - minMoneyAtStart)))}
 		short := root.Address()
 
 		if offlineAccounts && i > P/2 {
@@ -112,7 +112,7 @@ func testingenv(t testing.TB, numAccounts, numTxs int, offlineAccounts bool) (*L
 		}
 	}
 
-	genesis[poolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 100000 * uint64(proto.RewardsRateRefreshInterval)})
+	genesis[poolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 100000 * uint64(proto.RewardsRateRefreshInterval)})
 
 	bootstrap := bookkeeping.MakeGenesisBalances(genesis, poolAddr, sinkAddr)
 
@@ -120,7 +120,7 @@ func testingenv(t testing.TB, numAccounts, numTxs int, offlineAccounts bool) (*L
 	const inMem = true
 	cfg := config.GetDefaultLocal()
 	cfg.Archival = true
-	ledger, err := LoadLedger(logging.Base(), t.Name(), inMem, protocol.ConsensusCurrentVersion, bootstrap, genesisID, genesisHash, nil, cfg)
+	ledger, err := LoadLedger(logging.Base(), t.Name(), inMem, protocol.ConsensusCurrentVersion, bootstrap, genesisID, genesisHash, nil, nil, cfg)
 	if err != nil {
 		panic(err)
 	}
@@ -139,21 +139,21 @@ func testingenv(t testing.TB, numAccounts, numTxs int, offlineAccounts bool) (*L
 		saddr := roots[send].Address()
 		raddr := roots[recv].Address()
 
-		if proto.MinTxnFee+uint64(maxFee) > bal[saddr].MicroAlgos.Raw {
+		if proto.MinTxnFee+uint64(maxFee) > bal[saddr].MicroNovas.Raw {
 			continue
 		}
 
 		xferMax := transferredMoney
-		if uint64(xferMax) > bal[saddr].MicroAlgos.Raw-proto.MinTxnFee-uint64(maxFee) {
-			xferMax = int(bal[saddr].MicroAlgos.Raw - proto.MinTxnFee - uint64(maxFee))
+		if uint64(xferMax) > bal[saddr].MicroNovas.Raw-proto.MinTxnFee-uint64(maxFee) {
+			xferMax = int(bal[saddr].MicroNovas.Raw - proto.MinTxnFee - uint64(maxFee))
 		}
 
 		if xferMax == 0 {
 			continue
 		}
 
-		amt := basics.MicroAlgos{Raw: uint64(gen.Int() % xferMax)}
-		fee := basics.MicroAlgos{Raw: uint64(gen.Int()%maxFee) + proto.MinTxnFee}
+		amt := basics.MicroNovas{Raw: uint64(gen.Int() % xferMax)}
+		fee := basics.MicroNovas{Raw: uint64(gen.Int()%maxFee) + proto.MinTxnFee}
 
 		t := transactions.Transaction{
 			Type: protocol.PaymentTx,
@@ -179,16 +179,16 @@ func testingenv(t testing.TB, numAccounts, numTxs int, offlineAccounts bool) (*L
 		//}
 
 		sbal := bal[saddr]
-		sbal.MicroAlgos.Raw -= fee.Raw
-		sbal.MicroAlgos.Raw -= amt.Raw
+		sbal.MicroNovas.Raw -= fee.Raw
+		sbal.MicroNovas.Raw -= amt.Raw
 		bal[saddr] = sbal
 
 		ibal := bal[poolAddr]
-		ibal.MicroAlgos.Raw += fee.Raw
+		ibal.MicroNovas.Raw += fee.Raw
 		bal[poolAddr] = ibal
 
 		rbal := bal[raddr]
-		rbal.MicroAlgos.Raw += amt.Raw
+		rbal.MicroNovas.Raw += amt.Raw
 		bal[raddr] = rbal
 	}
 

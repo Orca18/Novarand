@@ -83,7 +83,7 @@ func (balances mockBalances) Put(addr basics.Address, ad basics.AccountData) err
 	return nil
 }
 
-func (balances mockBalances) Move(src, dst basics.Address, amount basics.MicroAlgos, srcRewards, dstRewards *basics.MicroAlgos) error {
+func (balances mockBalances) Move(src, dst basics.Address, amount basics.MicroNovas, srcRewards, dstRewards *basics.MicroNovas) error {
 	return nil
 }
 

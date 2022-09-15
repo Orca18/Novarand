@@ -32,14 +32,14 @@ type AlgoCount struct {
 	_struct struct{} `codec:",omitempty,omitemptyarray"`
 
 	// Sum of algos of all accounts in this class.
-	Money basics.MicroAlgos `codec:"mon"`
+	Money basics.MicroNovas `codec:"mon"`
 
 	// Total number of whole reward units in accounts.
 	RewardUnits uint64 `codec:"rwd"`
 }
 
 func (ac *AlgoCount) applyRewards(rewardsPerUnit uint64, ot *basics.OverflowTracker) {
-	rewardsGottenThisRound := basics.MicroAlgos{Raw: ot.Mul(ac.RewardUnits, rewardsPerUnit)}
+	rewardsGottenThisRound := basics.MicroNovas{Raw: ot.Mul(ac.RewardUnits, rewardsPerUnit)}
 	ac.Money = ot.AddA(ac.Money, rewardsGottenThisRound)
 }
 
@@ -81,7 +81,7 @@ func (at *AccountTotals) AddAccount(proto config.ConsensusParams, data basics.Ac
 	sum := at.statusField(data.Status)
 	algos, _ := data.Money(proto, at.RewardsLevel)
 	sum.Money = ot.AddA(sum.Money, algos)
-	sum.RewardUnits = ot.Add(sum.RewardUnits, data.MicroAlgos.RewardUnits(proto))
+	sum.RewardUnits = ot.Add(sum.RewardUnits, data.MicroNovas.RewardUnits(proto))
 }
 
 // DelAccount removes an account algos from the total money
@@ -89,7 +89,7 @@ func (at *AccountTotals) DelAccount(proto config.ConsensusParams, data basics.Ac
 	sum := at.statusField(data.Status)
 	algos, _ := data.Money(proto, at.RewardsLevel)
 	sum.Money = ot.SubA(sum.Money, algos)
-	sum.RewardUnits = ot.Sub(sum.RewardUnits, data.MicroAlgos.RewardUnits(proto))
+	sum.RewardUnits = ot.Sub(sum.RewardUnits, data.MicroNovas.RewardUnits(proto))
 }
 
 // ApplyRewards adds the reward to the account totals based on the new rewards level
@@ -101,7 +101,7 @@ func (at *AccountTotals) ApplyRewards(rewardsLevel uint64, ot *basics.OverflowTr
 }
 
 // All returns the sum of algos held under all different status values.
-func (at *AccountTotals) All() basics.MicroAlgos {
+func (at *AccountTotals) All() basics.MicroNovas {
 	participating := at.Participating()
 	res, overflowed := basics.OAddA(at.NotParticipating.Money, participating)
 	if overflowed {
@@ -111,9 +111,9 @@ func (at *AccountTotals) All() basics.MicroAlgos {
 }
 
 // Participating returns the sum of algos held under ``participating''
-// account status values (Online and Offline).  It excludes MicroAlgos held
+// account status values (Online and Offline).  It excludes MicroNovas held
 // by NotParticipating accounts.
-func (at *AccountTotals) Participating() basics.MicroAlgos {
+func (at *AccountTotals) Participating() basics.MicroNovas {
 	res, overflowed := basics.OAddA(at.Online.Money, at.Offline.Money)
 	if overflowed {
 		logging.Base().Panicf("AccountTotals.Participating(): overflow %v + %v", at.Online, at.Offline)

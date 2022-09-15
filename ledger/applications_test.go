@@ -148,7 +148,7 @@ return`
 
 	txHeader := transactions.Header{
 		Sender:      creator,
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   t.Name(),
@@ -360,7 +360,7 @@ return`
 	genesisID := t.Name()
 	txHeader := transactions.Header{
 		Sender:      creator,
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   genesisID,
@@ -603,7 +603,7 @@ return`
 	genesisID := t.Name()
 	txHeader := transactions.Header{
 		Sender:      creator,
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   genesisID,
@@ -662,7 +662,7 @@ return`
 		ApplicationCallTxnFields: appCallFields,
 	}
 	paymentFields := transactions.PaymentTxnFields{
-		Amount:           basics.MicroAlgos{Raw: 0},
+		Amount:           basics.MicroNovas{Raw: 0},
 		Receiver:         creator,
 		CloseRemainderTo: creator,
 	}
@@ -673,7 +673,7 @@ return`
 	}
 
 	data := genesisInitState.Accounts[userLocal]
-	balance := basics.MicroAlgos{Raw: data.MicroAlgos.Raw - txHeader.Fee.Raw*3}
+	balance := basics.MicroNovas{Raw: data.MicroNovas.Raw - txHeader.Fee.Raw*3}
 	stx1 := sign(initKeys, appCall)
 	stx2 := sign(initKeys, payment)
 
@@ -752,7 +752,7 @@ return`
 	genesisID := t.Name()
 	txHeader := transactions.Header{
 		Sender:      creator,
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   genesisID,
@@ -790,7 +790,7 @@ return`
 		ApplicationCallTxnFields: appCallFields,
 	}
 	paymentFields := transactions.PaymentTxnFields{
-		Amount:           basics.MicroAlgos{Raw: 0},
+		Amount:           basics.MicroNovas{Raw: 0},
 		Receiver:         userLocal,
 		CloseRemainderTo: userLocal,
 	}
@@ -801,7 +801,7 @@ return`
 	}
 
 	data := genesisInitState.Accounts[creator]
-	balance := basics.MicroAlgos{Raw: data.MicroAlgos.Raw - txHeader.Fee.Raw*3}
+	balance := basics.MicroNovas{Raw: data.MicroNovas.Raw - txHeader.Fee.Raw*3}
 	stx1 := sign(initKeys, appCall)
 	stx2 := sign(initKeys, payment)
 
@@ -943,7 +943,7 @@ func testAppAccountDeltaIndicesCompatibility(t *testing.T, source string, accoun
 	genesisID := t.Name()
 	txHeader := transactions.Header{
 		Sender:      creator,
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   genesisID,

@@ -123,7 +123,7 @@ func TestAccountInformationV2(t *testing.T) {
 	ad, err = client.AccountData(user)
 	a.NoError(err)
 	a.Zero(len(ad.AppParams))
-	a.Equal(basics.MicroAlgos{Raw: 10000000000}, ad.MicroAlgos)
+	a.Equal(basics.MicroNovas{Raw: 10000000000}, ad.MicroNovas)
 
 	counter := `#pragma version 2
 // a simple global and local calls counter app
@@ -285,7 +285,7 @@ int 1
 	// 2 global state update in total, 1 local state updates
 	checkEvalDelta(t, &client, txnRound, txnRound+1, 2, 1)
 
-	a.Equal(basics.MicroAlgos{Raw: 10000000000 - fee}, ad.MicroAlgos)
+	a.Equal(basics.MicroNovas{Raw: 10000000000 - fee}, ad.MicroNovas)
 
 	app, err := client.ApplicationInformation(uint64(appIdx))
 	a.NoError(err)

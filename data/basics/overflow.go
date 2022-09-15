@@ -157,31 +157,31 @@ func (t *OverflowTracker) Mul(a uint64, b uint64) uint64 {
 	return res
 }
 
-// OAddA adds 2 MicroAlgos values with overflow tracking
-func OAddA(a MicroAlgos, b MicroAlgos) (res MicroAlgos, overflowed bool) {
+// OAddA adds 2 MicroNovas values with overflow tracking
+func OAddA(a MicroNovas, b MicroNovas) (res MicroNovas, overflowed bool) {
 	res.Raw, overflowed = OAdd(a.Raw, b.Raw)
 	return
 }
 
 // OSubA subtracts b from a with overflow tracking
-func OSubA(a MicroAlgos, b MicroAlgos) (res MicroAlgos, overflowed bool) {
+func OSubA(a MicroNovas, b MicroNovas) (res MicroNovas, overflowed bool) {
 	res.Raw, overflowed = OSub(a.Raw, b.Raw)
 	return
 }
 
-// MulAIntSaturate uses MulSaturate to multiply b (int) with a (MicroAlgos)
-func MulAIntSaturate(a MicroAlgos, b int) MicroAlgos {
-	return MicroAlgos{Raw: MulSaturate(a.Raw, uint64(b))}
+// MulAIntSaturate uses MulSaturate to multiply b (int) with a (MicroNovas)
+func MulAIntSaturate(a MicroNovas, b int) MicroNovas {
+	return MicroNovas{Raw: MulSaturate(a.Raw, uint64(b))}
 }
 
-// AddA adds 2 MicroAlgos values with overflow tracking
-func (t *OverflowTracker) AddA(a MicroAlgos, b MicroAlgos) MicroAlgos {
-	return MicroAlgos{Raw: t.Add(uint64(a.Raw), uint64(b.Raw))}
+// AddA adds 2 MicroNovas values with overflow tracking
+func (t *OverflowTracker) AddA(a MicroNovas, b MicroNovas) MicroNovas {
+	return MicroNovas{Raw: t.Add(uint64(a.Raw), uint64(b.Raw))}
 }
 
 // SubA subtracts b from a with overflow tracking
-func (t *OverflowTracker) SubA(a MicroAlgos, b MicroAlgos) MicroAlgos {
-	return MicroAlgos{Raw: t.Sub(uint64(a.Raw), uint64(b.Raw))}
+func (t *OverflowTracker) SubA(a MicroNovas, b MicroNovas) MicroNovas {
+	return MicroNovas{Raw: t.Sub(uint64(a.Raw), uint64(b.Raw))}
 }
 
 // AddR adds 2 Round values with overflow tracking
@@ -195,8 +195,8 @@ func (t *OverflowTracker) SubR(a Round, b Round) Round {
 }
 
 // ScalarMulA multiplies an Algo amount by a scalar
-func (t *OverflowTracker) ScalarMulA(a MicroAlgos, b uint64) MicroAlgos {
-	return MicroAlgos{Raw: t.Mul(a.Raw, b)}
+func (t *OverflowTracker) ScalarMulA(a MicroNovas, b uint64) MicroNovas {
+	return MicroNovas{Raw: t.Mul(a.Raw, b)}
 }
 
 // Muldiv computes a*b/c.  The overflow flag indicates that

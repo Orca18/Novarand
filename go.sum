@@ -1,7 +1,9 @@
-github.com/algorand/falcon v0.0.0-20220130164023-c9e1d466f123 h1:cnUjJ/iqUjJNbhUzgmxbfwHMVFnz+DLnNQx8uJcGaks=
-github.com/algorand/falcon v0.0.0-20220130164023-c9e1d466f123/go.mod h1:OkQyHlGvS0kLNcIWbC21/uQcnbfwSOQm+wiqWwBG9pQ=
 github.com/Orca18/novarand v0.0.0-20220325203149-93754db34436 h1:+9Jy/Ob501eeR2zphFSnMmniom5S91dmIiZb9CibxdM=
 github.com/Orca18/novarand v0.0.0-20220325203149-93754db34436/go.mod h1:O7pMjynWt17KgO/tMrzee+ZN2st+0AIxTlcWjipVz/w=
+github.com/algorand/falcon v0.0.0-20220130164023-c9e1d466f123 h1:cnUjJ/iqUjJNbhUzgmxbfwHMVFnz+DLnNQx8uJcGaks=
+github.com/algorand/falcon v0.0.0-20220130164023-c9e1d466f123/go.mod h1:OkQyHlGvS0kLNcIWbC21/uQcnbfwSOQm+wiqWwBG9pQ=
+github.com/algorand/go-algorand v0.0.0-20220428192813-1729a3eed50e h1:mycU90F+gkdDKsbj5spL8/obZpmBkMPjegvadiZzb9Q=
+github.com/algorand/go-algorand v0.0.0-20220428192813-1729a3eed50e/go.mod h1:O7pMjynWt17KgO/tMrzee+ZN2st+0AIxTlcWjipVz/w=
 github.com/algorand/go-codec v1.1.2 h1:QWS9YC3EEWBpJq5AqFPELcCJ2QPpTIg9aqR2K/sRDq4=
 github.com/algorand/go-codec v1.1.2/go.mod h1:A3YI4V24jUUnU1eNekNmx2fLi60FvlNssqOiUsyfNM8=
 github.com/algorand/go-codec v1.1.8 h1:XDSreeeZY8gMst6Edz4RBkl08/DGMJOeHYkoXL2B7wI=

@@ -705,8 +705,8 @@ func (m *mockedLedger) Block(r basics.Round) (bookkeeping.Block, error) {
 func (m *mockedLedger) Lookup(basics.Round, basics.Address) (basics.AccountData, error) {
 	return basics.AccountData{}, errors.New("not needed for mockedLedger")
 }
-func (m *mockedLedger) Circulation(basics.Round) (basics.MicroAlgos, error) {
-	return basics.MicroAlgos{}, errors.New("not needed for mockedLedger")
+func (m *mockedLedger) Circulation(basics.Round) (basics.MicroNovas, error) {
+	return basics.MicroNovas{}, errors.New("not needed for mockedLedger")
 }
 func (m *mockedLedger) ConsensusVersion(basics.Round) (protocol.ConsensusVersion, error) {
 	return protocol.ConsensusCurrentVersion, nil

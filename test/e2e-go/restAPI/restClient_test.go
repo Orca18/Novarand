@@ -22,11 +22,6 @@ import (
 	"errors"
 	"flag"
 
-	algodclient "github.com/Orca18/novarand/daemon/algod/api/client"
-	kmdclient "github.com/Orca18/novarand/daemon/kmd/client"
-	"github.com/Orca18/novarand/data/account"
-	"github.com/Orca18/novarand/data/transactions/logic"
-	"github.com/Orca18/novarand/util/db"
 	"math"
 	"math/rand"
 	"os"
@@ -36,12 +31,18 @@ import (
 	"time"
 	"unicode"
 
+	algodclient "github.com/Orca18/novarand/daemon/algod/api/client"
+	kmdclient "github.com/Orca18/novarand/daemon/kmd/client"
+	"github.com/Orca18/novarand/data/account"
+	"github.com/Orca18/novarand/data/transactions/logic"
+	"github.com/Orca18/novarand/util/db"
+
 	"github.com/stretchr/testify/require"
 
 	"github.com/Orca18/novarand/config"
 	"github.com/Orca18/novarand/crypto"
 	"github.com/Orca18/novarand/crypto/merklesignature"
-	"github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+	v1 "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
 	"github.com/Orca18/novarand/data/basics"
 	"github.com/Orca18/novarand/data/transactions"
 	"github.com/Orca18/novarand/libgoal"
@@ -568,7 +569,7 @@ func TestAccountParticipationInfo(t *testing.T) {
 		Type: protocol.KeyRegistrationTx,
 		Header: transactions.Header{
 			Sender:      addr,
-			Fee:         basics.MicroAlgos{Raw: 10000},
+			Fee:         basics.MicroNovas{Raw: 10000},
 			FirstValid:  firstRound,
 			LastValid:   lastRound,
 			GenesisHash: gh,
@@ -1107,7 +1108,7 @@ func TestStateProofInParticipationInfo(t *testing.T) {
 		Type: protocol.KeyRegistrationTx,
 		Header: transactions.Header{
 			Sender:      addr,
-			Fee:         basics.MicroAlgos{Raw: 10000},
+			Fee:         basics.MicroNovas{Raw: 10000},
 			FirstValid:  firstRound,
 			LastValid:   lastRound,
 			GenesisHash: gh,
@@ -1204,7 +1205,7 @@ func TestNilStateProofInParticipationInfo(t *testing.T) {
 		Type: protocol.KeyRegistrationTx,
 		Header: transactions.Header{
 			Sender:      addr,
-			Fee:         basics.MicroAlgos{Raw: 10000},
+			Fee:         basics.MicroNovas{Raw: 10000},
 			FirstValid:  firstRound,
 			LastValid:   lastRound,
 			GenesisHash: gh,

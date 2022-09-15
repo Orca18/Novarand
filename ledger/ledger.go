@@ -93,7 +93,7 @@ type Ledger struct {
 	notifier   blockNotifier
 	metrics    metricsTracker
 	//(추가)
-	//statedelta stateDeltaTracker
+	statedelta stateDeltaTracker
 
 	// 트래커 정보 및 설정 정보 등을 가지고 있는 레지스트리
 	// []ledgerTracker을 가지고 있다.
@@ -188,6 +188,10 @@ func OpenLedger(
 
 	// 블록큐, 트래커등을 초기화 한다.
 	err = l.reloadLedger()
+
+	// (로그)
+	fmt.Println("l.reloadLedger()")
+
 	if err != nil {
 		return nil, err
 	}
@@ -224,6 +228,10 @@ func (l *Ledger) reloadLedger() error {
 
 	// init tracker db
 	trackerDBInitParams, err := trackerDBInitialize(l, l.catchpoint.catchpointEnabled(), l.catchpoint.dbDirectory)
+
+	// (로그)
+	fmt.Println("trackerDBInitParams, err := trackerDBInitialize()")
+
 	if err != nil {
 		return err
 	}
@@ -236,7 +244,7 @@ func (l *Ledger) reloadLedger() error {
 		&l.bulletin,   // provide closed channel signaling support for completed rounds
 		&l.notifier,   // send OnNewBlocks to subscribers
 		&l.metrics,    // provides metrics reporting support
-		//&l.statedelta,    // stateDelta Tracker 추가
+		&l.statedelta, // stateDelta Tracker 추가
 	}
 
 	err = l.trackers.initialize(l, trackers, l.cfg)
@@ -432,6 +440,10 @@ func (l *Ledger) RegisterBlockListeners(listeners []BlockListener) {
 	l.notifier.register(listeners)
 }
 
+func (l *Ledger) RegisterBlockTrackingListener(listener ValidateBlockListener) {
+	l.statedelta.register(listener)
+}
+
 // notifyCommit informs the trackers that all blocks up to r have been
 // written to disk.  Returns the minimum block number that must be kept
 // in the database.
@@ -558,12 +570,12 @@ func (l *Ledger) LatestTotals() (basics.Round, ledgercore.AccountTotals, error) 
 }
 
 // OnlineTotals returns the online totals of all accounts at the end of round rnd.
-func (l *Ledger) OnlineTotals(rnd basics.Round) (basics.MicroAlgos, error) {
+func (l *Ledger) OnlineTotals(rnd basics.Round) (basics.MicroNovas, error) {
 	l.trackerMu.RLock()
 	defer l.trackerMu.RUnlock()
 	totals, err := l.accts.Totals(rnd)
 	if err != nil {
-		return basics.MicroAlgos{}, err
+		return basics.MicroNovas{}, err
 	}
 	return totals.Online.Money, nil
 }
@@ -665,6 +677,7 @@ func (l *Ledger) AddValidatedBlock(vb ledgercore.ValidatedBlock, cert agreement.
 		return err
 	}
 	l.headerCache.Put(blk.Round(), blk.BlockHeader)
+	// 원장에 저장된 트래커들의 newBlock()메소드를 실행한다.
 	l.trackers.newBlock(blk, vb.Delta())
 	l.log.Debugf("ledger.AddValidatedBlock: added blk %d", blk.Round())
 	return nil
@@ -818,3 +831,8 @@ var ledgerInitblocksdbCount = metrics.NewCounter("ledger_initblocksdb_count", "c
 var ledgerInitblocksdbMicros = metrics.NewCounter("ledger_initblocksdb_micros", "µs spent")
 var ledgerVerifygenhashCount = metrics.NewCounter("ledger_verifygenhash_count", "calls")
 var ledgerVerifygenhashMicros = metrics.NewCounter("ledger_verifygenhash_micros", "µs spent")
+
+// Ledger가 가지고 있는 트래커 db 반환
+func (ledger *Ledger) GetTrackerDbs() db.Pair {
+	return ledger.trackerDBs
+}

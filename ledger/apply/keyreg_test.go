@@ -56,7 +56,7 @@ func (balances keyregTestBalances) Put(addr basics.Address, ad basics.AccountDat
 	return nil
 }
 
-func (balances keyregTestBalances) Move(src, dst basics.Address, amount basics.MicroAlgos, srcRewards, dstRewards *basics.MicroAlgos) error {
+func (balances keyregTestBalances) Move(src, dst basics.Address, amount basics.MicroNovas, srcRewards, dstRewards *basics.MicroNovas) error {
 	return nil
 }
 
@@ -132,7 +132,7 @@ func TestKeyregApply(t *testing.T) {
 			Type: protocol.KeyRegistrationTx,
 			Header: transactions.Header{
 				Sender:     src,
-				Fee:        basics.MicroAlgos{Raw: 1},
+				Fee:        basics.MicroNovas{Raw: 1},
 				FirstValid: basics.Round(1000),
 				LastValid:  basics.Round(1200),
 			},
@@ -222,7 +222,7 @@ func createTestTxnWithPeriod(t *testing.T, src basics.Address, secretParticipati
 		Type: protocol.KeyRegistrationTx,
 		Header: transactions.Header{
 			Sender:     src,
-			Fee:        basics.MicroAlgos{Raw: 1},
+			Fee:        basics.MicroNovas{Raw: 1},
 			FirstValid: basics.Round(defaultParticipationFirstRound),
 			LastValid:  basics.Round(defaultParticipationLastRound),
 		},

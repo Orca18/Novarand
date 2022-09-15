@@ -33,6 +33,9 @@ import (
 var emptySchema = basics.StateSchema{}
 
 // SignTransactionWithWallet signs the passed transaction with keys from the wallet associated with the passed walletHandle
+/*
+	walletHandle과 관련된 wallet에서 가져온 key를 이용해서 넘어온 트랜잭션에 서명한다.
+*/
 func (c *Client) SignTransactionWithWallet(walletHandle, pw []byte, utx transactions.Transaction) (stx transactions.SignedTxn, err error) {
 	kmd, err := c.ensureKmdClient()
 	if err != nil {
@@ -52,6 +55,10 @@ func (c *Client) SignTransactionWithWallet(walletHandle, pw []byte, utx transact
 
 // SignTransactionWithWalletAndSigner signs the passed transaction under a specific signer (which may differ from the sender's address). This is necessary after an account has been rekeyed.
 // If signerAddr is the empty string, just infer spending key from the sender address.
+/*
+	특정 signer가 넘어온 트랜잭션에 서명한다. signer는 보낸이의 주소완 다르다. 이것은 계정이 rekeyed된 후에 필요한 작업이다.
+	만약 signer의 주소가 빈 문자열이라면 보낸이의 주소에서 spending key를 추론해야 한다.
+*/
 func (c *Client) SignTransactionWithWalletAndSigner(walletHandle, pw []byte, signerAddr string, utx transactions.Transaction) (stx transactions.SignedTxn, err error) {
 	if signerAddr == "" {
 		return c.SignTransactionWithWallet(walletHandle, pw, utx)
@@ -78,6 +85,9 @@ func (c *Client) SignTransactionWithWalletAndSigner(walletHandle, pw []byte, sig
 }
 
 // SignProgramWithWallet signs the passed transaction with keys from the wallet associated with the passed walletHandle
+/*
+	walletHandle과 관련된 wallet에서 가져온 key를 이용해서 넘어온 트랜잭션에 서명한다.
+*/
 func (c *Client) SignProgramWithWallet(walletHandle, pw []byte, addr string, program []byte) (signature crypto.Signature, err error) {
 	kmd, err := c.ensureKmdClient()
 	if err != nil {
@@ -96,6 +106,9 @@ func (c *Client) SignProgramWithWallet(walletHandle, pw []byte, addr string, pro
 
 // MultisigSignTransactionWithWallet creates a multisig (or adds to an existing partial multisig, if one is provided), signing with the key corresponding to the given address and using the specified wallet
 // TODO instead of returning MultisigSigs, accept and return blobs
+/*
+	특정 지갑을 사용해서 다중서명을 생성하거나 기존에 존재하는 다중서명에 제공된 것을 더해서 생성하여 그것을 이용해 서명한다.
+*/
 func (c *Client) MultisigSignTransactionWithWallet(walletHandle, pw []byte, utx transactions.Transaction, signerAddr string, partial crypto.MultisigSig) (msig crypto.MultisigSig, err error) {
 	txBytes := protocol.Encode(&utx)
 	addr, err := basics.UnmarshalChecksumAddress(signerAddr)
@@ -236,7 +249,7 @@ func (c *Client) MakeUnsignedGoOnlineTx(address string, part *account.Participat
 
 	parsedFrstValid := basics.Round(firstValid)
 	parsedLastValid := basics.Round(lastValid)
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	goOnlineTransaction := part.GenerateRegistrationTransaction(parsedFee, parsedFrstValid, parsedLastValid, leaseBytes, cparams.EnableStateProofKeyregCheck)
 	if cparams.SupportGenesisHash {
@@ -250,7 +263,7 @@ func (c *Client) MakeUnsignedGoOnlineTx(address string, part *account.Participat
 	// transaction to get the size post signing and encoding.
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		goOnlineTransaction.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, goOnlineTransaction.EstimateEncodedSize())
+		goOnlineTransaction.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, goOnlineTransaction.EstimateEncodedSize())
 		if goOnlineTransaction.Fee.Raw < cparams.MinTxnFee {
 			goOnlineTransaction.Fee.Raw = cparams.MinTxnFee
 		}
@@ -283,7 +296,7 @@ func (c *Client) MakeUnsignedGoOfflineTx(address string, firstValid, lastValid, 
 
 	parsedFirstRound := basics.Round(firstValid)
 	parsedLastRound := basics.Round(lastValid)
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	goOfflineTransaction := transactions.Transaction{
 		Type: protocol.KeyRegistrationTx,
@@ -305,7 +318,7 @@ func (c *Client) MakeUnsignedGoOfflineTx(address string, firstValid, lastValid, 
 	// Fee is tricky, should taken care last. We encode the final transaction to get the size post signing and encoding
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		goOfflineTransaction.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, goOfflineTransaction.EstimateEncodedSize())
+		goOfflineTransaction.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, goOfflineTransaction.EstimateEncodedSize())
 		if goOfflineTransaction.Fee.Raw < cparams.MinTxnFee {
 			goOfflineTransaction.Fee.Raw = cparams.MinTxnFee
 		}
@@ -338,7 +351,7 @@ func (c *Client) MakeUnsignedBecomeNonparticipatingTx(address string, firstValid
 
 	parsedFirstRound := basics.Round(firstValid)
 	parsedLastRound := basics.Round(lastValid)
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	becomeNonparticipatingTransaction := transactions.Transaction{
 		Type: protocol.KeyRegistrationTx,
@@ -360,7 +373,7 @@ func (c *Client) MakeUnsignedBecomeNonparticipatingTx(address string, firstValid
 	// Fee is tricky, should taken care last. We encode the final transaction to get the size post signing and encoding
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		becomeNonparticipatingTransaction.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, becomeNonparticipatingTransaction.EstimateEncodedSize())
+		becomeNonparticipatingTransaction.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, becomeNonparticipatingTransaction.EstimateEncodedSize())
 		if becomeNonparticipatingTransaction.Fee.Raw < cparams.MinTxnFee {
 			becomeNonparticipatingTransaction.Fee.Raw = cparams.MinTxnFee
 		}
@@ -391,7 +404,7 @@ func (c *Client) FillUnsignedTxTemplate(sender string, firstValid, lastValid, fe
 		return transactions.Transaction{}, err
 	}
 
-	parsedFee := basics.MicroAlgos{Raw: fee}
+	parsedFee := basics.MicroNovas{Raw: fee}
 
 	tx.Header.Sender = parsedAddr
 	tx.Header.Fee = parsedFee
@@ -409,7 +422,7 @@ func (c *Client) FillUnsignedTxTemplate(sender string, firstValid, lastValid, fe
 	// transaction to get the size post signing and encoding.
 	// Then, we multiply it by the suggested fee per byte.
 	if fee == 0 {
-		tx.Fee = basics.MulAIntSaturate(basics.MicroAlgos{Raw: params.Fee}, tx.EstimateEncodedSize())
+		tx.Fee = basics.MulAIntSaturate(basics.MicroNovas{Raw: params.Fee}, tx.EstimateEncodedSize())
 		if tx.Fee.Raw < cparams.MinTxnFee {
 			tx.Fee.Raw = cparams.MinTxnFee
 		}
@@ -750,11 +763,6 @@ func (c *Client) MakeUnsignedAssetFreezeTx(index uint64, accountToChange string,
 	tx.AssetFrozen = newFreezeSetting
 
 	return tx, nil
-}
-
-// (추가) AddressPrint트랜잭션을 생성할 수 있는 함수 추가
-func (c *Client) MakeUnsignedAddressPrint() {
-
 }
 
 // GroupID computes the group ID for a group of transactions.

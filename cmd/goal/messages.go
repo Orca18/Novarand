@@ -102,7 +102,7 @@ const (
 	errorClearProgArgsRequired     = "Exactly one of --clear-prog or --clear-prog-raw is required"
 
 	// Clerk
-	infoTxIssued               = "Sent %d MicroAlgos from account %s to address %s, transaction ID: %s. Fee set to %d"
+	infoTxIssued               = "Sent %d MicroNovas from account %s to address %s, transaction ID: %s. Fee set to %d"
 	infoTxCommitted            = "Transaction %s committed in round %d"
 	infoTxPending              = "Transaction %s still pending as of round %d"
 	malformedNote              = "Cannot base64-decode note %s: %s"
@@ -126,6 +126,7 @@ const (
 	noOutputFileError          = "--msig-params must be specified with an output file name (-o)"
 	infoAutoFeeSet             = "Automatically set fee to %d MicroNovas"
 	errorTransactionExpired    = "Transaction %s expired before it could be included in a block"
+	infoAddrTxIssued           = "[Transaction ID] %s [Sender] %s [Receiver] %s, Fee set to %d"
 
 	loggingNotConfigured = "Remote logging is not currently configured and won't be enabled"
 	loggingNotEnabled    = "Remote logging is current disabled"

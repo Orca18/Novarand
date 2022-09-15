@@ -17,6 +17,11 @@
 package upgrades
 
 import (
+	"path/filepath"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/Orca18/novarand/config"
 	"github.com/Orca18/novarand/crypto"
 	"github.com/Orca18/novarand/data/basics"
@@ -25,10 +30,6 @@ import (
 	"github.com/Orca18/novarand/test/framework/fixtures"
 	"github.com/Orca18/novarand/test/partitiontest"
 	"github.com/stretchr/testify/require"
-	"path/filepath"
-	"strings"
-	"testing"
-	"time"
 )
 
 func waitUntilProtocolUpgrades(a *require.Assertions, fixture *fixtures.RestClientFixture, nodeClient libgoal.Client) {
@@ -115,7 +116,7 @@ func registerKeyInto(client *libgoal.Client, a *require.Assertions, lastValid ui
 	cparams := config.Consensus[ver]
 
 	tx := partKey.GenerateRegistrationTransaction(
-		basics.MicroAlgos{Raw: 1000},
+		basics.MicroNovas{Raw: 1000},
 		0,
 		100,
 		[32]byte{},

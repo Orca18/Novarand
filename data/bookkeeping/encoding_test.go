@@ -43,7 +43,7 @@ func TestBlockWithTxnEncoding(t *testing.T) {
 	txn := transactions.Transaction{
 		Type: protocol.PaymentTx,
 		PaymentTxnFields: transactions.PaymentTxnFields{
-			Amount: basics.MicroAlgos{Raw: 1},
+			Amount: basics.MicroNovas{Raw: 1},
 		},
 	}
 

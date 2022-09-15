@@ -140,7 +140,7 @@ type LedgerReader interface {
 	// confirmed. It may also return an error if the given Round is
 	// unavailable by the storage device. In that case, the agreement
 	// protocol may lose liveness.
-	Circulation(basics.Round) (basics.MicroAlgos, error)
+	Circulation(basics.Round) (basics.MicroNovas, error)
 
 	// LookupDigest returns the Digest of the entry that was agreed on in a
 	// given round.

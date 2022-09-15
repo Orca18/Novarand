@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/algorand/falcon v0.0.0-20220130164023-c9e1d466f123
+	github.com/algorand/go-algorand v0.0.0-20220428192813-1729a3eed50e
 	github.com/algorand/go-codec/codec v1.1.8
 	github.com/algorand/go-deadlock v0.2.2
 	github.com/algorand/go-sumhash v0.1.0

@@ -95,21 +95,25 @@ func (hts *HTTPTxSync) Sync(ctx context.Context, bloom *bloom.Filter) (txgroups 
 	}
 	bloomParam := base64.URLEncoding.EncodeToString(bloomBytes)
 
+	// 모든 피어정보를 가져온다.
 	peers := hts.peers.GetPeers(network.PeersPhonebookRelays)
 	if len(peers) == 0 {
 		return nil, nil //errors.New("no peers to tx sync from")
 	}
+	// 랜덤함수를 사용해서 임의의 한 피어정보를 가져온다.
 	peer := peers[rand.Intn(len(peers))]
 	hpeer, ok := peer.(network.HTTPPeer)
 	if !ok {
 		return nil, fmt.Errorf("cannot HTTPTxSync non http peer %T %#v", peer, peer)
 	}
 	hts.rootURL = hpeer.GetAddress()
+	// 연결된 피어의 httpClient객체 정보를 가져온다.
 	client := hpeer.GetHTTPClient()
 	if client == nil {
 		client = &http.Client{}
 		client.Transport = hts.peers.GetRoundTripper()
 	}
+	// 피어의 url
 	parsedURL, err := network.ParseHostOrURL(hts.rootURL)
 	if err != nil {
 		hts.log.Warnf("txSync bad url %v: %s", hts.rootURL, err)
@@ -120,6 +124,7 @@ func (hts *HTTPTxSync) Sync(ctx context.Context, bloom *bloom.Filter) (txgroups 
 	hts.log.Infof("http sync from %s", syncURL)
 	params := url.Values{}
 	params.Set("bf", bloomParam)
+	// 피어에게 전달할 request!!!! 즉, 피어가 처리하는부분이다!!
 	request, err := http.NewRequest("POST", syncURL, strings.NewReader(params.Encode()))
 	if err != nil {
 		hts.log.Errorf("txSync POST setup %v: %s", syncURL, err)
@@ -128,6 +133,7 @@ func (hts *HTTPTxSync) Sync(ctx context.Context, bloom *bloom.Filter) (txgroups 
 	request.Header.Set("Content-Type", requestContentType)
 	network.SetUserAgentHeader(request.Header)
 	request = request.WithContext(ctx)
+	// 피어에게 transaction을 요청하여 받은 응답!
 	response, err := client.Do(request)
 	if err != nil {
 		hts.log.Warnf("txSync POST %v: %s", syncURL, err)
@@ -163,6 +169,7 @@ func (hts *HTTPTxSync) Sync(ctx context.Context, bloom *bloom.Filter) (txgroups 
 		return nil, fmt.Errorf("txSync POST invalid content type '%s'", contentTypes[0])
 	}
 
+	// 피어에게 받은 트랜잭션 데이터
 	data, err := ResponseBytes(response, hts.log, hts.maxTxSyncResponseBytes)
 	if err != nil {
 		hts.log.Warn("txSync body read failed: ", err)
@@ -171,6 +178,8 @@ func (hts *HTTPTxSync) Sync(ctx context.Context, bloom *bloom.Filter) (txgroups 
 	hts.log.Debugf("http sync got %d bytes", len(data))
 
 	var txns []transactions.SignedTxn
+
+	// 피어에게 받은 트랜잭션 데이터를 디코드한다.
 	err = protocol.DecodeReflect(data, &txns)
 	if err != nil {
 		hts.log.Warn("txSync protocol decode: ", err)

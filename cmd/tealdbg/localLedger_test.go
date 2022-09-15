@@ -93,7 +93,7 @@ int 2
 			Type: protocol.ApplicationCallTx,
 			Header: transactions.Header{
 				Sender: addr,
-				Fee:    basics.MicroAlgos{Raw: 100},
+				Fee:    basics.MicroNovas{Raw: 100},
 				Note:   []byte{1, 2, 3},
 			},
 			ApplicationCallTxnFields: transactions.ApplicationCallTxnFields{

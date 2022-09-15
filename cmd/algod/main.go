@@ -64,6 +64,7 @@ func main() {
 
 func run() int {
 	dataDir := resolveDataDir()
+	fmt.Println(dataDir)
 	absolutePath, absPathErr := filepath.Abs(dataDir)
 	config.UpdateVersionDataDir(absolutePath)
 
@@ -116,6 +117,7 @@ func run() int {
 	genesisPath := *genesisFile
 	if genesisPath == "" {
 		genesisPath = filepath.Join(dataDir, config.GenesisJSONFile)
+		fmt.Println(genesisPath)
 	}
 
 	// Load genesis

@@ -895,13 +895,13 @@
           "x-go-name": "Address"
         },
         "amount": {
-          "description": "Amount indicates the total number of MicroAlgos in the account",
+          "description": "Amount indicates the total number of MicroNovas in the account",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "Amount"
         },
         "amountwithoutpendingrewards": {
-          "description": "AmountWithoutPendingRewards specifies the amount of MicroAlgos in\nthe account, without the pending rewards.",
+          "description": "AmountWithoutPendingRewards specifies the amount of MicroNovas in\nthe account, without the pending rewards.",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "AmountWithoutPendingRewards"
@@ -922,13 +922,13 @@
           "$ref": "#/definitions/Participation"
         },
         "pendingrewards": {
-          "description": "PendingRewards specifies the amount of MicroAlgos of pending\nrewards in this account.",
+          "description": "PendingRewards specifies the amount of MicroNovas of pending\nrewards in this account.",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "PendingRewards"
         },
         "rewards": {
-          "description": "Rewards indicates the total rewards of MicroAlgos the account has received, including pending rewards.",
+          "description": "Rewards indicates the total rewards of MicroNovas the account has received, including pending rewards.",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "Rewards"
@@ -940,7 +940,7 @@
           "x-go-name": "Round"
         },
         "status": {
-          "description": "Status indicates the delegation status of the account's MicroAlgos\nOffline - indicates that the associated account is delegated.\nOnline  - indicates that the associated account used as part of the delegation pool.\nNotParticipating - indicates that the associated account is neither a delegator nor a delegate.",
+          "description": "Status indicates the delegation status of the account's MicroNovas\nOffline - indicates that the associated account is delegated.\nOnline  - indicates that the associated account used as part of the delegation pool.\nNotParticipating - indicates that the associated account is neither a delegator nor a delegate.",
           "type": "string",
           "x-go-name": "Status"
         },
@@ -1266,7 +1266,7 @@
           "x-go-name": "CompactCertVoters"
         },
         "compactCertVotersTotal": {
-          "description": "CompactCertVotersTotal is the total amount of microalgos held by the voters in\nthe CompactCertVoters merkle tree.",
+          "description": "CompactCertVotersTotal is the total amount of micronovas held by the voters in\nthe CompactCertVoters merkle tree.",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "CompactCertVotersTotal"
@@ -1277,7 +1277,7 @@
           "x-go-name": "CurrentProtocol"
         },
         "frac": {
-          "description": "The number of leftover MicroAlgos after the distribution of RewardsRate/rewardUnits\nMicroAlgos for every reward unit in the next round.",
+          "description": "The number of leftover MicroNovas after the distribution of RewardsRate/rewardUnits\nMicroNovas for every reward unit in the next round.",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "RewardsResidue"
@@ -1327,13 +1327,13 @@
           "x-go-name": "Proposer"
         },
         "rate": {
-          "description": "The number of new MicroAlgos added to the participation stake from rewards at the next round.",
+          "description": "The number of new MicroNovas added to the participation stake from rewards at the next round.",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "RewardsRate"
         },
         "reward": {
-          "description": "RewardsLevel specifies how many rewards, in MicroAlgos,\nhave been distributed to each config.Protocol.RewardUnit\nof MicroAlgos since genesis.",
+          "description": "RewardsLevel specifies how many rewards, in MicroNovas,\nhave been distributed to each config.Protocol.RewardUnit\nof MicroNovas since genesis.",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "RewardsLevel"
@@ -1598,7 +1598,7 @@
       ],
       "properties": {
         "amount": {
-          "description": "Amount is the amount of MicroAlgos intended to be transferred",
+          "description": "Amount is the amount of MicroNovas intended to be transferred",
           "type": "integer",
           "format": "uint64",
           "x-go-name": "Amount"
@@ -1630,6 +1630,27 @@
           "type": "integer",
           "format": "uint64",
           "x-go-name": "ToRewards"
+        }
+      },
+      "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
+    },
+    "AddressPrintTransactionType": {
+      "description": "AddressPrintTransactionType contains the additional fields for a addressPrint Transaction",
+      "type": "object",
+      "required": [
+        "to2"
+      ],
+      "properties": {
+        "to2": {
+          "description": "To is the receiver's address",
+          "type": "string",
+          "x-go-name": "To2"
+        },
+        "torewards2": {
+          "description": "ToRewards is the amount of pending rewards applied to the To account\nas part of this transaction.",
+          "type": "integer",
+          "format": "uint64",
+          "x-go-name": "ToRewards2"
         }
       },
       "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
@@ -1679,7 +1700,7 @@
       "x-go-package": "github.com/Orca18/novarand/daemon/algod/api/spec/v1"
     },
     "Supply": {
-      "description": "Supply represents the current supply of MicroAlgos in the system",
+      "description": "Supply represents the current supply of MicroNovas in the system",
       "type": "object",
       "required": [
         "round",
@@ -1802,6 +1823,9 @@
         },
         "payment": {
           "$ref": "#/definitions/PaymentTransactionType"
+        },
+        "addressprint": {
+          "$ref": "#/definitions/AddressPrintTransactionType"
         },
         "poolerror": {
           "description": "PoolError indicates the transaction was evicted from this node's transaction\npool (if non-empty).  A non-empty PoolError does not guarantee that the\ntransaction will never be committed; other nodes may not have evicted the\ntransaction and may attempt to commit it in the future.",

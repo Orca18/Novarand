@@ -33,7 +33,7 @@ OnlineAccount는 AccountData.Status가 온라인인 계정에 해당합니다.
 type OnlineAccount struct {
 	// These are a subset of the fields from the corresponding AccountData.
 	Address                 basics.Address
-	MicroAlgos              basics.MicroAlgos
+	MicroNovas              basics.MicroNovas
 	RewardsBase             uint64
 	NormalizedOnlineBalance uint64
 	VoteFirstValid          basics.Round

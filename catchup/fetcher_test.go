@@ -48,15 +48,15 @@ func buildTestLedger(t *testing.T, blk bookkeeping.Block) (ledger *data.Ledger, 
 	genesis := make(map[basics.Address]basics.AccountData)
 	genesis[user] = basics.AccountData{
 		Status:     basics.Online,
-		MicroAlgos: basics.MicroAlgos{Raw: proto.MinBalance * 2000000},
+		MicroNovas: basics.MicroNovas{Raw: proto.MinBalance * 2000000},
 	}
 	genesis[sinkAddr] = basics.AccountData{
 		Status:     basics.Online,
-		MicroAlgos: basics.MicroAlgos{Raw: proto.MinBalance * 2000000},
+		MicroNovas: basics.MicroNovas{Raw: proto.MinBalance * 2000000},
 	}
 	genesis[poolAddr] = basics.AccountData{
 		Status:     basics.Online,
-		MicroAlgos: basics.MicroAlgos{Raw: proto.MinBalance * 2000000},
+		MicroNovas: basics.MicroNovas{Raw: proto.MinBalance * 2000000},
 	}
 
 	log := logging.TestingLog(t)
@@ -67,7 +67,7 @@ func buildTestLedger(t *testing.T, blk bookkeeping.Block) (ledger *data.Ledger, 
 	cfg.Archival = true
 	ledger, err = data.LoadLedger(
 		log, t.Name(), inMem, protocol.ConsensusCurrentVersion, genBal, "", genHash,
-		nil, cfg,
+		nil, nil, cfg,
 	)
 	if err != nil {
 		t.Fatal("couldn't build ledger", err)
@@ -78,14 +78,14 @@ func buildTestLedger(t *testing.T, blk bookkeeping.Block) (ledger *data.Ledger, 
 		Type: protocol.PaymentTx,
 		Header: transactions.Header{
 			Sender:      user,
-			Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee},
+			Fee:         basics.MicroNovas{Raw: proto.MinTxnFee},
 			FirstValid:  next,
 			LastValid:   next,
 			GenesisHash: genHash,
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: user,
-			Amount:   basics.MicroAlgos{Raw: 2},
+			Amount:   basics.MicroNovas{Raw: 2},
 		},
 	}
 	signedtx := transactions.SignedTxn{

@@ -113,7 +113,7 @@ type ConsensusParams struct {
 	// rather than check each individual app call is within the budget.
 	EnableAppCostPooling bool
 
-	// RewardUnit specifies the number of MicroAlgos corresponding to one reward
+	// RewardUnit specifies the number of MicroNovas corresponding to one reward
 	// unit.
 	//
 	// Rewards are received by whole reward units.  Fractions of
@@ -719,7 +719,7 @@ func initConsensusProtocols() {
 	// v7 can be upgraded to v8.
 	v7.ApprovedUpgrades[protocol.ConsensusV8] = 0
 
-	// v9 increases the minimum balance to 100,000 microAlgos.
+	// v9 increases the minimum balance to 100,000 microNovas.
 	v9 := v8
 	v9.MinBalance = 100000
 	v9.ApprovedUpgrades = map[protocol.ConsensusVersion]uint64{}
@@ -919,13 +919,13 @@ func initConsensusProtocols() {
 	// individual limits while maintaining same max references.
 	v24.MaxAppTotalTxnReferences = 8
 
-	// 64 byte keys @ ~333 microAlgos/byte + delta
+	// 64 byte keys @ ~333 microNovas/byte + delta
 	v24.SchemaMinBalancePerEntry = 25000
 
-	// 9 bytes @ ~333 microAlgos/byte + delta
+	// 9 bytes @ ~333 microNovas/byte + delta
 	v24.SchemaUintMinBalance = 3500
 
-	// 64 byte values @ ~333 microAlgos/byte + delta
+	// 64 byte values @ ~333 microNovas/byte + delta
 	v24.SchemaBytesMinBalance = 25000
 
 	// Maximum number of key/value pairs per local key/value store

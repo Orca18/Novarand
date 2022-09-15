@@ -38,6 +38,10 @@ type NodeController struct {
 
 // MakeNodeController creates a NodeController representing a
 // specific data directory (and an associated binary directory)
+/*
+	특정 데이터 폴더를 나타내는 노드 컨트롤러 생성
+	노드 컨트롤러는 algod, algoh를 포함하여 노드 관련 컨트롤을 하는 객체구나
+*/
 func MakeNodeController(binDir, algodDataDir string) NodeController {
 	nc := NodeController{
 		algod:              filepath.Join(binDir, "algod"),

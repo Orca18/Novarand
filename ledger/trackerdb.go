@@ -72,6 +72,10 @@ func trackerDBInitialize(l ledgerForTracker, catchpointEnabled bool, dbPathPrefi
 		tp := trackerDBParams{l.GenesisAccounts(), l.GenesisProto(), catchpointEnabled, dbPathPrefix}
 		var err0 error
 		mgr, err0 = trackerDBInitializeImpl(ctx, tx, tp, log)
+
+		// (로그)
+		fmt.Println("mgr, err0 = trackerDBInitializeImpl()1111")
+
 		if err0 != nil {
 			return err0
 		}
@@ -87,6 +91,10 @@ func trackerDBInitialize(l ledgerForTracker, catchpointEnabled bool, dbPathPrefi
 				return err0
 			}
 			mgr, err0 = trackerDBInitializeImpl(ctx, tx, tp, log)
+
+			// (로그)
+			fmt.Println("mgr, err0 = trackerDBInitializeImpl()22222")
+
 			if err0 != nil {
 				return err0
 			}
@@ -113,6 +121,12 @@ func trackerDBInitializeImpl(ctx context.Context, tx *sql.Tx, params trackerDBPa
 		log:             log,
 	}
 
+	// (로그)
+	fmt.Println("tu.version(): ", tu.version())
+
+	// (로그)
+	fmt.Println("accountDBVersion: ", accountDBVersion)
+
 	// if database version is greater than supported by current binary, write a warning. This would keep the existing
 	// fallback behavior where we could use an older binary iff the schema happen to be backward compatible.
 	if tu.version() > accountDBVersion {
@@ -121,16 +135,21 @@ func trackerDBInitializeImpl(ctx context.Context, tx *sql.Tx, params trackerDBPa
 
 	if tu.version() < accountDBVersion {
 		tu.log.Infof("trackerDBInitialize upgrading database schema from version %d to version %d", tu.version(), accountDBVersion)
-		tu.log.Infof("is Modified?? - ryeong")
 
 		// newDatabase is determined during the tables creations. If we're filling the database with accounts,
 		// then we set this variable to true, allowing some of the upgrades to be skipped.
+
+		// (로그)
+		fmt.Println(tu.version())
+
 		for tu.version() < accountDBVersion {
 			tu.log.Infof("trackerDBInitialize performing upgrade from version %d", tu.version())
 			// perform the initialization/upgrade
 			switch tu.version() {
 			case 0:
 				err = tu.upgradeDatabaseSchema0(ctx, tx)
+				// (로그)
+				fmt.Println("err = tu.upgradeDatabaseSchema0()")
 				if err != nil {
 					tu.log.Warnf("trackerDBInitialize failed to upgrade accounts database (ledger.tracker.sqlite) from schema 0 : %v", err)
 					return
@@ -206,6 +225,8 @@ func (tu trackerDBSchemaInitializer) version() int32 {
 func (tu *trackerDBSchemaInitializer) upgradeDatabaseSchema0(ctx context.Context, tx *sql.Tx) (err error) {
 	tu.log.Infof("upgradeDatabaseSchema0 initializing schema")
 	tu.newDatabase, err = accountsInit(tx, tu.initAccounts, tu.initProto)
+	// (로그)
+	fmt.Println("tu.newDatabase, err = accountsInit()")
 	if err != nil {
 		return fmt.Errorf("upgradeDatabaseSchema0 unable to initialize schema : %v", err)
 	}

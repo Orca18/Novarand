@@ -302,14 +302,14 @@ func TestSignTransaction(t *testing.T) {
 		Type: protocol.PaymentTx,
 		Header: transactions.Header{
 			Sender:     basics.Address(pk),
-			Fee:        basics.MicroAlgos{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
+			Fee:        basics.MicroNovas{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
 			FirstValid: basics.Round(1),
 			LastValid:  basics.Round(1),
 			Note:       []byte(""),
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: basics.Address{},
-			Amount:   basics.MicroAlgos{},
+			Amount:   basics.MicroNovas{},
 		},
 	}
 
@@ -409,14 +409,14 @@ func BenchmarkSignTransaction(b *testing.B) {
 		Type: protocol.PaymentTx,
 		Header: transactions.Header{
 			Sender:     basics.Address(pk),
-			Fee:        basics.MicroAlgos{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
+			Fee:        basics.MicroNovas{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
 			FirstValid: basics.Round(1),
 			LastValid:  basics.Round(1),
 			Note:       []byte(""),
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: basics.Address{},
-			Amount:   basics.MicroAlgos{},
+			Amount:   basics.MicroNovas{},
 		},
 	}
 
