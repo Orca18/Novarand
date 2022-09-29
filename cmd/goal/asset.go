@@ -286,7 +286,7 @@ var createAssetCmd = &cobra.Command{
 		}
 		explicitFee := cmd.Flags().Changed("fee")
 		if explicitFee {
-			tx.Fee = basics.MicroAlgos{Raw: fee}
+			tx.Fee = basics.MicroNovas{Raw: fee}
 		}
 
 		if outFilename == "" {
@@ -365,7 +365,7 @@ var destroyAssetCmd = &cobra.Command{
 		}
 		explicitFee := cmd.Flags().Changed("fee")
 		if explicitFee {
-			tx.Fee = basics.MicroAlgos{Raw: fee}
+			tx.Fee = basics.MicroNovas{Raw: fee}
 		}
 
 		if outFilename == "" {
@@ -458,7 +458,7 @@ var configAssetCmd = &cobra.Command{
 		}
 		explicitFee := cmd.Flags().Changed("fee")
 		if explicitFee {
-			tx.Fee = basics.MicroAlgos{Raw: fee}
+			tx.Fee = basics.MicroNovas{Raw: fee}
 		}
 
 		if outFilename == "" {
@@ -545,7 +545,7 @@ var sendAssetCmd = &cobra.Command{
 
 		explicitFee := cmd.Flags().Changed("fee")
 		if explicitFee {
-			tx.Fee = basics.MicroAlgos{Raw: fee}
+			tx.Fee = basics.MicroNovas{Raw: fee}
 		}
 
 		if outFilename == "" {
@@ -614,7 +614,7 @@ var freezeAssetCmd = &cobra.Command{
 		}
 		explicitFee := cmd.Flags().Changed("fee")
 		if explicitFee {
-			tx.Fee = basics.MicroAlgos{Raw: fee}
+			tx.Fee = basics.MicroNovas{Raw: fee}
 		}
 
 		if outFilename == "" {

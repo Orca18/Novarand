@@ -37,8 +37,8 @@ func keypair() *crypto.SignatureSecrets {
 func TestAlgosEncoding(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
-	var a basics.MicroAlgos
-	var b basics.MicroAlgos
+	var a basics.MicroNovas
+	var b basics.MicroNovas
 	var i uint64
 
 	a.Raw = 222233333
@@ -65,6 +65,6 @@ func TestAlgosEncoding(t *testing.T) {
 	x := true
 	err = protocol.Decode(protocol.EncodeReflect(x), &a)
 	if err == nil {
-		panic("decode of bool into MicroAlgos succeeded")
+		panic("decode of bool into MicroNovas succeeded")
 	}
 }

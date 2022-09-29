@@ -56,7 +56,7 @@ var ledgerCmd = &cobra.Command{
 var supplyCmd = &cobra.Command{
 	Use:   "supply",
 	Short: "Show ledger token supply",
-	Long:  `Show ledger token supply. All units are in microAlgos. The "Total Money" is all algos held by online+offline accounts (excludes non-participating accounts). The "Online Money" is the amount held solely by online accounts.`,
+	Long:  `Show ledger token supply. All units are in microNovas. The "Total Money" is all algos held by online+offline accounts (excludes non-participating accounts). The "Online Money" is the amount held solely by online accounts.`,
 	Args:  validateNoPosArgsFn,
 	Run: func(cmd *cobra.Command, _ []string) {
 		dataDir := ensureSingleDataDir()
@@ -65,7 +65,7 @@ var supplyCmd = &cobra.Command{
 			reportErrorf(errorRequestFail, err)
 		}
 
-		fmt.Printf("Round: %v\nTotal Money: %v microAlgos\nOnline Money: %v microAlgos\n", response.Round, response.TotalMoney, response.OnlineMoney)
+		fmt.Printf("Round: %v\nTotal Money: %v microNovas\nOnline Money: %v microNovas\n", response.Round, response.TotalMoney, response.OnlineMoney)
 	},
 }
 

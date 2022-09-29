@@ -90,13 +90,13 @@ func TestNumReveals(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
 	billion := uint64(1000 * 1000 * 1000)
-	microalgo := uint64(1000 * 1000)
-	provenWeight := 2 * billion * microalgo
+	micronova := uint64(1000 * 1000)
+	provenWeight := 2 * billion * micronova
 	secKQ := uint64(compactCertSecKQForTests)
 	bound := uint64(1000)
 
 	for i := uint64(3); i < 10; i++ {
-		signedWeight := i * billion * microalgo
+		signedWeight := i * billion * micronova
 		n, err := numReveals(signedWeight, provenWeight, secKQ, bound)
 		if err != nil {
 			t.Error(err)
@@ -111,9 +111,9 @@ func TestNumReveals(t *testing.T) {
 
 func BenchmarkNumReveals(b *testing.B) {
 	billion := uint64(1000 * 1000 * 1000)
-	microalgo := uint64(1000 * 1000)
-	provenWeight := 100 * billion * microalgo
-	signedWeight := 110 * billion * microalgo
+	micronova := uint64(1000 * 1000)
+	provenWeight := 100 * billion * micronova
+	signedWeight := 110 * billion * micronova
 	secKQ := uint64(compactCertSecKQForTests)
 	bound := uint64(1000)
 

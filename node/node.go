@@ -39,6 +39,7 @@ import (
 	"github.com/Orca18/novarand/data/basics"
 	"github.com/Orca18/novarand/data/bookkeeping"
 	"github.com/Orca18/novarand/data/committee"
+	"github.com/Orca18/novarand/data/listener"
 	"github.com/Orca18/novarand/data/pools"
 	"github.com/Orca18/novarand/data/transactions"
 	"github.com/Orca18/novarand/data/transactions/verify"
@@ -212,11 +213,21 @@ func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAdd
 	node.cryptoPool = execpool.MakePool(node)
 	node.lowPriorityCryptoVerificationPool = execpool.MakeBacklog(node.cryptoPool, 2*node.cryptoPool.GetParallelism(), execpool.LowPriority, node)
 	node.highPriorityCryptoVerificationPool = execpool.MakeBacklog(node.cryptoPool, 2*node.cryptoPool.GetParallelism(), execpool.HighPriority, node)
-	node.ledger, err = data.LoadLedger(node.log, ledgerPathnamePrefix, false, genesis.Proto, genalloc, node.genesisID, node.genesisHash, []ledger.BlockListener{}, cfg)
+
+	var validateBlockListener ledger.ValidateBlockListener
+
+	// 원장 생성
+	node.ledger, err = data.LoadLedger(node.log, ledgerPathnamePrefix, false, genesis.Proto, genalloc, node.genesisID, node.genesisHash, []ledger.BlockListener{}, validateBlockListener, cfg)
+
+	// (로그)
+	fmt.Println("node.ledger, err = data.LoadLedger()")
+
 	if err != nil {
 		log.Errorf("Cannot initialize ledger (%s): %v", ledgerPathnamePrefix, err)
 		return nil, err
 	}
+
+	// 트랜잭션 풀 생성
 	node.ledger.SetDirInData(node.rootDir)
 	node.transactionPool = pools.MakeTransactionPool(node.ledger.Ledger, cfg, node.log)
 
@@ -226,10 +237,20 @@ func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAdd
 		node,
 	}
 
+	// 블록트래킹 리스너 생성
+	listener := listener.MakeBlockTrackingListener(node.ledger.Ledger, node.log)
+
 	if node.config.EnableTopAccountsReporting {
 		blockListeners = append(blockListeners, &accountListener)
 	}
+
+	// notifier 트래커에 여러 리스너를 등록한다.
 	node.ledger.RegisterBlockListeners(blockListeners)
+
+	// stateDelta 트래커에 blockTracking리스너를 등록한다.
+	node.ledger.RegisterBlockTrackingListener(listener)
+
+	// BlockTrackingListener를 등록한다.
 	node.txHandler = data.MakeTxHandler(node.transactionPool, node.ledger, node.net, node.genesisID, node.genesisHash, node.lowPriorityCryptoVerificationPool)
 
 	// Indexer setup
@@ -780,8 +801,8 @@ func (node *AlgorandFullNode) PoolStats() PoolStats {
 // Caller should set fee to max(MinTxnFee, SuggestedFee() * len(encoded SignedTxn))
 // SuggestedFee는 새 트랜잭션이 적시에 처리되도록 권장되는 바이트당 제안된 요금을 반환합니다.
 // 호출자는 수수료를 max(MinTxnFee, SuggestedFee() * len(encoded SignedTxn))로 설정해야 합니다.
-func (node *AlgorandFullNode) SuggestedFee() basics.MicroAlgos {
-	return basics.MicroAlgos{Raw: node.transactionPool.FeePerByte()}
+func (node *AlgorandFullNode) SuggestedFee() basics.MicroNovas {
+	return basics.MicroNovas{Raw: node.transactionPool.FeePerByte()}
 }
 
 // GetPendingTxnsFromPool returns a snapshot of every pending transactions from the node's transaction pool in a slice.

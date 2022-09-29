@@ -46,14 +46,14 @@ func TestTransaction_EstimateEncodedSize(t *testing.T) {
 		Type: protocol.PaymentTx,
 		Header: Header{
 			Sender:     addr,
-			Fee:        basics.MicroAlgos{Raw: 100},
+			Fee:        basics.MicroNovas{Raw: 100},
 			FirstValid: basics.Round(1000),
 			LastValid:  basics.Round(1000 + proto.MaxTxnLife),
 			Note:       buf,
 		},
 		PaymentTxnFields: PaymentTxnFields{
 			Receiver: addr,
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 
@@ -69,7 +69,7 @@ func generateDummyGoNonparticpatingTransaction(addr basics.Address) (tx Transact
 		Type: protocol.KeyRegistrationTx,
 		Header: Header{
 			Sender:     addr,
-			Fee:        basics.MicroAlgos{Raw: proto.MinTxnFee},
+			Fee:        basics.MicroNovas{Raw: proto.MinTxnFee},
 			FirstValid: 1,
 			LastValid:  300,
 		},
@@ -153,7 +153,7 @@ func TestAppCallCreateWellFormed(t *testing.T) {
 				Type: protocol.ApplicationCallTx,
 				Header: Header{
 					Sender:     addr1,
-					Fee:        basics.MicroAlgos{Raw: 1000},
+					Fee:        basics.MicroNovas{Raw: 1000},
 					LastValid:  105,
 					FirstValid: 100,
 				},
@@ -173,7 +173,7 @@ func TestAppCallCreateWellFormed(t *testing.T) {
 				Type: protocol.ApplicationCallTx,
 				Header: Header{
 					Sender:     addr1,
-					Fee:        basics.MicroAlgos{Raw: 1000},
+					Fee:        basics.MicroNovas{Raw: 1000},
 					LastValid:  105,
 					FirstValid: 100,
 				},
@@ -194,7 +194,7 @@ func TestAppCallCreateWellFormed(t *testing.T) {
 				Type: protocol.ApplicationCallTx,
 				Header: Header{
 					Sender:     addr1,
-					Fee:        basics.MicroAlgos{Raw: 1000},
+					Fee:        basics.MicroNovas{Raw: 1000},
 					LastValid:  105,
 					FirstValid: 100,
 				},
@@ -215,7 +215,7 @@ func TestAppCallCreateWellFormed(t *testing.T) {
 				Type: protocol.ApplicationCallTx,
 				Header: Header{
 					Sender:     addr1,
-					Fee:        basics.MicroAlgos{Raw: 1000},
+					Fee:        basics.MicroNovas{Raw: 1000},
 					LastValid:  105,
 					FirstValid: 100,
 				},
@@ -236,7 +236,7 @@ func TestAppCallCreateWellFormed(t *testing.T) {
 				Type: protocol.ApplicationCallTx,
 				Header: Header{
 					Sender:     addr1,
-					Fee:        basics.MicroAlgos{Raw: 1000},
+					Fee:        basics.MicroNovas{Raw: 1000},
 					LastValid:  105,
 					FirstValid: 100,
 				},
@@ -276,7 +276,7 @@ func TestWellFormedErrors(t *testing.T) {
 	v5 := []byte{0x05}
 	okHeader := Header{
 		Sender:     addr1,
-		Fee:        basics.MicroAlgos{Raw: 1000},
+		Fee:        basics.MicroNovas{Raw: 1000},
 		LastValid:  105,
 		FirstValid: 100,
 	}
@@ -291,7 +291,7 @@ func TestWellFormedErrors(t *testing.T) {
 				Type: protocol.PaymentTx,
 				Header: Header{
 					Sender: addr1,
-					Fee:    basics.MicroAlgos{Raw: 100},
+					Fee:    basics.MicroNovas{Raw: 100},
 				},
 			},
 			spec:          specialAddr,
@@ -303,7 +303,7 @@ func TestWellFormedErrors(t *testing.T) {
 				Type: protocol.PaymentTx,
 				Header: Header{
 					Sender: addr1,
-					Fee:    basics.MicroAlgos{Raw: 100},
+					Fee:    basics.MicroNovas{Raw: 100},
 				},
 			},
 			spec:  specialAddr,
@@ -314,7 +314,7 @@ func TestWellFormedErrors(t *testing.T) {
 				Type: protocol.PaymentTx,
 				Header: Header{
 					Sender:     addr1,
-					Fee:        basics.MicroAlgos{Raw: 1000},
+					Fee:        basics.MicroNovas{Raw: 1000},
 					LastValid:  100,
 					FirstValid: 105,
 				},

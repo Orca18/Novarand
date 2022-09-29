@@ -40,15 +40,15 @@ func TestAccountTotalsMarshalMsg(t *testing.T) {
 
 	at := AccountTotals{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340001},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340001},
 			RewardUnits: 0x1234123412340002,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340003},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340003},
 			RewardUnits: 0x1234123412340004,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340005},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340005},
 			RewardUnits: 0x1234123412340006,
 		},
 		RewardsLevel: 0x1234123412340007,
@@ -67,7 +67,7 @@ func TestAlgoCountMarshalMsg(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
 	ac := AlgoCount{
-		Money:       basics.MicroAlgos{Raw: 0x4321432143214321},
+		Money:       basics.MicroNovas{Raw: 0x4321432143214321},
 		RewardUnits: 0x1234123412341234,
 	}
 	inBuffer := make([]byte, 0, 128)
@@ -83,120 +83,120 @@ func TestAlgoCountMarshalMsg(t *testing.T) {
 var uniqueAccountTotals = []AccountTotals{
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		RewardsLevel: 0x1234123412340000,
 	},
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340001},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340001},
 			RewardUnits: 0x1234123412340000,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		RewardsLevel: 0x1234123412340000,
 	},
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340001,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		RewardsLevel: 0x1234123412340000,
 	},
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340001},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340001},
 			RewardUnits: 0x1234123412340000,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		RewardsLevel: 0x1234123412340000,
 	},
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340001,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		RewardsLevel: 0x1234123412340000,
 	},
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340001},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340001},
 			RewardUnits: 0x1234123412340000,
 		},
 		RewardsLevel: 0x1234123412340000,
 	},
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340001,
 		},
 		RewardsLevel: 0x1234123412340000,
 	},
 	{
 		Online: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		Offline: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		NotParticipating: AlgoCount{
-			Money:       basics.MicroAlgos{Raw: 0x1234123412340000},
+			Money:       basics.MicroNovas{Raw: 0x1234123412340000},
 			RewardUnits: 0x1234123412340000,
 		},
 		RewardsLevel: 0x1234123412340001,

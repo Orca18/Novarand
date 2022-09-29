@@ -66,6 +66,7 @@ func (bn *blockNotifier) worker() {
 	bn.mu.Lock()
 
 	for {
+		// 실행중이고 pendingBlock의 수가 0이라면 고루틴을 잠시 대기한다.
 		for bn.running && len(bn.pendingBlocks) == 0 {
 			bn.cond.Wait()
 		}
@@ -75,9 +76,11 @@ func (bn *blockNotifier) worker() {
 			return
 		}
 
+		// broadcast()가 호출되면 여기부터 실행됨!!
 		blocks := bn.pendingBlocks
 		listeners := bn.listeners
 		bn.pendingBlocks = nil
+		// 공유자원인 pendingBlocks에 대한 처리가 끝났으므로 락을 해제해도 됨!!
 		bn.mu.Unlock()
 
 		for _, blk := range blocks {
@@ -104,6 +107,7 @@ func (bn *blockNotifier) loadFromDisk(l ledgerForTracker, _ basics.Round) error 
 	bn.cond = sync.NewCond(&bn.mu)
 	bn.running = true
 	bn.pendingBlocks = nil
+	// 고루틴을 하나만 만드므로 고루틴이 완료될 때까지 기다리는 Add함수에 1을 넣어줌
 	bn.closing.Add(1)
 	go bn.worker()
 	return nil
@@ -122,7 +126,10 @@ func (bn *blockNotifier) register(listeners []BlockListener) {
 func (bn *blockNotifier) newBlock(blk bookkeeping.Block, delta ledgercore.StateDelta) {
 	bn.mu.Lock()
 	defer bn.mu.Unlock()
+	// pendingBlocks은 worker()안의 고루틴들의 공유자원이므로 여기에 값을 넣을 때 락을 걸어야 되는구나!!
 	bn.pendingBlocks = append(bn.pendingBlocks, blockDeltaPair{block: blk, delta: delta})
+	// woker()에서 생성된 고루틴들은 pendingBlocks에 값이 있어야만 동작하므로!! 값을 넣어준 후에 wait상태에 있는 모든 고루틴을 깨우는구나!
+	// 어떤 고루틴이 처리해도 상관없으니까!
 	bn.cond.Broadcast()
 }
 

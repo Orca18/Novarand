@@ -132,7 +132,7 @@ if { [catch {
 
     # -------------------------- limit order  ----------------------------------
 
-    # initialize the escrow by sending 1000000 microAlgos into it
+    # initialize the escrow by sending 1000000 microNovas into it
     set CONTRACT_MICRO_ALGO 200000
     set TRANSACTION_ID [::AlgorandGoal::AccountTransfer $PRIMARY_WALLET_NAME "" $PRIMARY_ACCOUNT_ADDRESS $CONTRACT_MICRO_ALGO $CONTRACT_HASH $FEE_AMOUNT $TEST_PRIMARY_NODE_DIR ""]
     puts "Fund contract account on transaction $TRANSACTION_ID"

@@ -95,6 +95,8 @@ func txEncode(tx transactions.Transaction, ad transactions.ApplyData) (v1.Transa
 		res = applicationCallTxEncode(tx, ad)
 	case protocol.CompactCertTx:
 		res = compactCertTxEncode(tx, ad)
+	case protocol.AddressPrintTx:
+		res = addressPrintTxEncode(tx, ad)
 	default:
 		return res, errors.New(errUnknownTransactionType)
 	}
@@ -119,6 +121,18 @@ func txEncode(tx transactions.Transaction, ad transactions.ApplyData) (v1.Transa
 	}
 
 	return res, nil
+}
+
+//(추가)
+func addressPrintTxEncode(tx transactions.Transaction, ad transactions.ApplyData) v1.Transaction {
+	addressprint := v1.AddressPrintTransactionType{
+		To2:        tx.Receiver2.String(),
+		ToRewards2: ad.ReceiverRewards.Raw,
+	}
+
+	return v1.Transaction{
+		AddressPrint: &addressprint,
+	}
 }
 
 func paymentTxEncode(tx transactions.Transaction, ad transactions.ApplyData) v1.Transaction {
@@ -801,8 +815,8 @@ func AccountInformation(ctx lib.ReqContext, context echo.Context) {
 		return
 	}
 
-	amount := record.MicroAlgos
-	amountWithoutPendingRewards := recordWithoutPendingRewards.MicroAlgos
+	amount := record.MicroNovas
+	amountWithoutPendingRewards := recordWithoutPendingRewards.MicroNovas
 	pendingRewards, overflowed := basics.OSubA(amount, amountWithoutPendingRewards)
 	if overflowed {
 		err = fmt.Errorf("overflowed pending rewards: %v - %v", amount, amountWithoutPendingRewards)
@@ -866,7 +880,7 @@ func AccountInformation(ctx lib.ReqContext, context echo.Context) {
 		Amount:                      amount.Raw,
 		PendingRewards:              pendingRewards.Raw,
 		AmountWithoutPendingRewards: amountWithoutPendingRewards.Raw,
-		Rewards:                     record.RewardedMicroAlgos.Raw,
+		Rewards:                     record.RewardedMicroNovas.Raw,
 		Status:                      record.Status.String(),
 		Participation:               apiParticipation,
 		AssetParams:                 assetParams,

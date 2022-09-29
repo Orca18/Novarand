@@ -28,8 +28,8 @@ import (
 	"github.com/Orca18/novarand/protocol"
 )
 
-type selectionParameterFn func(addr basics.Address) (bool, BalanceRecord, Seed, basics.MicroAlgos)
-type selectionParameterListFn func(addr []basics.Address) (bool, []BalanceRecord, Seed, basics.MicroAlgos)
+type selectionParameterFn func(addr basics.Address) (bool, BalanceRecord, Seed, basics.MicroNovas)
+type selectionParameterListFn func(addr []basics.Address) (bool, []BalanceRecord, Seed, basics.MicroNovas)
 
 var proto = config.Consensus[protocol.ConsensusCurrentVersion]
 
@@ -69,7 +69,7 @@ func testingenvMoreKeys(t testing.TB, numAccounts, numTxs int, keyBatchesForward
 	otSecrets := make([]*crypto.OneTimeSignatureSecrets, P)
 	proto := config.Consensus[protocol.ConsensusCurrentVersion]
 	lookback := basics.Round(2*proto.SeedRefreshInterval + proto.SeedLookback + 1)
-	var total basics.MicroAlgos
+	var total basics.MicroNovas
 	for i := 0; i < P; i++ {
 		addr, sigSec, vrfSec, otSec := newAccount(t, gen, lookback, keyBatchesForward)
 		addrs[i] = addr
@@ -81,7 +81,7 @@ func testingenvMoreKeys(t testing.TB, numAccounts, numTxs int, keyBatchesForward
 		short := addr
 		genesis[short] = basics.AccountData{
 			Status:      basics.Online,
-			MicroAlgos:  basics.MicroAlgos{Raw: startamt},
+			MicroNovas:  basics.MicroNovas{Raw: startamt},
 			SelectionID: vrfSec.Pubkey(),
 			VoteID:      otSec.OneTimeSignatureVerifier,
 		}
@@ -98,8 +98,8 @@ func testingenvMoreKeys(t testing.TB, numAccounts, numTxs int, keyBatchesForward
 
 		saddr := addrs[send]
 		raddr := addrs[recv]
-		amt := basics.MicroAlgos{Raw: uint64(gen.Int() % transferredMoney)}
-		fee := basics.MicroAlgos{Raw: uint64(gen.Int() % maxFee)}
+		amt := basics.MicroNovas{Raw: uint64(gen.Int() % transferredMoney)}
+		fee := basics.MicroNovas{Raw: uint64(gen.Int() % maxFee)}
 
 		t := transactions.Transaction{
 			Type: protocol.PaymentTx,
@@ -119,21 +119,21 @@ func testingenvMoreKeys(t testing.TB, numAccounts, numTxs int, keyBatchesForward
 		tx[i] = t.Sign(secrets[send])
 	}
 
-	selParams := func(addr basics.Address) (bool, BalanceRecord, Seed, basics.MicroAlgos) {
+	selParams := func(addr basics.Address) (bool, BalanceRecord, Seed, basics.MicroNovas) {
 		data, ok := genesis[addr]
 		if !ok {
-			return false, BalanceRecord{}, Seed{}, basics.MicroAlgos{Raw: 0}
+			return false, BalanceRecord{}, Seed{}, basics.MicroNovas{Raw: 0}
 		}
 		return true, BalanceRecord{Addr: addr, OnlineAccountData: data.OnlineAccountData()}, seed, total
 	}
 
-	selParamsList := func(addrs []basics.Address) (ok bool, records []BalanceRecord, seed Seed, total basics.MicroAlgos) {
+	selParamsList := func(addrs []basics.Address) (ok bool, records []BalanceRecord, seed Seed, total basics.MicroNovas) {
 		records = make([]BalanceRecord, len(addrs))
 		for i, addr := range addrs {
 			var record BalanceRecord
 			ok, record, seed, total = selParams(addr)
 			if !ok {
-				return false, nil, Seed{}, basics.MicroAlgos{Raw: 0}
+				return false, nil, Seed{}, basics.MicroNovas{Raw: 0}
 			}
 			records[i] = record
 		}

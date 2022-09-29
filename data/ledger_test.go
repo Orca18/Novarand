@@ -96,16 +96,16 @@ func testGenerateInitState(tb testing.TB, proto protocol.ConsensusVersion) (gene
 			accountStatus = basics.NotParticipating
 		}
 		// 계정 초기화(온라인여부, 알고양)
-		initAccounts[genaddrs[i]] = basics.MakeAccountData(accountStatus, basics.MicroAlgos{Raw: uint64((i + 100) * 100000)})
+		initAccounts[genaddrs[i]] = basics.MakeAccountData(accountStatus, basics.MicroNovas{Raw: uint64((i + 100) * 100000)})
 	}
 	// rewardpool, feesinkpool 정보 세팅
 	initKeys[poolAddr] = poolSecret
-	initAccounts[poolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 1234567})
+	initAccounts[poolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 1234567})
 	initKeys[sinkAddr] = sinkSecret
-	initAccounts[sinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 7654321})
+	initAccounts[sinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 7654321})
 
 	// 시작시 rewardpool이 가지고 있는 알고양
-	incentivePoolBalanceAtGenesis := initAccounts[poolAddr].MicroAlgos
+	incentivePoolBalanceAtGenesis := initAccounts[poolAddr].MicroNovas
 	// 라운드마다 제공하는 알고양
 	initialRewardsPerRound := incentivePoolBalanceAtGenesis.Raw / uint64(params.RewardsRateRefreshInterval)
 
@@ -201,7 +201,7 @@ func TestLedgerCirculation(t *testing.T) {
 	data, err := realLedger.Lookup(basics.Round(0), destAccount)
 	require.NoError(t, err)
 	// 0라운드에서 destAccoun의 알고양
-	baseDestValue := data.MicroAlgos.Raw
+	baseDestValue := data.MicroNovas.Raw
 
 	blk := genesisInitState.Block
 	// 가장 최신라운드, 그 라운드에 모든 계정이 가지고 있는 알고양을 반환(온라인, 오프라인, 참여안하는 계정별로 나눠서)
@@ -226,11 +226,11 @@ func TestLedgerCirculation(t *testing.T) {
 		// source가 dest계정에게 알고를 보내는 트랜잭션 생성
 		var tx transactions.Transaction
 		tx.Sender = sourceAccount
-		tx.Fee = basics.MicroAlgos{Raw: 10000}
+		tx.Fee = basics.MicroNovas{Raw: 10000}
 		tx.FirstValid = rnd - 1
 		tx.LastValid = tx.FirstValid + 999
 		tx.Receiver = destAccount
-		tx.Amount = basics.MicroAlgos{Raw: 1}
+		tx.Amount = basics.MicroNovas{Raw: 1}
 		tx.Type = protocol.PaymentTx
 		signedTx := tx.Sign(srcAccountKey)
 		blk.Payset = transactions.Payset{transactions.SignedTxnInBlock{
@@ -248,10 +248,10 @@ func TestLedgerCirculation(t *testing.T) {
 		if rnd < basics.Round(500) {
 			data, err = realLedger.Lookup(rnd, destAccount)
 			require.NoError(t, err)
-			require.Equal(t, baseDestValue+uint64(rnd), data.MicroAlgos.Raw)
+			require.Equal(t, baseDestValue+uint64(rnd), data.MicroNovas.Raw)
 			data, err = l.Lookup(rnd, destAccount)
 			require.NoError(t, err)
-			require.Equal(t, baseDestValue+uint64(rnd), data.MicroAlgos.Raw)
+			require.Equal(t, baseDestValue+uint64(rnd), data.MicroNovas.Raw)
 
 			roundCirculation, err := realLedger.OnlineTotals(rnd)
 			require.NoError(t, err)
@@ -264,10 +264,10 @@ func TestLedgerCirculation(t *testing.T) {
 			// test one round ago
 			data, err = realLedger.Lookup(rnd-1, destAccount)
 			require.NoError(t, err)
-			require.Equal(t, baseDestValue+uint64(rnd)-1, data.MicroAlgos.Raw)
+			require.Equal(t, baseDestValue+uint64(rnd)-1, data.MicroNovas.Raw)
 			data, err = l.Lookup(rnd-1, destAccount)
 			require.NoError(t, err)
-			require.Equal(t, baseDestValue+uint64(rnd)-1, data.MicroAlgos.Raw)
+			require.Equal(t, baseDestValue+uint64(rnd)-1, data.MicroNovas.Raw)
 
 			roundCirculation, err := realLedger.OnlineTotals(rnd - 1)
 			require.NoError(t, err)
@@ -280,10 +280,10 @@ func TestLedgerCirculation(t *testing.T) {
 			// test one round in the future ( expected error )
 			data, err = realLedger.Lookup(rnd+1, destAccount)
 			require.Error(t, err)
-			require.Equal(t, uint64(0), data.MicroAlgos.Raw)
+			require.Equal(t, uint64(0), data.MicroNovas.Raw)
 			data, err = l.Lookup(rnd+1, destAccount)
 			require.Error(t, err)
-			require.Equal(t, uint64(0), data.MicroAlgos.Raw)
+			require.Equal(t, uint64(0), data.MicroNovas.Raw)
 
 			_, err = realLedger.OnlineTotals(rnd + 1)
 			require.Error(t, err)
@@ -543,8 +543,8 @@ func TestLedgerErrorValidate(t *testing.T) {
 	blk.BlockHeader.GenesisHash = crypto.Hash([]byte(t.Name()))
 
 	accts := make(map[basics.Address]basics.AccountData)
-	accts[testPoolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 0})
-	accts[testSinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 0})
+	accts[testPoolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 0})
+	accts[testSinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 0})
 
 	genesisInitState := ledgercore.InitState{
 		Accounts:    accts,

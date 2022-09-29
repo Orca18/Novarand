@@ -164,7 +164,7 @@ func MakeGenesisBlock(proto protocol.ConsensusVersion, genesisBal GenesisBalance
 		RewardsRecalculationRound: basics.Round(params.RewardsRateRefreshInterval),
 	}
 
-	initialRewards := genesisBal.Balances[genesisBal.RewardsPool].MicroAlgos.Raw
+	initialRewards := genesisBal.Balances[genesisBal.RewardsPool].MicroNovas.Raw
 	if params.InitialRewardsRateCalculation {
 		genesisRewardsState.RewardsRate = basics.SubSaturate(initialRewards, params.MinBalance) / uint64(params.RewardsRateRefreshInterval)
 	} else {

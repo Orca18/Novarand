@@ -1035,3 +1035,35 @@ func BenchmarkUnmarshalTxGroup(b *testing.B) {
 		}
 	}
 }
+
+/*
+	AddressPrintTxnFields 마샬링, 언마샬링 테스트
+*/
+func TestMarshalUnmarshalAddressPrintTxnFields(t *testing.T) {
+	partitiontest.PartitionTest(t)
+	v := AddressPrintTxnFields{}
+	bts := v.MarshalMsg(nil)
+	left, err := v.UnmarshalMsg(bts)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(left) > 0 {
+		t.Errorf("%d bytes left over after UnmarshalMsg(): %q", len(left), left)
+	}
+
+	left, err = msgp.Skip(bts)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	
+	if len(left) > 0 {
+		t.Errorf("%d bytes left over after Skip(): %q", len(left), left)
+	}
+}
+
+func TestRandomizedEncodingAddressPrintTxnFields(t *testing.T) {
+	protocol.RunEncodingTest(t, &AddressPrintTxnFields{})
+}

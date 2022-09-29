@@ -31,29 +31,29 @@ var poolAddr = basics.Address{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x
 // BalanceMap is a simple implementation of the balances interface.
 type BalanceMap map[basics.Address]basics.BalanceRecord
 
-func (b BalanceMap) Move(src, dst basics.Address, amount basics.MicroAlgos) error {
+func (b BalanceMap) Move(src, dst basics.Address, amount basics.MicroNovas) error {
 	var overflowed bool
-	var tmp basics.MicroAlgos
+	var tmp basics.MicroNovas
 	srcBal, ok := b[src]
 	if !ok {
 		return errors.New("Move() called with src not in tx.RelevantAddrs")
 	}
-	tmp, overflowed = basics.OSubA(srcBal.MicroAlgos, amount)
+	tmp, overflowed = basics.OSubA(srcBal.MicroNovas, amount)
 	if overflowed {
 		return errors.New("Move(): sender overspent")
 	}
-	srcBal.MicroAlgos = tmp
+	srcBal.MicroNovas = tmp
 	b[src] = srcBal
 
 	dstBal, ok := b[dst]
 	if !ok {
 		return errors.New("Move() called with dst not in tx.RelevantAddrs")
 	}
-	tmp, overflowed = basics.OAddA(dstBal.MicroAlgos, amount)
+	tmp, overflowed = basics.OAddA(dstBal.MicroNovas, amount)
 	if overflowed {
 		return errors.New("Move(): recipient balance overflowed")
 	}
-	dstBal.MicroAlgos = tmp
+	dstBal.MicroNovas = tmp
 	b[dst] = dstBal
 
 	return nil
@@ -109,13 +109,13 @@ func generateTestObjects(numTxs, numAccs int) ([]Transaction, []SignedTxn, []*cr
 			Type: protocol.PaymentTx,
 			Header: Header{
 				Sender:     addresses[s],
-				Fee:        basics.MicroAlgos{Raw: f},
+				Fee:        basics.MicroNovas{Raw: f},
 				FirstValid: basics.Round(iss),
 				LastValid:  basics.Round(exp),
 			},
 			PaymentTxnFields: PaymentTxnFields{
 				Receiver: addresses[r],
-				Amount:   basics.MicroAlgos{Raw: uint64(a)},
+				Amount:   basics.MicroNovas{Raw: uint64(a)},
 			},
 		}
 		signed[i] = txs[i].Sign(secrets[s])

@@ -227,7 +227,7 @@ func (l *Ledger) AccountData(addr basics.Address) (basics.AccountData, error) {
 	}
 
 	return basics.AccountData{
-		MicroAlgos:         basics.MicroAlgos{Raw: br.balance},
+		MicroNovas:         basics.MicroNovas{Raw: br.balance},
 		AssetParams:        assets,
 		Assets:             br.holdings,
 		AuthAddr:           br.auth,
@@ -756,7 +756,7 @@ func (l *Ledger) Get(addr basics.Address, withPendingRewards bool) (basics.Accou
 		return basics.AccountData{}, fmt.Errorf("addr %s not in test.Ledger", addr.String())
 	}
 	return basics.AccountData{
-		MicroAlgos:     basics.MicroAlgos{Raw: br.balance},
+		MicroNovas:     basics.MicroNovas{Raw: br.balance},
 		AssetParams:    map[basics.AssetIndex]basics.AssetParams{},
 		Assets:         map[basics.AssetIndex]basics.AssetHolding{},
 		AppLocalStates: map[basics.AppIndex]basics.AppLocalState{},

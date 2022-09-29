@@ -187,15 +187,15 @@ func TestUpdate(t *testing.T) {
 	listener := topAccountListener{
 		accounts:          []basics.AccountDetail{},
 		round:             1,
-		totalCirculation:  basics.MicroAlgos{Raw: 100},
-		onlineCirculation: basics.MicroAlgos{Raw: 100},
+		totalCirculation:  basics.MicroNovas{Raw: 100},
+		onlineCirculation: basics.MicroNovas{Raw: 100},
 	}
 
 	balanceUpdate := basics.BalanceDetail{
 		Accounts:    []basics.AccountDetail{},
 		Round:       2,
-		OnlineMoney: basics.MicroAlgos{Raw: 100000},
-		TotalMoney:  basics.MicroAlgos{Raw: 1000000},
+		OnlineMoney: basics.MicroNovas{Raw: 100000},
+		TotalMoney:  basics.MicroNovas{Raw: 1000000},
 	}
 
 	// Update when accounts is empty.
@@ -228,7 +228,7 @@ func TestUpdate(t *testing.T) {
 		onlineDetail(byte(2), 5),
 	}
 	balanceUpdate.Round++
-	balanceUpdate.TotalMoney = basics.MicroAlgos{Raw: 99999999}
+	balanceUpdate.TotalMoney = basics.MicroNovas{Raw: 99999999}
 	balanceUpdate.Accounts = []basics.AccountDetail{onlineDetail(byte(1), 1)}
 	block = makeBlockWithTxnFor([]byte{3}, []byte{1})
 	listener.update(block, balanceUpdate)
@@ -269,8 +269,8 @@ func TestInit(t *testing.T) {
 	balanceUpdate := basics.BalanceDetail{
 		Accounts:    make([]basics.AccountDetail, 0, 10),
 		Round:       2,
-		OnlineMoney: basics.MicroAlgos{Raw: 100},
-		TotalMoney:  basics.MicroAlgos{Raw: 100},
+		OnlineMoney: basics.MicroNovas{Raw: 100},
+		TotalMoney:  basics.MicroNovas{Raw: 100},
 	}
 
 	listener.accounts = append(listener.accounts, onlineDetail(byte(10), 100))
@@ -302,7 +302,7 @@ func makeBlockWithTxnFor(senders []byte, receivers []byte) bookkeeping.Block {
 				PaymentTxnFields: transactions.PaymentTxnFields{
 					Receiver: basics.Address{b},
 					// If this ends up being used by topAccountListener, add it here.
-					// Amount: basics.MicroAlgos{123},
+					// Amount: basics.MicroNovas{123},
 				},
 			}}, transactions.ApplyData{})
 		if err != nil {
@@ -328,7 +328,7 @@ func detail(b byte, bal uint64, isOnline bool) basics.AccountDetail {
 	}
 	return basics.AccountDetail{
 		Address: basics.Address{b},
-		Algos:   basics.MicroAlgos{Raw: bal},
+		Algos:   basics.MicroNovas{Raw: bal},
 		Status:  state,
 	}
 }

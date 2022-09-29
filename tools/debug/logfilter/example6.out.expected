@@ -77,14 +77,14 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         Primary node address is: 127.0.0.1:43613
         Primary Node Address: 127.0.0.1:43613
         spawn goal account list -w unencrypted-default-wallet -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        [online]	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	5000000000000000 microAlgos
+        [online]	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	5000000000000000 microNovas
         Account Address: W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE   Balance: 5000000000000000
         spawn goal account balance -w unencrypted-default-wallet -a W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        5000000000000000 microAlgos
+        5000000000000000 microNovas
         Wallet: unencrypted-default-wallet, Account: W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE, Balance: 5000000000000000
         Primary Account Balance: 5000000000000000
         spawn goal account rewards -w unencrypted-default-wallet -a W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        0 microAlgos
+        0 microNovas
         Wallet: unencrypted-default-wallet, Account: W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE, Rewards: 0
         Primary Account Rewards: 0
         spawn goal wallet new Wallet_1_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
@@ -112,7 +112,7 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         Created new account with address GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ
         Account Address: GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ
         spawn goal account list -w Wallet_1_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        [offline]	Unnamed-0	GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ	0 microAlgosAccount Address: GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ 
+        [offline]	Unnamed-0	GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ	0 microNovasAccount Address: GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ 
         spawn goal wallet new Wallet_2_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
         Please choose a password for wallet 'Wallet_2_1617230151': 
         Please confirm the password: 
@@ -138,23 +138,23 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         
         Created new account with address F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UAAccount Address: F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA
         spawn goal account list -w Wallet_2_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        [offline]	Unnamed-1	F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA	0 microAlgosAccount Address: F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA 
+        [offline]	Unnamed-1	F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA	0 microNovasAccount Address: F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA 
         spawn goal clerk send --fee 1000 --wallet unencrypted-default-wallet --amount 1000000000 --from W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE --to GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        Sent 1000000000 MicroAlgos from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ, transaction ID: ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA. Fee set to 1000
+        Sent 1000000000 MicroNovas from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ, transaction ID: ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA. Fee set to 1000
         Transaction ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA still pending as of round 8
         Transaction ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA committed in round 10
         TRANSACTION_ID 1: ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA
         spawn goal account balance -a GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ -w Wallet_1_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        1000000000 microAlgos
+        1000000000 microNovas
         Account Balance: 1000000000
         Account balance OK: 1000000000
         spawn goal clerk send --fee 1000 --wallet unencrypted-default-wallet --amount 1000000000 --from W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE --to F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        Sent 1000000000 MicroAlgos from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA, transaction ID: NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ. Fee set to 1000
+        Sent 1000000000 MicroNovas from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA, transaction ID: NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ. Fee set to 1000
         Transaction NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ still pending as of round 11
         Transaction NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ committed in round 13
         TRANSACTION_ID 2: NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ
         spawn goal account balance -a F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA -w Wallet_2_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        1000000000 microAlgos
+        1000000000 microNovas
         Account Balance: 1000000000
         Account balance OK: 1000000000
         setting up working dir /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/work
@@ -167,12 +167,12 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         spawn goal clerk compile /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/work/simple.teal
         /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/work/simple.teal: YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA
         spawn goal clerk send --fee 1000 --wallet unencrypted-default-wallet --amount 1000000000 --from W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE --to YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        Sent 1000000000 MicroAlgos from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA, transaction ID: IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA. Fee set to 1000
+        Sent 1000000000 MicroNovas from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA, transaction ID: IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA. Fee set to 1000
         Transaction IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA still pending as of round 14
         Transaction IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA committed in round 16
         TRANSACTION_ID_APP: IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA, APP_ACCOUNT_ADDRESS: YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA
         spawn goal account balance -a YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA -w Wallet_1_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
-        1000000000 microAlgos
+        1000000000 microNovas
         Account Balance: 1000000000
         Account balance OK: 1000000000
         calling app create
@@ -241,10 +241,10 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         Primary node address is: 127.0.0.1:37299
         Primary Node Address: 127.0.0.1:37299
         spawn goal account list -w unencrypted-default-wallet -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/pingpongTest/algod/root_1617230521/Primary/
-        [online]	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	5000000000000000 microAlgos
+        [online]	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	5000000000000000 microNovas
         Account Address: 3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U   Balance: 5000000000000000
         spawn goal account balance -w unencrypted-default-wallet -a 3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/pingpongTest/algod/root_1617230521/Primary/
-        5000000000000000 microAlgos
+        5000000000000000 microNovas
         Wallet: unencrypted-default-wallet, Account: 3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U, Balance: 5000000000000000
         Primary Account Balance: 5000000000000000
         node status waiting for Round 1 

@@ -161,7 +161,7 @@ func (b *testBalances) GetCreator(cidx basics.CreatableIndex, ctype basics.Creat
 	return basics.Address{}, false, nil
 }
 
-func (b *testBalances) Move(src, dst basics.Address, amount basics.MicroAlgos, srcRewards *basics.MicroAlgos, dstRewards *basics.MicroAlgos) error {
+func (b *testBalances) Move(src, dst basics.Address, amount basics.MicroNovas, srcRewards *basics.MicroNovas, dstRewards *basics.MicroNovas) error {
 	return nil
 }
 

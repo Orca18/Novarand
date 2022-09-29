@@ -163,7 +163,7 @@ func generateTransactions(restClient client.RestClient, cfg config, privateKey *
 		tx := transactions.Transaction{
 			Header: transactions.Header{
 				Sender:      publicKey,
-				Fee:         basics.MicroAlgos{Raw: cfg.Fee},
+				Fee:         basics.MicroNovas{Raw: cfg.Fee},
 				FirstValid:  basics.Round(nodeStatus.LastRound),
 				LastValid:   basics.Round(nodeStatus.LastRound + 2),
 				Note:        make([]byte, 4),
@@ -172,7 +172,7 @@ func generateTransactions(restClient client.RestClient, cfg config, privateKey *
 			},
 			PaymentTxnFields: transactions.PaymentTxnFields{
 				Receiver: publicKey,
-				Amount:   basics.MicroAlgos{Raw: 0},
+				Amount:   basics.MicroNovas{Raw: 0},
 			},
 			Type: protocol.PaymentTx,
 		}

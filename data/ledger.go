@@ -61,7 +61,7 @@ type Ledger struct {
 // 프로토콜의 라운드와 온라인상에 있는 돈을 가지고 있는 구조체라.. => 라운드 번호와 그때 온라인상에 있는 algo(합의에 의해 생성된걸까? )를 가지고 있는 객체 인듯
 type roundCirculationPair struct {
 	round       basics.Round
-	onlineMoney basics.MicroAlgos
+	onlineMoney basics.MicroNovas
 }
 
 // roundCirculation is the cache for the circulating coins
@@ -89,7 +89,7 @@ type roundSeed struct {
 func LoadLedger(
 	log logging.Logger, dbFilenamePrefix string, memory bool,
 	genesisProto protocol.ConsensusVersion, genesisBal bookkeeping.GenesisBalances, genesisID string, genesisHash crypto.Digest,
-	blockListeners []ledger.BlockListener, cfg config.Local,
+	blockListeners []ledger.BlockListener, listener ledger.ValidateBlockListener, cfg config.Local,
 ) (*Ledger, error) {
 	if genesisBal.Balances == nil {
 		genesisBal.Balances = make(map[basics.Address]basics.AccountData)
@@ -118,12 +118,16 @@ func LoadLedger(
 	l.log.Debugf("Initializing Ledger(%s)", dbFilenamePrefix)
 
 	ll, err := ledger.OpenLedger(log, dbFilenamePrefix, memory, genesisInitState, cfg)
+	// (로그)
+	fmt.Println("ll, err := ledger.OpenLedger()")
+
 	if err != nil {
 		return nil, err
 	}
 
 	l.Ledger = ll
 	l.RegisterBlockListeners(blockListeners)
+	l.RegisterBlockTrackingListener(listener)
 	return l, nil
 }
 
@@ -183,7 +187,7 @@ func (l *Ledger) NextRound() basics.Round {
 }
 
 // Circulation implements agreement.Ledger.Circulation.
-func (l *Ledger) Circulation(r basics.Round) (basics.MicroAlgos, error) {
+func (l *Ledger) Circulation(r basics.Round) (basics.MicroNovas, error) {
 	circulation, cached := l.lastRoundCirculation.Load().(roundCirculation)
 	if cached && r != basics.Round(0) {
 		for _, element := range circulation.elements {
@@ -195,7 +199,7 @@ func (l *Ledger) Circulation(r basics.Round) (basics.MicroAlgos, error) {
 
 	totals, err := l.OnlineTotals(r) //nolint:typecheck
 	if err != nil {
-		return basics.MicroAlgos{}, err
+		return basics.MicroNovas{}, err
 	}
 
 	if !cached || r > circulation.elements[1].round {

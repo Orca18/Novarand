@@ -484,7 +484,7 @@ func TestCdtSessionGetObjects(t *testing.T) {
 				Txn: transactions.Transaction{
 					Type: protocol.PaymentTx,
 					Header: transactions.Header{
-						Sender: basics.Address{}, Fee: basics.MicroAlgos{Raw: 1000}, FirstValid: 10,
+						Sender: basics.Address{}, Fee: basics.MicroNovas{Raw: 1000}, FirstValid: 10,
 					},
 				},
 			},
@@ -545,7 +545,7 @@ func TestCdtSessionGetObjects(t *testing.T) {
 									Txn: transactions.Transaction{
 										Type: protocol.PaymentTx,
 										Header: transactions.Header{
-											Sender: basics.Address{}, Fee: basics.MicroAlgos{Raw: 1000}, FirstValid: 10,
+											Sender: basics.Address{}, Fee: basics.MicroNovas{Raw: 1000}, FirstValid: 10,
 										},
 									},
 								},

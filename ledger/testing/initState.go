@@ -65,14 +65,14 @@ func GenerateInitState(tb testing.TB, proto protocol.ConsensusVersion, baseAlgoP
 	for i := range genaddrs {
 		initKeys[genaddrs[i]] = gensecrets[i]
 		// Give each account quite a bit more balance than MinFee or MinBalance
-		initAccounts[genaddrs[i]] = basics.MakeAccountData(basics.Online, basics.MicroAlgos{Raw: uint64((i + baseAlgoPerAccount) * 100000)})
+		initAccounts[genaddrs[i]] = basics.MakeAccountData(basics.Online, basics.MicroNovas{Raw: uint64((i + baseAlgoPerAccount) * 100000)})
 	}
 	initKeys[poolAddr] = poolSecret
-	initAccounts[poolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 1234567})
+	initAccounts[poolAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 1234567})
 	initKeys[sinkAddr] = sinkSecret
-	initAccounts[sinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroAlgos{Raw: 7654321})
+	initAccounts[sinkAddr] = basics.MakeAccountData(basics.NotParticipating, basics.MicroNovas{Raw: 7654321})
 
-	incentivePoolBalanceAtGenesis := initAccounts[poolAddr].MicroAlgos
+	incentivePoolBalanceAtGenesis := initAccounts[poolAddr].MicroNovas
 	var initialRewardsPerRound uint64
 	if params.InitialRewardsRateCalculation {
 		initialRewardsPerRound = basics.SubSaturate(incentivePoolBalanceAtGenesis.Raw, params.MinBalance) / uint64(params.RewardsRateRefreshInterval)

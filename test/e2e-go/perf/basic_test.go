@@ -164,14 +164,14 @@ func doBenchTemplate(b *testing.B, template string, moneynode string) {
 						Type: protocol.PaymentTx,
 						Header: transactions.Header{
 							Sender:      sender,
-							Fee:         basics.MicroAlgos{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
+							Fee:         basics.MicroNovas{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinTxnFee},
 							FirstValid:  basics.Round(round),
 							LastValid:   basics.Round(round) + basics.Round(proto.MaxTxnLife),
 							GenesisHash: genesisHash,
 						},
 						PaymentTxnFields: transactions.PaymentTxnFields{
 							Receiver: dst,
-							Amount:   basics.MicroAlgos{Raw: 100000},
+							Amount:   basics.MicroNovas{Raw: 100000},
 						},
 					}
 

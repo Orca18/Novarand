@@ -46,11 +46,11 @@ import (
 
 var testPoolAddr = basics.Address{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
 var testSinkAddr = basics.Address{0x2c, 0x2a, 0x6c, 0xe9, 0xa9, 0xa7, 0xc2, 0x8c, 0x22, 0x95, 0xfd, 0x32, 0x4f, 0x77, 0xa5, 0x4, 0x8b, 0x42, 0xc2, 0xb7, 0xa8, 0x54, 0x84, 0xb6, 0x80, 0xb1, 0xe1, 0x3d, 0x59, 0x9b, 0xeb, 0x36}
-var minFee basics.MicroAlgos
+var minFee basics.MicroNovas
 
 func init() {
 	params := config.Consensus[protocol.ConsensusCurrentVersion]
-	minFee = basics.MicroAlgos{Raw: params.MinTxnFee}
+	minFee = basics.MicroNovas{Raw: params.MinTxnFee}
 }
 
 func TestBlockEvaluator(t *testing.T) {
@@ -80,7 +80,7 @@ func TestBlockEvaluator(t *testing.T) {
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: addrs[1],
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 
@@ -146,7 +146,7 @@ func TestBlockEvaluator(t *testing.T) {
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: addrs[2],
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 	stxn := selfTxn.Sign(keys[2])
@@ -218,9 +218,9 @@ func TestBlockEvaluator(t *testing.T) {
 	bal2new, err := l.Lookup(newBlock.Round(), addrs[2])
 	require.NoError(t, err)
 
-	require.Equal(t, bal0new.MicroAlgos.Raw, bal0.MicroAlgos.Raw-minFee.Raw-100)
-	require.Equal(t, bal1new.MicroAlgos.Raw, bal1.MicroAlgos.Raw+100)
-	require.Equal(t, bal2new.MicroAlgos.Raw, bal2.MicroAlgos.Raw-minFee.Raw)
+	require.Equal(t, bal0new.MicroNovas.Raw, bal0.MicroNovas.Raw-minFee.Raw-100)
+	require.Equal(t, bal1new.MicroNovas.Raw, bal1.MicroNovas.Raw+100)
+	require.Equal(t, bal2new.MicroNovas.Raw, bal2.MicroNovas.Raw-minFee.Raw)
 }
 
 func TestRekeying(t *testing.T) {
@@ -629,9 +629,9 @@ func lookup(t testing.TB, ledger *ledger.Ledger, addr basics.Address) basics.Acc
 	return ad
 }
 
-// micros gets the current microAlgo balance for an address
+// micros gets the current microNova balance for an address
 func micros(t testing.TB, ledger *ledger.Ledger, addr basics.Address) uint64 {
-	return lookup(t, ledger, addr).MicroAlgos.Raw
+	return lookup(t, ledger, addr).MicroNovas.Raw
 }
 
 // holding gets the current balance and optin status for some asa for an address
@@ -764,9 +764,9 @@ func TestMinBalanceChanges(t *testing.T) {
 
 	proto := l.GenesisProto()
 	// Check balance and min balance requirement changes
-	require.Equal(t, ad0init.MicroAlgos.Raw, ad0new.MicroAlgos.Raw+1000)                   // fee
+	require.Equal(t, ad0init.MicroNovas.Raw, ad0new.MicroNovas.Raw+1000)                   // fee
 	require.Equal(t, ad0init.MinBalance(&proto).Raw, ad0new.MinBalance(&proto).Raw-100000) // create
-	require.Equal(t, ad5init.MicroAlgos.Raw, ad5new.MicroAlgos.Raw+1000)                   // fee
+	require.Equal(t, ad5init.MicroNovas.Raw, ad5new.MicroNovas.Raw+1000)                   // fee
 	require.Equal(t, ad5init.MinBalance(&proto).Raw, ad5new.MinBalance(&proto).Raw-100000) // optin
 
 	optOutTxn := txntest.Txn{

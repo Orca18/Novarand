@@ -109,8 +109,8 @@ func validateGenesis(genesis bookkeeping.Genesis) {
 			}
 		}
 
-		if alloc.State.MicroAlgos.Raw < config.Consensus[genesis.Proto].MinBalance {
-			log.Fatalf("account %s has less than MinBalance: %d < %d", alloc.Address, alloc.State.MicroAlgos.Raw, config.Consensus[genesis.Proto].MinBalance)
+		if alloc.State.MicroNovas.Raw < config.Consensus[genesis.Proto].MinBalance {
+			log.Fatalf("account %s has less than MinBalance: %d < %d", alloc.Address, alloc.State.MicroNovas.Raw, config.Consensus[genesis.Proto].MinBalance)
 		}
 	}
 
@@ -177,7 +177,7 @@ func parseInput() (genesis bookkeeping.Genesis) {
 			Comment: record.Comment,
 			State: basics.AccountData{
 				Status:          record.Status,
-				MicroAlgos:      basics.MicroAlgos{Raw: record.Algos * 1e6},
+				MicroNovas:      basics.MicroNovas{Raw: record.Algos * 1e6},
 				VoteID:          record.VoteID,
 				SelectionID:     record.SelectionID,
 				VoteFirstValid:  basics.Round(record.VoteFirstValid),

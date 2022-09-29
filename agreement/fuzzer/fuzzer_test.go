@@ -188,7 +188,7 @@ func (n *Fuzzer) initAccountsAndBalances(rootSeed []byte, onlineNodes []bool) er
 	}
 
 	for i := 0; i < n.nodesCount; i++ {
-		stake := basics.MicroAlgos{Raw: 1000000}
+		stake := basics.MicroNovas{Raw: 1000000}
 		firstValid := basics.Round(0)
 		lastValid := basics.Round(1000)
 
@@ -216,7 +216,7 @@ func (n *Fuzzer) initAccountsAndBalances(rootSeed []byte, onlineNodes []bool) er
 
 		acctData := basics.AccountData{
 			Status:      basics.Online,
-			MicroAlgos:  stake,
+			MicroNovas:  stake,
 			VoteID:      n.accounts[i].VotingSecrets().OneTimeSignatureVerifier,
 			SelectionID: n.accounts[i].VRFSecrets().PK,
 		}

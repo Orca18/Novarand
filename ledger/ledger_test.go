@@ -107,7 +107,7 @@ func makeNewEmptyBlock(t *testing.T, l *Ledger, GenesisID string, initAccounts m
 		require.NotNil(t, initAccounts)
 		for _, acctdata := range initAccounts {
 			if acctdata.Status != basics.NotParticipating {
-				totalRewardUnits += acctdata.MicroAlgos.RewardUnits(proto)
+				totalRewardUnits += acctdata.MicroNovas.RewardUnits(proto)
 			}
 		}
 	} else {
@@ -124,7 +124,7 @@ func makeNewEmptyBlock(t *testing.T, l *Ledger, GenesisID string, initAccounts m
 		Round:        l.Latest() + 1,
 		Branch:       lastBlock.Hash(),
 		TimeStamp:    0,
-		RewardsState: lastBlock.NextRewardsState(l.Latest()+1, proto, poolBal.MicroAlgos, totalRewardUnits, logging.Base()),
+		RewardsState: lastBlock.NextRewardsState(l.Latest()+1, proto, poolBal.MicroNovas, totalRewardUnits, logging.Base()),
 		UpgradeState: lastBlock.UpgradeState,
 		// Seed:       does not matter,
 		// UpgradeVote: empty,
@@ -213,7 +213,7 @@ func TestLedgerBlockHeaders(t *testing.T) {
 	poolAddr := testPoolAddr
 	var totalRewardUnits uint64
 	for _, acctdata := range genesisInitState.Accounts {
-		totalRewardUnits += acctdata.MicroAlgos.RewardUnits(proto)
+		totalRewardUnits += acctdata.MicroNovas.RewardUnits(proto)
 	}
 	poolBal, err := l.Lookup(l.Latest(), poolAddr)
 	a.NoError(err, "could not get incentive pool balance")
@@ -223,7 +223,7 @@ func TestLedgerBlockHeaders(t *testing.T) {
 		Round:        l.Latest() + 1,
 		Branch:       lastBlock.Hash(),
 		TimeStamp:    0,
-		RewardsState: lastBlock.NextRewardsState(l.Latest()+1, proto, poolBal.MicroAlgos, totalRewardUnits, logging.Base()),
+		RewardsState: lastBlock.NextRewardsState(l.Latest()+1, proto, poolBal.MicroNovas, totalRewardUnits, logging.Base()),
 		UpgradeState: lastBlock.UpgradeState,
 		// Seed:       does not matter,
 		// UpgradeVote: empty,
@@ -367,7 +367,7 @@ func TestLedgerSingleTx(t *testing.T) {
 
 	correctTxHeader := transactions.Header{
 		Sender:      addrList[0],
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   t.Name(),
@@ -376,7 +376,7 @@ func TestLedgerSingleTx(t *testing.T) {
 
 	correctPayFields := transactions.PaymentTxnFields{
 		Receiver: addrList[1],
-		Amount:   basics.MicroAlgos{Raw: initAccounts[addrList[0]].MicroAlgos.Raw / 10},
+		Amount:   basics.MicroNovas{Raw: initAccounts[addrList[0]].MicroNovas.Raw / 10},
 	}
 
 	correctPay := transactions.Transaction{
@@ -468,15 +468,15 @@ func TestLedgerSingleTx(t *testing.T) {
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added tx send from zero address")
 
 	badTx = correctPay
-	badTx.Fee = basics.MicroAlgos{}
+	badTx.Fee = basics.MicroNovas{}
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added tx with zero fee")
 
 	badTx = correctPay
-	badTx.Fee = basics.MicroAlgos{Raw: proto.MinTxnFee - 1}
+	badTx.Fee = basics.MicroNovas{Raw: proto.MinTxnFee - 1}
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added tx with fee below minimum")
 
 	badTx = correctKeyreg
-	fee, overflow := basics.OAddA(initAccounts[badTx.Sender].MicroAlgos, basics.MicroAlgos{Raw: 1})
+	fee, overflow := basics.OAddA(initAccounts[badTx.Sender].MicroNovas, basics.MicroNovas{Raw: 1})
 	a.False(overflow)
 	badTx.Fee = fee
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added keyreg tx with fee above user balance")
@@ -516,15 +516,15 @@ func TestLedgerSingleTx(t *testing.T) {
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "sink closed to pool address")
 
 	badTx = correctPay
-	remainder, overflow := basics.OSubA(initAccounts[badTx.Sender].MicroAlgos, badTx.Amount)
+	remainder, overflow := basics.OSubA(initAccounts[badTx.Sender].MicroNovas, badTx.Amount)
 	a.False(overflow)
-	fee, overflow = basics.OAddA(remainder, basics.MicroAlgos{Raw: 1})
+	fee, overflow = basics.OAddA(remainder, basics.MicroNovas{Raw: 1})
 	a.False(overflow)
 	badTx.Fee = fee
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "overspent with (amount + fee)")
 
 	adClose := ad
-	adClose.ClosingAmount = initAccounts[correctClose.Sender].MicroAlgos
+	adClose.ClosingAmount = initAccounts[correctClose.Sender].MicroNovas
 	adClose.ClosingAmount, _ = basics.OSubA(adClose.ClosingAmount, correctPay.Amount)
 	adClose.ClosingAmount, _ = basics.OSubA(adClose.ClosingAmount, correctPay.Fee)
 	adClose.ClosingAmount, _ = basics.OSubA(adClose.ClosingAmount, correctClose.Amount)
@@ -570,7 +570,7 @@ func TestLedgerSingleTxV24(t *testing.T) {
 
 	correctTxHeader := transactions.Header{
 		Sender:      addrList[0],
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   t.Name(),
@@ -747,7 +747,7 @@ func TestLedgerAppCrossRoundWrites(t *testing.T) {
 	user := addrList[1]
 	correctTxHeader := transactions.Header{
 		Sender:      creator,
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   t.Name(),
@@ -886,7 +886,7 @@ func TestLedgerAppMultiTxnWrites(t *testing.T) {
 	genesisID := t.Name()
 	correctTxHeader := transactions.Header{
 		Sender:      creator,
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   genesisID,
@@ -1048,7 +1048,7 @@ func testLedgerSingleTxApplyData(t *testing.T, version protocol.ConsensusVersion
 
 	correctTxHeader := transactions.Header{
 		Sender:      addrList[0],
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   t.Name(),
@@ -1057,7 +1057,7 @@ func testLedgerSingleTxApplyData(t *testing.T, version protocol.ConsensusVersion
 
 	correctPayFields := transactions.PaymentTxnFields{
 		Receiver: addrList[1],
-		Amount:   basics.MicroAlgos{Raw: initAccounts[addrList[0]].MicroAlgos.Raw / 10},
+		Amount:   basics.MicroNovas{Raw: initAccounts[addrList[0]].MicroNovas.Raw / 10},
 	}
 
 	correctPay := transactions.Transaction{
@@ -1158,15 +1158,15 @@ func testLedgerSingleTxApplyData(t *testing.T, version protocol.ConsensusVersion
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added tx send from zero address")
 
 	badTx = correctPay
-	badTx.Fee = basics.MicroAlgos{}
+	badTx.Fee = basics.MicroNovas{}
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added tx with zero fee")
 
 	badTx = correctPay
-	badTx.Fee = basics.MicroAlgos{Raw: proto.MinTxnFee - 1}
+	badTx.Fee = basics.MicroNovas{Raw: proto.MinTxnFee - 1}
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added tx with fee below minimum")
 
 	badTx = correctKeyreg
-	fee, overflow := basics.OAddA(initAccounts[badTx.Sender].MicroAlgos, basics.MicroAlgos{Raw: 1})
+	fee, overflow := basics.OAddA(initAccounts[badTx.Sender].MicroNovas, basics.MicroNovas{Raw: 1})
 	a.False(overflow)
 	badTx.Fee = fee
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "added keyreg tx with fee above user balance")
@@ -1179,15 +1179,15 @@ func testLedgerSingleTxApplyData(t *testing.T, version protocol.ConsensusVersion
 	a.Error(l.appendUnvalidatedSignedTx(t, initAccounts, sbadTx, ad), "added tx with no signature")
 
 	badTx = correctPay
-	remainder, overflow := basics.OSubA(initAccounts[badTx.Sender].MicroAlgos, badTx.Amount)
+	remainder, overflow := basics.OSubA(initAccounts[badTx.Sender].MicroNovas, badTx.Amount)
 	a.False(overflow)
-	fee, overflow = basics.OAddA(remainder, basics.MicroAlgos{Raw: 1})
+	fee, overflow = basics.OAddA(remainder, basics.MicroNovas{Raw: 1})
 	a.False(overflow)
 	badTx.Fee = fee
 	a.Error(l.appendUnvalidatedTx(t, initAccounts, initSecrets, badTx, ad), "overspent with (amount + fee)")
 
 	adClose := ad
-	adClose.ClosingAmount = initAccounts[correctClose.Sender].MicroAlgos
+	adClose.ClosingAmount = initAccounts[correctClose.Sender].MicroNovas
 	adClose.ClosingAmount, _ = basics.OSubA(adClose.ClosingAmount, correctPay.Amount)
 	adClose.ClosingAmount, _ = basics.OSubA(adClose.ClosingAmount, correctPay.Fee)
 	adClose.ClosingAmount, _ = basics.OSubA(adClose.ClosingAmount, correctClose.Amount)
@@ -1227,7 +1227,7 @@ func testLedgerSingleTxApplyData(t *testing.T, version protocol.ConsensusVersion
 
 			var totalRewardUnits uint64
 			for _, acctdata := range initAccounts {
-				totalRewardUnits += acctdata.MicroAlgos.RewardUnits(proto)
+				totalRewardUnits += acctdata.MicroNovas.RewardUnits(proto)
 			}
 			poolBal, err := l.Lookup(l.Latest(), testPoolAddr)
 			a.NoError(err, "could not get incentive pool balance")
@@ -1239,7 +1239,7 @@ func testLedgerSingleTxApplyData(t *testing.T, version protocol.ConsensusVersion
 				Round:        l.Latest() + 1,
 				Branch:       lastBlock.Hash(),
 				TimeStamp:    0,
-				RewardsState: lastBlock.NextRewardsState(l.Latest()+1, proto, poolBal.MicroAlgos, totalRewardUnits, logging.Base()),
+				RewardsState: lastBlock.NextRewardsState(l.Latest()+1, proto, poolBal.MicroNovas, totalRewardUnits, logging.Base()),
 				UpgradeState: lastBlock.UpgradeState,
 				// Seed:       does not matter,
 				// UpgradeVote: empty,
@@ -1335,7 +1335,7 @@ func testLedgerRegressionFaultyLeaseFirstValidCheck2f3880f7(t *testing.T, versio
 
 	correctTxHeader := transactions.Header{
 		Sender:      addrList[0],
-		Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+		Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 		FirstValid:  l.Latest() + 1,
 		LastValid:   l.Latest() + 10,
 		GenesisID:   t.Name(),
@@ -1344,7 +1344,7 @@ func testLedgerRegressionFaultyLeaseFirstValidCheck2f3880f7(t *testing.T, versio
 
 	correctPayFields := transactions.PaymentTxnFields{
 		Receiver: addrList[1],
-		Amount:   basics.MicroAlgos{Raw: initAccounts[addrList[0]].MicroAlgos.Raw / 10},
+		Amount:   basics.MicroNovas{Raw: initAccounts[addrList[0]].MicroNovas.Raw / 10},
 	}
 
 	correctPay := transactions.Transaction{
@@ -1611,7 +1611,7 @@ func TestLedgerMemoryLeak(t *testing.T) {
 		for j := 0; j < 1000; j++ {
 			txHeader := transactions.Header{
 				Sender:      addresses[curAddressIdx],
-				Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+				Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 				FirstValid:  l.Latest() + 1,
 				LastValid:   l.Latest() + 10,
 				GenesisID:   t.Name(),
@@ -1648,7 +1648,7 @@ func TestLedgerMemoryLeak(t *testing.T) {
 					sender := addresses[rand.Intn(len(genesisInitState.Accounts)-2)] // one of init accounts
 					correctTxHeader := transactions.Header{
 						Sender:      sender,
-						Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+						Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 						FirstValid:  l.Latest() + 1,
 						LastValid:   l.Latest() + 10,
 						GenesisID:   t.Name(),
@@ -1657,7 +1657,7 @@ func TestLedgerMemoryLeak(t *testing.T) {
 
 					correctPayFields := transactions.PaymentTxnFields{
 						Receiver: addr,
-						Amount:   basics.MicroAlgos{Raw: 1000 * 1000000},
+						Amount:   basics.MicroNovas{Raw: 1000 * 1000000},
 					}
 
 					correctPay := transactions.Transaction{

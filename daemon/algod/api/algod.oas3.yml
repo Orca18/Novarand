@@ -79,7 +79,7 @@
         "x-algorand-format": "Catchpoint String"
       },
       "currency-greater-than": {
-        "description": "Results should have an amount greater than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.",
+        "description": "Results should have an amount greater than this value. MicroNovas are the default currency unless an asset-id is provided, in which case the asset will be used.",
         "in": "query",
         "name": "currency-greater-than",
         "schema": {
@@ -87,7 +87,7 @@
         }
       },
       "currency-less-than": {
-        "description": "Results should have an amount less than this value. MicroAlgos are the default currency unless an asset-id is provided, in which case the asset will be used.",
+        "description": "Results should have an amount less than this value. MicroNovas are the default currency unless an asset-id is provided, in which case the asset will be used.",
         "in": "query",
         "name": "currency-less-than",
         "schema": {
@@ -595,7 +595,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "description": "Supply represents the current supply of MicroAlgos in the system",
+              "description": "Supply represents the current supply of MicroNovas in the system",
               "properties": {
                 "current_round": {
                   "description": "Round",
@@ -619,7 +619,7 @@
             }
           }
         },
-        "description": "Supply represents the current supply of MicroAlgos in the system."
+        "description": "Supply represents the current supply of MicroNovas in the system."
       },
       "TransactionParametersResponse": {
         "content": {
@@ -689,11 +689,11 @@
             "type": "string"
           },
           "amount": {
-            "description": "\\[algo\\] total number of MicroAlgos in the account",
+            "description": "\\[algo\\] total number of MicroNovas in the account",
             "type": "integer"
           },
           "amount-without-pending-rewards": {
-            "description": "specifies the amount of MicroAlgos in the account, without the pending rewards.",
+            "description": "specifies the amount of MicroNovas in the account, without the pending rewards.",
             "type": "integer"
           },
           "apps-local-state": {
@@ -737,14 +737,14 @@
             "type": "array"
           },
           "min-balance": {
-            "description": "MicroAlgo balance required by the account.\n\nThe requirement grows based on asset and application usage.",
+            "description": "MicroNova balance required by the account.\n\nThe requirement grows based on asset and application usage.",
             "type": "integer"
           },
           "participation": {
             "$ref": "#/components/schemas/AccountParticipation"
           },
           "pending-rewards": {
-            "description": "amount of MicroAlgos of pending rewards in this account.",
+            "description": "amount of MicroNovas of pending rewards in this account.",
             "type": "integer"
           },
           "reward-base": {
@@ -752,7 +752,7 @@
             "type": "integer"
           },
           "rewards": {
-            "description": "\\[ern\\] total rewards of MicroAlgos the account has received, including pending rewards.",
+            "description": "\\[ern\\] total rewards of MicroNovas the account has received, including pending rewards.",
             "type": "integer"
           },
           "round": {
@@ -769,7 +769,7 @@
             "type": "string"
           },
           "status": {
-            "description": "\\[onl\\] delegation status of the account's MicroAlgos\n* Offline - indicates that the associated account is delegated.\n*  Online  - indicates that the associated account used as part of the delegation pool.\n*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.",
+            "description": "\\[onl\\] delegation status of the account's MicroNovas\n* Offline - indicates that the associated account is delegated.\n*  Online  - indicates that the associated account used as part of the delegation pool.\n*   NotParticipating - indicates that the associated account is neither a delegator nor a delegate.",
             "type": "string"
           }
         },
@@ -1405,7 +1405,7 @@
             "type": "integer"
           },
           "close-rewards": {
-            "description": "Rewards in microalgos applied to the close remainder to account.",
+            "description": "Rewards in micronovas applied to the close remainder to account.",
             "type": "integer"
           },
           "closing-amount": {
@@ -1447,11 +1447,11 @@
             "type": "string"
           },
           "receiver-rewards": {
-            "description": "Rewards in microalgos applied to the receiver account.",
+            "description": "Rewards in micronovas applied to the receiver account.",
             "type": "integer"
           },
           "sender-rewards": {
-            "description": "Rewards in microalgos applied to the sender account.",
+            "description": "Rewards in micronovas applied to the sender account.",
             "type": "integer"
           },
           "txn": {
@@ -2529,7 +2529,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "description": "Supply represents the current supply of MicroAlgos in the system",
+                  "description": "Supply represents the current supply of MicroNovas in the system",
                   "properties": {
                     "current_round": {
                       "description": "Round",
@@ -2553,7 +2553,7 @@
                 }
               }
             },
-            "description": "Supply represents the current supply of MicroAlgos in the system."
+            "description": "Supply represents the current supply of MicroNovas in the system."
           },
           "401": {
             "content": {

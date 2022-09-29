@@ -331,13 +331,13 @@ func (pool *TransactionPool) checkPendingQueueSize(txCount int) error {
 	return nil
 }
 
-// FeePerByte returns the current minimum microalgos per byte a transaction
+// FeePerByte returns the current minimum micronovas per byte a transaction
 // needs to pay in order to get into the pool.
 func (pool *TransactionPool) FeePerByte() uint64 {
 	return atomic.LoadUint64(&pool.feePerByte)
 }
 
-// computeFeePerByte computes and returns the current minimum microalgos per byte a transaction
+// computeFeePerByte computes and returns the current minimum micronovas per byte a transaction
 // needs to pay in order to get into the pool. It also updates the atomic counter that holds
 // the current fee per byte
 func (pool *TransactionPool) computeFeePerByte() uint64 {

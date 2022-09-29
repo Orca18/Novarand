@@ -68,13 +68,13 @@ func BenchmarkAssembleBlock(b *testing.B) {
 		addresses[i] = addr
 		genesis[addr] = basics.AccountData{
 			Status:     basics.Online,
-			MicroAlgos: basics.MicroAlgos{Raw: 10000000000000},
+			MicroNovas: basics.MicroNovas{Raw: 10000000000000},
 		}
 	}
 
 	genesis[poolAddr] = basics.AccountData{
 		Status:     basics.NotParticipating,
-		MicroAlgos: basics.MicroAlgos{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinBalance},
+		MicroNovas: basics.MicroNovas{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinBalance},
 	}
 
 	require.Equal(b, len(genesis), numUsers+1)
@@ -83,7 +83,7 @@ func BenchmarkAssembleBlock(b *testing.B) {
 	const inMem = true
 	cfg := config.GetDefaultLocal()
 	cfg.Archival = true
-	ledger, err := data.LoadLedger(log, ledgerName, inMem, protocol.ConsensusCurrentVersion, genBal, genesisID, genesisHash, nil, cfg)
+	ledger, err := data.LoadLedger(log, ledgerName, inMem, protocol.ConsensusCurrentVersion, genBal, genesisID, genesisHash, nil, nil, cfg)
 	require.NoError(b, err)
 
 	l := ledger
@@ -112,7 +112,7 @@ func BenchmarkAssembleBlock(b *testing.B) {
 				Type: protocol.PaymentTx,
 				Header: transactions.Header{
 					Sender:      addresses[sourcei],
-					Fee:         basics.MicroAlgos{Raw: proto.MinTxnFee * 2},
+					Fee:         basics.MicroNovas{Raw: proto.MinTxnFee * 2},
 					FirstValid:  0,
 					LastValid:   basics.Round(proto.MaxTxnLife),
 					Note:        make([]byte, 2),
@@ -120,7 +120,7 @@ func BenchmarkAssembleBlock(b *testing.B) {
 				},
 				PaymentTxnFields: transactions.PaymentTxnFields{
 					Receiver: addresses[desti],
-					Amount:   basics.MicroAlgos{Raw: mockBalancesMinBalance + (rand.Uint64() % 10000)},
+					Amount:   basics.MicroNovas{Raw: mockBalancesMinBalance + (rand.Uint64() % 10000)},
 				},
 			}
 			if okcount == 0 {
@@ -198,13 +198,13 @@ func TestAssembleBlockTransactionPoolBehind(t *testing.T) {
 		addresses[i] = addr
 		genesis[addr] = basics.AccountData{
 			Status:     basics.Online,
-			MicroAlgos: basics.MicroAlgos{Raw: 10000000000000},
+			MicroNovas: basics.MicroNovas{Raw: 10000000000000},
 		}
 	}
 
 	genesis[poolAddr] = basics.AccountData{
 		Status:     basics.NotParticipating,
-		MicroAlgos: basics.MicroAlgos{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinBalance},
+		MicroNovas: basics.MicroNovas{Raw: config.Consensus[protocol.ConsensusCurrentVersion].MinBalance},
 	}
 
 	require.Equal(t, len(genesis), numUsers+1)
@@ -212,7 +212,7 @@ func TestAssembleBlockTransactionPoolBehind(t *testing.T) {
 	const inMem = true
 	cfg := config.GetDefaultLocal()
 	cfg.Archival = true
-	ledger, err := data.LoadLedger(log, "ledgerName", inMem, protocol.ConsensusCurrentVersion, genBal, genesisID, genesisHash, nil, cfg)
+	ledger, err := data.LoadLedger(log, "ledgerName", inMem, protocol.ConsensusCurrentVersion, genBal, genesisID, genesisHash, nil, nil, cfg)
 	require.NoError(t, err)
 
 	l := ledger

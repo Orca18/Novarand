@@ -231,18 +231,18 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         Primary Node Address: 127.0.0.1:43613
         spawn goal account list -w unencrypted-default-wallet -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        [online]	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	5000000000000000 microAlgos
+        [online]	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE	5000000000000000 microNovas
 
         Account Address: W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE   Balance: 5000000000000000
         spawn goal account balance -w unencrypted-default-wallet -a W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        5000000000000000 microAlgos
+        5000000000000000 microNovas
 
         Wallet: unencrypted-default-wallet, Account: W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE, Balance: 5000000000000000
         Primary Account Balance: 5000000000000000
         spawn goal account rewards -w unencrypted-default-wallet -a W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        0 microAlgos
+        0 microNovas
 
         Wallet: unencrypted-default-wallet, Account: W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE, Rewards: 0
         Primary Account Rewards: 0
@@ -293,7 +293,7 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         Account Address: GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ
         spawn goal account list -w Wallet_1_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        [offline]	Unnamed-0	GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ	0 microAlgosAccount Address: GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ 
+        [offline]	Unnamed-0	GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ	0 microNovasAccount Address: GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ 
         spawn goal wallet new Wallet_2_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
         Please choose a password for wallet 'Wallet_2_1617230151': 
@@ -342,10 +342,10 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         Created new account with address F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UAAccount Address: F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA
         spawn goal account list -w Wallet_2_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        [offline]	Unnamed-1	F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA	0 microAlgosAccount Address: F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA 
+        [offline]	Unnamed-1	F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA	0 microNovasAccount Address: F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA 
         spawn goal clerk send --fee 1000 --wallet unencrypted-default-wallet --amount 1000000000 --from W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE --to GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        Sent 1000000000 MicroAlgos from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ, transaction ID: ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA. Fee set to 1000
+        Sent 1000000000 MicroNovas from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ, transaction ID: ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA. Fee set to 1000
 
         Transaction ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA still pending as of round 8
 
@@ -354,13 +354,13 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         TRANSACTION_ID 1: ZUOOECVQQBAMVGTSWHYJG5RGHEUEQJZHL2BUJTSL5YKYBYX5HJJA
         spawn goal account balance -a GVKIH6LJCB5SSA5EYVU3K2KLQJLHX6HDXUOMPUO6RXTI6D7JZBKU5QODBQ -w Wallet_1_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        1000000000 microAlgos
+        1000000000 microNovas
 
         Account Balance: 1000000000
         Account balance OK: 1000000000
         spawn goal clerk send --fee 1000 --wallet unencrypted-default-wallet --amount 1000000000 --from W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE --to F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        Sent 1000000000 MicroAlgos from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA, transaction ID: NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ. Fee set to 1000
+        Sent 1000000000 MicroNovas from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA, transaction ID: NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ. Fee set to 1000
 
         Transaction NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ still pending as of round 11
 
@@ -369,7 +369,7 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         TRANSACTION_ID 2: NAFNAJF5Q2OTTRVGFRV63GTIHPPDECXND3I6HES3FKJNALLMEDPQ
         spawn goal account balance -a F4FUBJ5HEKVFHZAJCESFD7GU2RSQEFJP7AYSKQLYLZINRMBHENBVCPV2UA -w Wallet_2_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        1000000000 microAlgos
+        1000000000 microNovas
 
         Account Balance: 1000000000
         Account balance OK: 1000000000
@@ -386,7 +386,7 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
 
         spawn goal clerk send --fee 1000 --wallet unencrypted-default-wallet --amount 1000000000 --from W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE --to YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        Sent 1000000000 MicroAlgos from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA, transaction ID: IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA. Fee set to 1000
+        Sent 1000000000 MicroNovas from account W7FNWH6L7DEUMNXU2AIQOYINPYUSU65FE6A6D2A4VI7BQEDTWZJ2FPKJQE to address YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA, transaction ID: IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA. Fee set to 1000
 
         Transaction IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA still pending as of round 14
 
@@ -395,7 +395,7 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         TRANSACTION_ID_APP: IAS7I66XI6GH7S5RJVJ5ENTMSES62SQKODCF56N6QV7LYV3CCHTA, APP_ACCOUNT_ADDRESS: YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA
         spawn goal account balance -a YOE6C22GHCTKAN3HU4SE5PGIPN5UKXAJTXCQUPJ3KKF5HOAH646MKKCPDA -w Wallet_1_1617230151 -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/tealAndStatefulTealTest/algod/root/Primary/
 
-        1000000000 microAlgos
+        1000000000 microNovas
 
         Account Balance: 1000000000
         Account balance OK: 1000000000
@@ -509,12 +509,12 @@ ok  	github.com/Orca18/novarand/test/e2e-go/cli/goal	26.354s
         Primary Node Address: 127.0.0.1:37299
         spawn goal account list -w unencrypted-default-wallet -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/pingpongTest/algod/root_1617230521/Primary/
 
-        [online]	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	5000000000000000 microAlgos
+        [online]	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U	5000000000000000 microNovas
 
         Account Address: 3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U   Balance: 5000000000000000
         spawn goal account balance -w unencrypted-default-wallet -a 3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U -d /home/travis/gopath/src/github.com/Orca18/novarand/tmp/out/e2e/104122-1617229030279/pingpongTest/algod/root_1617230521/Primary/
 
-        5000000000000000 microAlgos
+        5000000000000000 microNovas
 
         Wallet: unencrypted-default-wallet, Account: 3LRXUJIBC6H3JMAGTHMR5Z2DMXAPNS2B3WBAPCZWUVSQB76R243UEM672U, Balance: 5000000000000000
         Primary Account Balance: 5000000000000000
@@ -2279,10 +2279,10 @@ algod(4343) : Exiting on terminated
 === RUN   TestClientCanGetGoRoutines
 --- PASS: TestClientCanGetGoRoutines (0.01s)
 === RUN   TestSendingTooMuchFails
-    restClient_test.go:557: HTTP 400 Bad Request: TransactionPool.Remember: transaction HV3NYJPDGYHZH6LH4IBB54BAACA2F45B552S4JQA4CD56SD5EPKA: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroAlgos:{Raw:90000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {100100})
-    restClient_test.go:562: HTTP 400 Bad Request: TransactionPool.Remember: transaction IQEXYSWOWK6O6NNE75AEV6VLPBZFKPKES4EYBTSPCG6MCOVDASQQ: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroAlgos:{Raw:90000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {18446744073709551615})
-    restClient_test.go:567: HTTP 400 Bad Request: TransactionPool.Remember: transaction EARCABJLCKMRRBEZW2DGRVPBRKVS6D6TILGS3C6ZZEZWAE4E2AQQ: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroAlgos:{Raw:100000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {100100})
-    restClient_test.go:572: HTTP 400 Bad Request: TransactionPool.Remember: transaction W64ZQNQU4QF4KGG562ZHVM4KY2C5IOMJOU6ZGOKL2MC7USAAQWIA: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroAlgos:{Raw:100000} RewardsBase:0 RewardedMicroAlgos:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {18446744073709551615})
+    restClient_test.go:557: HTTP 400 Bad Request: TransactionPool.Remember: transaction HV3NYJPDGYHZH6LH4IBB54BAACA2F45B552S4JQA4CD56SD5EPKA: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroNovas:{Raw:90000} RewardsBase:0 RewardedMicroNovas:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {100100})
+    restClient_test.go:562: HTTP 400 Bad Request: TransactionPool.Remember: transaction IQEXYSWOWK6O6NNE75AEV6VLPBZFKPKES4EYBTSPCG6MCOVDASQQ: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroNovas:{Raw:90000} RewardsBase:0 RewardedMicroNovas:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {18446744073709551615})
+    restClient_test.go:567: HTTP 400 Bad Request: TransactionPool.Remember: transaction EARCABJLCKMRRBEZW2DGRVPBRKVS6D6TILGS3C6ZZEZWAE4E2AQQ: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroNovas:{Raw:100000} RewardsBase:0 RewardedMicroNovas:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {100100})
+    restClient_test.go:572: HTTP 400 Bad Request: TransactionPool.Remember: transaction W64ZQNQU4QF4KGG562ZHVM4KY2C5IOMJOU6ZGOKL2MC7USAAQWIA: overspend (account P7LZTPX5YJZ7YG5QEQWMQH54CBPIKATUQMIWS6BK6BJ7HYDNJJLFZC75XA, data {_struct:{} Status:Offline MicroNovas:{Raw:100000} RewardsBase:0 RewardedMicroNovas:{Raw:0} VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0 AssetParams:map[] Assets:map[] AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ AppLocalStates:map[] AppParams:map[] TotalAppSchema:{_struct:{} NumUint:0 NumByteSlice:0}}, tried to spend {18446744073709551615})
 --- PASS: TestSendingTooMuchFails (0.07s)
 === RUN   TestSendingFromEmptyAccountFails
 --- PASS: TestSendingFromEmptyAccountFails (0.04s)

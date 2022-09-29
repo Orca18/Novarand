@@ -51,7 +51,7 @@ func RandomAccountData(rewardsLevel uint64) basics.AccountData {
 	var data basics.AccountData
 
 	// Avoid overflowing totals
-	data.MicroAlgos.Raw = crypto.RandUint64() % (1 << 32)
+	data.MicroNovas.Raw = crypto.RandUint64() % (1 << 32)
 
 	switch crypto.RandUint64() % 3 {
 	case 0:
@@ -291,7 +291,7 @@ func RandomDeltasImpl(niter int, base map[basics.Address]basics.AccountData, rew
 				new, lastCreatableID = RandomFullAccountData(rewardsLevel, lastCreatableID)
 			}
 			updates.Upsert(addr, new)
-			imbalance += int64(old.WithUpdatedRewards(proto, rewardsLevel).MicroAlgos.Raw - new.MicroAlgos.Raw)
+			imbalance += int64(old.WithUpdatedRewards(proto, rewardsLevel).MicroNovas.Raw - new.MicroNovas.Raw)
 			totals[addr] = new
 		}
 	}
@@ -307,7 +307,7 @@ func RandomDeltasImpl(niter int, base map[basics.Address]basics.AccountData, rew
 			new, lastCreatableID = RandomFullAccountData(rewardsLevel, lastCreatableID)
 		}
 		updates.Upsert(addr, new)
-		imbalance += int64(old.WithUpdatedRewards(proto, rewardsLevel).MicroAlgos.Raw - new.MicroAlgos.Raw)
+		imbalance += int64(old.WithUpdatedRewards(proto, rewardsLevel).MicroNovas.Raw - new.MicroNovas.Raw)
 		totals[addr] = new
 	}
 
@@ -337,7 +337,7 @@ func RandomDeltasBalancedImpl(niter int, base map[basics.Address]basics.AccountD
 
 	oldPool := base[testPoolAddr]
 	newPool := oldPool
-	newPool.MicroAlgos.Raw += uint64(imbalance)
+	newPool.MicroNovas.Raw += uint64(imbalance)
 
 	updates.Upsert(testPoolAddr, newPool)
 	totals[testPoolAddr] = newPool

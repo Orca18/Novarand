@@ -3435,7 +3435,7 @@ func opBalance(cx *EvalContext) {
 	}
 
 	cx.stack[last].Bytes = nil
-	cx.stack[last].Uint = account.MicroAlgos.Raw
+	cx.stack[last].Uint = account.MicroNovas.Raw
 }
 
 func opMinBalance(cx *EvalContext) {
@@ -4006,13 +4006,13 @@ func opAcctParamsGet(cx *EvalContext) {
 		return
 	}
 
-	exist := boolToUint(account.MicroAlgos.Raw > 0)
+	exist := boolToUint(account.MicroNovas.Raw > 0)
 
 	var value stackValue
 
 	switch fs.field {
 	case AcctBalance:
-		value.Uint = account.MicroAlgos.Raw
+		value.Uint = account.MicroNovas.Raw
 	case AcctMinBalance:
 		value.Uint = account.MinBalance(cx.Proto).Raw
 	case AcctAuthAddr:
@@ -4088,7 +4088,7 @@ func addInnerTxn(cx *EvalContext) error {
 
 	stxn.Txn.Header = transactions.Header{
 		Sender:     addr,
-		Fee:        basics.MicroAlgos{Raw: fee},
+		Fee:        basics.MicroNovas{Raw: fee},
 		FirstValid: cx.Txn.Txn.FirstValid,
 		LastValid:  cx.Txn.Txn.LastValid,
 	}

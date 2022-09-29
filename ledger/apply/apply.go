@@ -23,10 +23,10 @@ import (
 	"github.com/Orca18/novarand/data/transactions/logic"
 )
 
-// Balances allow to move MicroAlgos from one address to another and to update balance records, or to access and modify individual balance records
+// Balances allow to move MicroNovas from one address to another and to update balance records, or to access and modify individual balance records
 // After a call to Put (or Move), future calls to Get or Move will reflect the updated balance record(s)
 /*
-	Balances는 MicroAlgos를 다른 주소로 옮기고 잔액을 수정할 수 있게 해준다.
+	Balances는 MicroNovas를 다른 주소로 옮기고 잔액을 수정할 수 있게 해준다.
 	혹은 개별 잔액에 접근하거나 수정하게 해준다.
 	Put(또는 Move)을 호출한 후 Get 또는 Move에 대한 향후 호출은 업데이트된 잔액 레코드를 반영합니다.
 */
@@ -61,9 +61,9 @@ type Balances interface {
 	// an EvalDelta that contains the changes made by the program.
 	StatefulEval(gi int, params *logic.EvalParams, aidx basics.AppIndex, program []byte) (passed bool, evalDelta transactions.EvalDelta, err error)
 
-	// Move MicroAlgos from one account to another, doing all necessary overflow checking (convenience method)
+	// Move MicroNovas from one account to another, doing all necessary overflow checking (convenience method)
 	// TODO: Does this need to be part of the balances interface, or can it just be implemented here as a function that calls Put and Get?
-	Move(src, dst basics.Address, amount basics.MicroAlgos, srcRewards *basics.MicroAlgos, dstRewards *basics.MicroAlgos) error
+	Move(src, dst basics.Address, amount basics.MicroNovas, srcRewards *basics.MicroNovas, dstRewards *basics.MicroNovas) error
 
 	// Balances correspond to a Round, which mean that they also correspond
 	// to a ConsensusParams.  This returns those parameters.

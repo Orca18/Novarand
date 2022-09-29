@@ -55,7 +55,7 @@ func TestTxnMerkle(t *testing.T) {
 					GenesisHash: b.BlockHeader.GenesisHash,
 				},
 				PaymentTxnFields: transactions.PaymentTxnFields{
-					Amount: basics.MicroAlgos{Raw: i},
+					Amount: basics.MicroNovas{Raw: i},
 				},
 			}
 
@@ -102,7 +102,7 @@ func BenchmarkTxnRoots(b *testing.B) {
 				GenesisHash: blk.BlockHeader.GenesisHash,
 			},
 			PaymentTxnFields: transactions.PaymentTxnFields{
-				Amount: basics.MicroAlgos{Raw: crypto.RandUint64()},
+				Amount: basics.MicroNovas{Raw: crypto.RandUint64()},
 			},
 		}
 

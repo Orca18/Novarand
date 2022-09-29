@@ -40,20 +40,20 @@ func TestRewards(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
 	proto := config.Consensus[protocol.ConsensusCurrentVersion]
-	accountAlgos := []MicroAlgos{{Raw: 0}, {Raw: 8000}, {Raw: 13000}, {Raw: 83000}}
+	accountAlgos := []MicroNovas{{Raw: 0}, {Raw: 8000}, {Raw: 13000}, {Raw: 83000}}
 	for _, accountAlgo := range accountAlgos {
 		ad := AccountData{
 			Status:             Online,
-			MicroAlgos:         accountAlgo,
+			MicroNovas:         accountAlgo,
 			RewardsBase:        100,
-			RewardedMicroAlgos: MicroAlgos{Raw: 25},
+			RewardedMicroNovas: MicroNovas{Raw: 25},
 		}
 
 		levels := []uint64{uint64(0), uint64(1), uint64(30), uint64(3000)}
 		for _, level := range levels {
 			money, rewards := ad.Money(proto, ad.RewardsBase+level)
-			require.Equal(t, money.Raw, ad.MicroAlgos.Raw+level*ad.MicroAlgos.RewardUnits(proto))
-			require.Equal(t, rewards.Raw, ad.RewardedMicroAlgos.Raw+level*ad.MicroAlgos.RewardUnits(proto))
+			require.Equal(t, money.Raw, ad.MicroNovas.Raw+level*ad.MicroNovas.RewardUnits(proto))
+			require.Equal(t, rewards.Raw, ad.RewardedMicroNovas.Raw+level*ad.MicroNovas.RewardUnits(proto))
 		}
 	}
 }
@@ -76,8 +76,8 @@ func TestWithUpdatedRewardsPanics(t *testing.T) {
 			}()
 			a := AccountData{
 				Status:             Online,
-				MicroAlgos:         MicroAlgos{Raw: ^uint64(0)},
-				RewardedMicroAlgos: MicroAlgos{Raw: 0},
+				MicroNovas:         MicroNovas{Raw: ^uint64(0)},
+				RewardedMicroNovas: MicroNovas{Raw: 0},
 				RewardsBase:        0,
 			}
 			a.WithUpdatedRewards(proto, 100)
@@ -88,12 +88,12 @@ func TestWithUpdatedRewardsPanics(t *testing.T) {
 	t.Run("RewardsOverflow", func(t *testing.T) {
 		a := AccountData{
 			Status:             Online,
-			MicroAlgos:         MicroAlgos{Raw: 80000000},
-			RewardedMicroAlgos: MicroAlgos{Raw: ^uint64(0)},
+			MicroNovas:         MicroNovas{Raw: 80000000},
+			RewardedMicroNovas: MicroNovas{Raw: ^uint64(0)},
 			RewardsBase:        0,
 		}
 		b := a.WithUpdatedRewards(proto, 100)
-		require.Equal(t, 100*a.MicroAlgos.RewardUnits(proto)-1, b.RewardedMicroAlgos.Raw)
+		require.Equal(t, 100*a.MicroNovas.RewardUnits(proto)-1, b.RewardedMicroNovas.Raw)
 	})
 }
 
@@ -111,9 +111,9 @@ func getSampleAccountData() AccountData {
 
 	return AccountData{
 		Status:             NotParticipating,
-		MicroAlgos:         MicroAlgos{},
+		MicroNovas:         MicroNovas{},
 		RewardsBase:        0x1234123412341234,
-		RewardedMicroAlgos: MicroAlgos{},
+		RewardedMicroNovas: MicroNovas{},
 		VoteID:             oneTimeSecrets.OneTimeSignatureVerifier,
 		SelectionID:        vrfSecrets.PK,
 		VoteFirstValid:     Round(0x1234123412341234),
@@ -263,7 +263,7 @@ func TestOnlineAccountData(t *testing.T) {
 	partitiontest.PartitionTest(t)
 
 	ad := getSampleAccountData()
-	ad.MicroAlgos.Raw = 1000000
+	ad.MicroNovas.Raw = 1000000
 	ad.Status = Offline
 
 	oad := ad.OnlineAccountData()
@@ -271,7 +271,7 @@ func TestOnlineAccountData(t *testing.T) {
 
 	ad.Status = Online
 	oad = ad.OnlineAccountData()
-	require.Equal(t, ad.MicroAlgos, oad.MicroAlgosWithRewards)
+	require.Equal(t, ad.MicroNovas, oad.MicroNovasWithRewards)
 	require.Equal(t, ad.VoteID, oad.VoteID)
 	require.Equal(t, ad.SelectionID, oad.SelectionID)
 }

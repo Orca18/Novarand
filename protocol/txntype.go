@@ -55,7 +55,7 @@ const (
 	CompactCertTx TxType = "cert"
 
 	// (추가) 새로만들 트랜잭션 타입 정의!!
-	AddressPrint TxType = "addrprint"
+	AddressPrintTx TxType = "addrprint"
 
 	// UnknownTx signals an error
 	// UnknownTx는 오류 신호를 보냅니다.

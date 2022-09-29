@@ -46,11 +46,11 @@ import (
 
 var testPoolAddr = basics.Address{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
 var testSinkAddr = basics.Address{0x2c, 0x2a, 0x6c, 0xe9, 0xa9, 0xa7, 0xc2, 0x8c, 0x22, 0x95, 0xfd, 0x32, 0x4f, 0x77, 0xa5, 0x4, 0x8b, 0x42, 0xc2, 0xb7, 0xa8, 0x54, 0x84, 0xb6, 0x80, 0xb1, 0xe1, 0x3d, 0x59, 0x9b, 0xeb, 0x36}
-var minFee basics.MicroAlgos
+var minFee basics.MicroNovas
 
 func init() {
 	params := config.Consensus[protocol.ConsensusCurrentVersion]
-	minFee = basics.MicroAlgos{Raw: params.MinTxnFee}
+	minFee = basics.MicroNovas{Raw: params.MinTxnFee}
 }
 
 func TestBlockEvaluatorFeeSink(t *testing.T) {
@@ -297,7 +297,7 @@ func TestTestnetFixup(t *testing.T) {
 
 	eval := &BlockEvaluator{}
 	var rewardPoolBalance basics.AccountData
-	rewardPoolBalance.MicroAlgos.Raw = 1234
+	rewardPoolBalance.MicroNovas.Raw = 1234
 	var headerRound basics.Round
 	testnetGenesisHash, _ := crypto.DigestFromString("JBR3KGFEWPEE5SAQ6IWU6EEBZMHXD4CZU6WCBXWGF57XBZIJHIRA")
 
@@ -334,7 +334,7 @@ func testnetFixupExecution(t *testing.T, headerRound basics.Round, poolBonus uin
 	genesisInitState.GenesisHash = testnetGenesisHash
 
 	rewardPoolBalance := genesisInitState.Accounts[testPoolAddr]
-	nextPoolBalance := rewardPoolBalance.MicroAlgos.Raw + poolBonus
+	nextPoolBalance := rewardPoolBalance.MicroNovas.Raw + poolBonus
 
 	l := newTestLedger(t, bookkeeping.GenesisBalances{
 		Balances:    genesisInitState.Accounts,
@@ -368,7 +368,7 @@ func testnetFixupExecution(t *testing.T, headerRound basics.Round, poolBonus uin
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: bankAddr,
-			Amount:   basics.MicroAlgos{Raw: 20000000000 * 10},
+			Amount:   basics.MicroNovas{Raw: 20000000000 * 10},
 		},
 	}
 	st := txn.Sign(keys[0])
@@ -376,7 +376,7 @@ func testnetFixupExecution(t *testing.T, headerRound basics.Round, poolBonus uin
 	require.NoError(t, err)
 
 	poolOld, err := eval.workaroundOverspentRewards(rewardPoolBalance, headerRound)
-	require.Equal(t, nextPoolBalance, poolOld.MicroAlgos.Raw)
+	require.Equal(t, nextPoolBalance, poolOld.MicroNovas.Raw)
 	require.NoError(t, err)
 }
 
@@ -400,7 +400,7 @@ func newTestGenesis() (bookkeeping.GenesisBalances, []basics.Address, []*crypto.
 	secrets := make([]*crypto.SignatureSecrets, count)
 	accts := make(map[basics.Address]basics.AccountData)
 
-	// 10 billion microalgos, across N accounts and pool and sink
+	// 10 billion micronovas, across N accounts and pool and sink
 	amount := 10 * 1000000000 * 1000000 / uint64(count+2)
 
 	for i := 0; i < count; i++ {
@@ -411,18 +411,18 @@ func newTestGenesis() (bookkeeping.GenesisBalances, []basics.Address, []*crypto.
 		addrs[i] = basics.Address(secrets[i].SignatureVerifier)
 
 		adata := basics.AccountData{
-			MicroAlgos: basics.MicroAlgos{Raw: amount},
+			MicroNovas: basics.MicroNovas{Raw: amount},
 		}
 		accts[addrs[i]] = adata
 	}
 
 	accts[sink] = basics.AccountData{
-		MicroAlgos: basics.MicroAlgos{Raw: amount},
+		MicroNovas: basics.MicroNovas{Raw: amount},
 		Status:     basics.NotParticipating,
 	}
 
 	accts[rewards] = basics.AccountData{
-		MicroAlgos: basics.MicroAlgos{Raw: amount},
+		MicroNovas: basics.MicroNovas{Raw: amount},
 	}
 
 	genBalances := bookkeeping.MakeGenesisBalances(accts, sink, rewards)
@@ -648,9 +648,9 @@ func (ledger *evalTestLedger) lookup(t testing.TB, addr basics.Address) basics.A
 	return ad
 }
 
-// micros gets the current microAlgo balance for an address
+// micros gets the current microNova balance for an address
 func (ledger *evalTestLedger) micros(t testing.TB, addr basics.Address) uint64 {
-	return ledger.lookup(t, addr).MicroAlgos.Raw
+	return ledger.lookup(t, addr).MicroNovas.Raw
 }
 
 // asa gets the current balance and optin status for some asa for an address
@@ -812,7 +812,7 @@ func TestEvalFunctionForExpiredAccounts(t *testing.T) {
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: recvAddr,
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 
@@ -951,7 +951,7 @@ func TestExpiredAccountGenerationWithDiskFailure(t *testing.T) {
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: recvAddr,
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 
@@ -1051,7 +1051,7 @@ func TestExpiredAccountGeneration(t *testing.T) {
 		},
 		PaymentTxnFields: transactions.PaymentTxnFields{
 			Receiver: recvAddr,
-			Amount:   basics.MicroAlgos{Raw: 100},
+			Amount:   basics.MicroNovas{Raw: 100},
 		},
 	}
 
