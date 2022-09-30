@@ -64,7 +64,6 @@ func main() {
 
 func run() int {
 	dataDir := resolveDataDir()
-	fmt.Println(dataDir)
 	absolutePath, absPathErr := filepath.Abs(dataDir)
 	config.UpdateVersionDataDir(absolutePath)
 
