@@ -19,7 +19,6 @@ package node
 import (
 	"context"
 	"errors"
-
 	"github.com/Orca18/novarand/agreement"
 	"github.com/Orca18/novarand/catchup"
 	"github.com/Orca18/novarand/data"

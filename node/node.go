@@ -228,6 +228,7 @@ func MakeFull(log logging.Logger, rootDir string, cfg config.Local, phonebookAdd
 	}
 
 	// 트랜잭션 풀 생성
+	node.ledger.SetDirInData(node.rootDir)
 	node.transactionPool = pools.MakeTransactionPool(node.ledger.Ledger, cfg, node.log)
 
 	// 트랜잭션풀 리스너를 등록한다.

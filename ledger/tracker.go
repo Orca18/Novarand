@@ -746,3 +746,10 @@ func (tr *trackerRegistry) initializeTrackerCaches(l ledgerForTracker) (err erro
 	return
 
 }
+
+// &accLedgerEval가 internal.LedgerForEvaluator 형식(타입)으로 사용되기 위해는,
+//*accountUpdatesLedgerEvaluator가
+//internal.LedgerForEvaluator 인터페이스에서 필요로하는 method 중 GetLedgerRootDir method를 구현해야한다.
+func (l *accountUpdatesLedgerEvaluator) GetLedgerRootDir() string {
+	return ""
+}

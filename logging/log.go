@@ -71,6 +71,7 @@ const (
 	Info
 	// Debug Level level. Usually only enabled when debugging. Very verbose logging.
 	Debug
+	Nomal
 )
 
 const stackPrefix = "[Stack]"

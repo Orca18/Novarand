@@ -20,8 +20,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"sync"
-
 	"github.com/Orca18/novarand/config"
 	"github.com/Orca18/novarand/crypto"
 	"github.com/Orca18/novarand/crypto/compactcert"
@@ -35,6 +33,10 @@ import (
 	"github.com/Orca18/novarand/logging"
 	"github.com/Orca18/novarand/protocol"
 	"github.com/Orca18/novarand/util/execpool"
+	"log"
+	"os"
+	"path/filepath"
+	"sync"
 )
 
 // LedgerForCowBase represents subset of Ledger functionality needed for cow business
@@ -308,7 +310,6 @@ func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics
 	}
 	// reward레벨이 반영된 트랜잭션을 보낸 계정의 AccountData를 반환한다.
 	fromBalNew := fromBal.WithUpdatedRewards(cs.proto, rewardlvl)
-
 	if fromRewards != nil {
 		var ot basics.OverflowTracker
 		newFromRewards := ot.AddA(*fromRewards, ot.SubA(fromBalNew.MicroNovas, fromBal.MicroNovas))
@@ -333,7 +334,6 @@ func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics
 	}
 	// reward레벨이 반영된 수수료를 받는 계정의 AccountData를 반환한다.
 	toBalNew := toBal.WithUpdatedRewards(cs.proto, rewardlvl)
-
 	if toRewards != nil {
 		var ot basics.OverflowTracker
 		newToRewards := ot.AddA(*toRewards, ot.SubA(toBalNew.MicroNovas, toBal.MicroNovas))
@@ -349,7 +349,6 @@ func (cs *roundCowState) Move(from basics.Address, to basics.Address, amt basics
 		return fmt.Errorf("balance overflow (account %v, data %+v, was going to receive %v)", to, toBal, amt)
 	}
 	cs.Put(to, toBalNew)
-
 	return nil
 }
 
@@ -419,6 +418,9 @@ type BlockEvaluator struct {
 	l LedgerForEvaluator
 
 	maxTxnBytesPerBlock int
+
+	//보상받는 주소들 = []베이직.어드레스들 = transaction안에 certvote 주소
+	rewardAddresses []basics.Address
 }
 
 // LedgerForEvaluator defines the ledger interface needed by the evaluator.
@@ -428,6 +430,7 @@ type LedgerForEvaluator interface {
 	GenesisProto() config.ConsensusParams
 	LatestTotals() (basics.Round, ledgercore.AccountTotals, error)
 	CompactCertVoters(basics.Round) (*ledgercore.VotersForRound, error)
+	GetLedgerRootDir() string
 }
 
 // EvaluatorOptions defines the evaluator creation options
@@ -955,9 +958,38 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	/*
 		수수료를 FeeSink계정에게 전달한다.
 	*/
-	err = balances.Move(tx.Sender, eval.specials.FeeSink, tx.Fee, &ad.SenderRewards, nil)
-	if err != nil {
-		return
+	//err = balances.Move(tx.Sender, eval.specials.FeeSink, tx.Fee, &ad.SenderRewards, nil)
+	//if err != nil {
+	//	return
+	//}
+	//수수료 부분 수정
+	/*
+		tx.Sender=동일
+		eval.specials.FeeSink=eval.rewardAddresses
+		tx.Fee=동일
+		&ad.SenderRewards=동일
+		nil=&ad.ReceiverRewards
+		1.인당 보상금 계산 (수수료 / 검증자수)
+		2. 각 검증자에게 인당 보상금 전송
+	*/
+	certVoters := uint64(len(eval.rewardAddresses))
+	//fmt.Println(certVoters, "certVoters", eval.rewardAddresses, "len(eval.rewardAddresses)", len(eval.rewardAddresses))
+	if certVoters != 0 {
+		rw := tx.Fee.Raw / certVoters
+		reward := basics.MicroNovas{Raw: rw}
+		for _, rewardAdd := range eval.rewardAddresses {
+			err = balances.Move(tx.Sender, rewardAdd, reward, &ad.SenderRewards, &ad.ReceiverRewards)
+			if err != nil {
+				fmt.Println("send reward to certVoter has problems")
+				return
+			}
+		}
+	} else {
+		fmt.Println("certVoters are 0 ", eval.block.Round())
+		err = balances.Move(tx.Sender, eval.specials.FeeSink, tx.Fee, &ad.SenderRewards, nil)
+		if err != nil {
+			return
+		}
 	}
 
 	err = apply.Rekey(balances, &tx)
@@ -968,6 +1000,7 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	switch tx.Type {
 	case protocol.PaymentTx:
 		err = apply.Payment(tx.PaymentTxnFields, tx.Header, balances, eval.specials, &ad)
+		transactionLog(eval.l.GetLedgerRootDir(), tx.Header.Sender, tx.PaymentTxnFields.Receiver, tx.PaymentTxnFields.Amount)
 
 	case protocol.KeyRegistrationTx:
 		err = apply.Keyreg(tx.KeyregTxnFields, tx.Header, balances, eval.specials, &ad, balances.round())
@@ -1362,35 +1395,36 @@ func (validator *evalTxValidator) run() {
 /*
 	evaluator의 메인 진입점이다.
 */
-func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, validate bool, txcache verify.VerifiedTransactionCache, executionPool execpool.BacklogPool) (ledgercore.StateDelta, error) {
+func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, validate bool, txcache verify.VerifiedTransactionCache, executionPool execpool.BacklogPool, certVoteAddresses []basics.Address) (ledgercore.StateDelta, error) {
 	eval, err := StartEvaluator(l, blk.BlockHeader,
 		EvaluatorOptions{
 			PaysetHint: len(blk.Payset),
 			Validate:   validate,
 			Generate:   false,
-		})
+		}) //eval 객체 구체화
 	if err != nil {
 		return ledgercore.StateDelta{}, err
 	}
-
-	validationCtx, validationCancel := context.WithCancel(ctx)
-	var wg sync.WaitGroup
+	eval.rewardAddresses = certVoteAddresses                   //검증자 주소 할당
+	validationCtx, validationCancel := context.WithCancel(ctx) //유효성 검증 컨텍스트
+	var wg sync.WaitGroup                                      //싱커의 대기 그룹
 	defer func() {
 		validationCancel()
-		wg.Wait()
-	}()
+		wg.Wait() //모든 고루틴이 종료될때까지 대기한다.
+	}() //맨 마지막에 이거 실행 즉, 대기한다.
 
 	// Next, transactions
 	/*
 		블록안에 있는 서명된 트랜잭션 그룹정보를 가져온다.
 	*/
-	paysetgroups, err := blk.DecodePaysetGroups()
+	paysetgroups, err := blk.DecodePaysetGroups() //블록안에 있는 [][]transactions.SignedTxnWithAD
 	if err != nil {
 		return ledgercore.StateDelta{}, err
 	}
 
 	accountLoadingCtx, accountLoadingCancel := context.WithCancel(ctx)
-	paysetgroupsCh := loadAccounts(accountLoadingCtx, l, blk.Round()-1, paysetgroups, blk.BlockHeader.FeeSink, blk.ConsensusProtocol())
+	paysetgroupsCh := loadAccounts(accountLoadingCtx, l, blk.Round()-1,
+		paysetgroups, blk.BlockHeader.FeeSink, blk.ConsensusProtocol())
 	// ensure that before we exit from this method, the account loading is no longer active.
 	defer func() {
 		accountLoadingCancel()
@@ -1416,7 +1450,6 @@ func Eval(ctx context.Context, l LedgerForEvaluator, blk bookkeeping.Block, vali
 		txvalidator.txgroups = paysetgroups
 		txvalidator.done = make(chan error, 1)
 		go txvalidator.run()
-
 	}
 
 	base := eval.state.lookupParent.(*roundCowBase)
@@ -1666,4 +1699,37 @@ func loadAccounts(ctx context.Context, l LedgerForEvaluator, rnd basics.Round, g
 		}
 	}()
 	return outChan
+}
+
+func transactionLog(dataDir string, sender basics.Address, receiver basics.Address, amount basics.MicroNovas) {
+	if dataDir != "" {
+		txnLogFilePath := filepath.Join(dataDir, "transaction.log")
+		txnLogFileMode := os.O_CREATE | os.O_WRONLY | os.O_APPEND
+		logFile, err := os.OpenFile(txnLogFilePath, txnLogFileMode, 600)
+		if err != nil {
+			log.Fatalf("error opening file: %v", err)
+		}
+		defer logFile.Close()
+		log.SetOutput(logFile)
+		log.Println(" [Sender] ", sender, "[Receiver] ", receiver, "[Amount] ", amount.Raw)
+	}
+}
+
+func rewardLog(dataDir string, round basics.Round,
+	from basics.Address, fromBal basics.MicroNovas, fromNewBal basics.MicroNovas, rewardFrom basics.MicroNovas,
+	validator basics.Address, prevBalance basics.MicroNovas, CurrentBalance basics.MicroNovas, rewardTo basics.MicroNovas,
+	fromBalNewTest basics.MicroNovas, toBalNewTest basics.MicroNovas) {
+	txnLogFilePath := filepath.Join(dataDir, "reward.log")
+	txnLogFileMode := os.O_CREATE | os.O_WRONLY | os.O_APPEND
+	logFile, err := os.OpenFile(txnLogFilePath, txnLogFileMode, 600)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
+	log.Println(" [라운드] ", round, " [fromAccount] ", from,
+		" [fromBal] ", fromBal.Raw, " [fromNewBal] ", fromNewBal.Raw, " [RewardFrom] ", rewardFrom.Raw,
+		" [validator] ", validator, " [PrevBalance] ", prevBalance.Raw, " [CurrentBalance] ", CurrentBalance.Raw,
+		" [RewardPerPerson] ", rewardTo.Raw,
+		" [fromBalNewTest] ", fromBalNewTest.Raw, " [toBalNewTest]", toBalNewTest.Raw)
 }

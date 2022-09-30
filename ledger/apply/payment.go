@@ -18,7 +18,6 @@ package apply
 
 import (
 	"fmt"
-
 	"github.com/Orca18/novarand/config"
 	"github.com/Orca18/novarand/data/basics"
 	"github.com/Orca18/novarand/data/transactions"

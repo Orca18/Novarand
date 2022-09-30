@@ -20,10 +20,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/algorand/go-deadlock"
 	"sync"
 	"time"
-
-	"github.com/algorand/go-deadlock"
 
 	"github.com/Orca18/novarand/agreement"
 	"github.com/Orca18/novarand/data/basics"
@@ -191,7 +190,6 @@ func (bq *blockQueue) latestCommitted() (basics.Round, basics.Round) {
 func (bq *blockQueue) putBlock(blk bookkeeping.Block, cert agreement.Certificate) error {
 	bq.mu.Lock()
 	defer bq.mu.Unlock()
-
 	nextRound := bq.lastCommitted + basics.Round(len(bq.q)) + 1
 
 	// As an optimization to reduce warnings in logs, return a special
