@@ -116,7 +116,6 @@ func run() int {
 	genesisPath := *genesisFile
 	if genesisPath == "" {
 		genesisPath = filepath.Join(dataDir, config.GenesisJSONFile)
-		fmt.Println(genesisPath)
 	}
 
 	// Load genesis
