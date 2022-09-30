@@ -976,7 +976,7 @@ func (eval *BlockEvaluator) applyTransaction(tx transactions.Transaction, balanc
 	//fmt.Println(certVoters, "certVoters", eval.rewardAddresses, "len(eval.rewardAddresses)", len(eval.rewardAddresses))
 	if certVoters != 0 {
 		rw := tx.Fee.Raw / certVoters
-		reward := basics.MicroAlgos{Raw: rw}
+		reward := basics.MicroNovas{Raw: rw}
 		for _, rewardAdd := range eval.rewardAddresses {
 			err = balances.Move(tx.Sender, rewardAdd, reward, &ad.SenderRewards, &ad.ReceiverRewards)
 			if err != nil {
@@ -1701,7 +1701,7 @@ func loadAccounts(ctx context.Context, l LedgerForEvaluator, rnd basics.Round, g
 	return outChan
 }
 
-func transactionLog(dataDir string, sender basics.Address, receiver basics.Address, amount basics.MicroAlgos) {
+func transactionLog(dataDir string, sender basics.Address, receiver basics.Address, amount basics.MicroNovas) {
 	if dataDir != "" {
 		txnLogFilePath := filepath.Join(dataDir, "transaction.log")
 		txnLogFileMode := os.O_CREATE | os.O_WRONLY | os.O_APPEND
@@ -1716,9 +1716,9 @@ func transactionLog(dataDir string, sender basics.Address, receiver basics.Addre
 }
 
 func rewardLog(dataDir string, round basics.Round,
-	from basics.Address, fromBal basics.MicroAlgos, fromNewBal basics.MicroAlgos, rewardFrom basics.MicroAlgos,
-	validator basics.Address, prevBalance basics.MicroAlgos, CurrentBalance basics.MicroAlgos, rewardTo basics.MicroAlgos,
-	fromBalNewTest basics.MicroAlgos, toBalNewTest basics.MicroAlgos) {
+	from basics.Address, fromBal basics.MicroNovas, fromNewBal basics.MicroNovas, rewardFrom basics.MicroNovas,
+	validator basics.Address, prevBalance basics.MicroNovas, CurrentBalance basics.MicroNovas, rewardTo basics.MicroNovas,
+	fromBalNewTest basics.MicroNovas, toBalNewTest basics.MicroNovas) {
 	txnLogFilePath := filepath.Join(dataDir, "reward.log")
 	txnLogFileMode := os.O_CREATE | os.O_WRONLY | os.O_APPEND
 	logFile, err := os.OpenFile(txnLogFilePath, txnLogFileMode, 600)
